@@ -38,15 +38,13 @@ export default function SuperAdminVtmManagement() {
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6">
 
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRightBread size={14} />
               <span className="text-[#333]">VTM</span>
             </div>
 
-            {/* Title + Create button */}
-            <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-[#333]">VTMs</h1>
               <button
                 onClick={() => router.push("/super-admin/vtm/create")}
@@ -57,8 +55,7 @@ export default function SuperAdminVtmManagement() {
               </button>
             </div>
 
-            {/* Table */}
-            <div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
+<div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -93,8 +90,7 @@ export default function SuperAdminVtmManagement() {
                 </table>
               </div>
 
-              {/* Pagination */}
-              <div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
+<div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
                 <div className="flex items-center gap-3">
                   <span className="text-[13px] font-medium text-[#666]">items per page</span>
                   <div className="relative">

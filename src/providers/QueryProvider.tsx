@@ -8,13 +8,13 @@ export default function QueryProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // One QueryClient per app session — created once, never re-created on re-renders
+  
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 1000 * 30, // 30 seconds before background refetch
+            staleTime: 1000 * 30, 
             retry: 1,
           },
         },

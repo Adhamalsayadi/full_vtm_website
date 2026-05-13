@@ -27,7 +27,7 @@ function StatusPill({ status }: { status: string }) {
     rejected: "bg-[#FEEBEB] text-[#F84F4F]",
     failed: "bg-[#FEEBEB] text-[#F84F4F]",
     false: "bg-[#FEEBEB] text-[#F84F4F]",
-    pending: "bg-[#FEEBEB] text-[#F84F4F]", // Looking at VTM - Enq.png, pending for enquiry status is red-ish/orange
+    pending: "bg-[#FEEBEB] text-[#F84F4F]", 
     moderate: "bg-[#F2F4F7] text-[#666]",
     normal: "bg-[#E9F8F1] text-[#27B973]",
   }[s] || "bg-[#F2F4F7] text-[#666]";

@@ -13,7 +13,7 @@ export function useEnquiries(params: FetchEnquiriesParams) {
   return useQuery({
     queryKey: ["enquiries", params],
     queryFn: () => fetchEnquiries(params),
-    // Don't run user-scoped queries until userId is available
+    
     enabled: params.onlyMyEnquiries ? !!params.userId : true,
     select: (result) => result.data,
   });

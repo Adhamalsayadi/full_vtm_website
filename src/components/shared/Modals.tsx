@@ -108,10 +108,8 @@ export const EditEnquiryModal = ({
             e.preventDefault();
             const formData = new FormData(e.currentTarget);
             const data = Object.fromEntries(formData.entries());
-            // If previewImage is a string and matches enquiry.image, it means it's not changed.
-            // If previewImage is a URL (from CreateObjectURL), we should handle it.
-            // The caller onSave should handle the file from newImage input.
-            onSave(data);
+
+onSave(data);
             onClose();
         }}>
            <div className="space-y-1.5">
@@ -127,7 +125,7 @@ export const EditEnquiryModal = ({
               <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Enquiry Image</label>
               {previewImage && (
                  <div className="mb-2 relative w-32 h-32 rounded-xl border border-[#EAECF0] group overflow-hidden bg-gray-50 flex items-center justify-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    
                     <img src={previewImage} alt="Preview" className="w-full h-full object-cover" />
                     <button 
                       type="button" 
@@ -146,7 +144,7 @@ export const EditEnquiryModal = ({
                    onChange={handleImageChange}
                    className="block w-full text-sm text-[#667085] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer border border-[#EAECF0] rounded-xl bg-[#F9FAFB]"
                  />
-                 {/* Hidden input to pass the existing image url if not replaced */}
+                 
                  <input type="hidden" name="image" value={typeof previewImage === 'string' ? previewImage : ""} />
               </div>
            </div>

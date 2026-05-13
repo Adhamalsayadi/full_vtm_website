@@ -13,7 +13,6 @@ import { useEnquiryModalStore } from "@/store/enquiryModalStore";
 import {
   useEnquiries,
   useUpdateEnquiry,
-  useDeleteEnquiry,
   useToggleEnquiryVisibility,
 } from "@/hooks/useEnquiries";
 import { Enquiry } from "@/types/enquiries";
@@ -24,8 +23,7 @@ export default function MarketerEnquiriesPage() {
   const { activeEnquiry, modalType, openModal, closeModal } =
     useEnquiryModalStore();
 
-  // Marketer sees ALL enquiries (no user filter)
-  const {
+const {
     data: enquiries = [],
     isLoading,
     isError,
@@ -36,7 +34,6 @@ export default function MarketerEnquiriesPage() {
   });
 
   const updateEnquiry = useUpdateEnquiry();
-  const deleteEnquiry = useDeleteEnquiry();
   const toggleVisibility = useToggleEnquiryVisibility();
 
   const handleAction = (id: string, action: string) => {
@@ -53,7 +50,7 @@ export default function MarketerEnquiriesPage() {
         toggleVisibility.mutate(id);
         break;
       default:
-        alert(`${action} action on enquiry ${id}`);
+        break;
     }
   };
 
@@ -82,7 +79,7 @@ export default function MarketerEnquiriesPage() {
 
   const loading = isLoading;
   const error = isError ? "Unable to load enquiries right now." : null;
-  const isDeleteModalOpen = modalType === "delete";
+  const isHideModalOpen = modalType === "hide";
   const isEditModalOpen = modalType === "edit";
 
   return (
@@ -235,7 +232,7 @@ export default function MarketerEnquiriesPage() {
       </div>
 
       <ConfirmationModal
-        isOpen={isDeleteModalOpen}
+        isOpen={isHideModalOpen}
         onClose={closeModal}
         onConfirm={() => activeEnquiry && confirmHide(activeEnquiry.id)}
         title="Hide Enquiry"

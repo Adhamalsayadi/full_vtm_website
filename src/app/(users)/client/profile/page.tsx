@@ -44,8 +44,7 @@ export default function ClientProfilePage() {
               &gt; <span className="text-[#98A2B3]">Edit Profile</span>
             </div>
 
-            {/* Avatar card */}
-            <div className="bg-white rounded-2xl border border-[#EAECF0] shadow-sm p-6 mb-6 flex items-center gap-5">
+<div className="bg-white rounded-2xl border border-[#EAECF0] shadow-sm p-6 mb-6 flex items-center gap-5">
               <div className="relative">
                 <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl font-black overflow-hidden">
                   {user?.avatar ? (
@@ -72,8 +71,7 @@ export default function ClientProfilePage() {
                 User Information
               </h2>
 
-              {/* Basic fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {[
                   { label: "Name", name: "name", defaultValue: user?.name },
                   { label: "Position", name: "position" },
@@ -94,8 +92,7 @@ export default function ClientProfilePage() {
                 ))}
               </div>
 
-              {/* Company background */}
-              <div>
+<div>
                 <p className="text-xs font-bold text-[#344054] uppercase tracking-wider mb-3">Company Background</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -109,8 +106,7 @@ export default function ClientProfilePage() {
                 </div>
               </div>
 
-              {/* Scope of services — suppliers only */}
-              {isSupplier && (
+{isSupplier && (
                 <>
                   <div>
                     <p className="text-xs font-bold text-[#344054] uppercase tracking-wider mb-3">Company scope of services</p>
@@ -165,8 +161,7 @@ export default function ClientProfilePage() {
                 </>
               )}
 
-              {/* Actions */}
-              <div className="flex gap-3 pt-2 border-t border-[#F2F4F7]">
+<div className="flex gap-3 pt-2 border-t border-[#F2F4F7]">
                 <Link
                   href={isSupplier ? "/supplier" : "/client"}
                   className="flex-1 text-center py-3 rounded-xl border border-[#EAECF0] text-sm font-semibold text-[#344054] hover:bg-[#F9FAFB] transition-all"

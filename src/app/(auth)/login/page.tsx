@@ -10,7 +10,7 @@ import { useAuthStore } from "@/store/authStore";
 import { setAuthCookie } from "@/actions/auth";
 
 export default function LoginPage() {
-  const router = useRouter(); // 2. Initialize router
+  const router = useRouter(); 
   const setUser = useAuthStore((state) => state.setUser);
 
   const [email, setEmail] = useState("");
@@ -28,14 +28,12 @@ export default function LoginPage() {
       const result = await loginUser(email, password);
 
       if (result.success && result.role && result.user) {
-        // 3. Store user in global auth store
+        
         setUser(result.user);
 
-        // Save auth cookie for middleware using mock token for now
-        await setAuthCookie(result.role, "mock-jwt-token");
+await setAuthCookie(result.role, "mock-jwt-token");
 
-        // 4. REDIRECT LOGIC BASED ON ROLE
-        if (result.role === "Client") {
+if (result.role === "Client") {
           router.push("/client");
         } else if (result.role === "Admin") {
           router.push("/marketer");

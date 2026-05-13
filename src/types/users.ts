@@ -10,21 +10,18 @@ export interface SignUpFormData {
   experienceYears: string;
   location: string;
 
-  // Supplier Specific
-  serviceScope: string;
+serviceScope: string;
   activityClassification: string;
   subCategories: string;
 
-  // Custom "Other" inputs
-  customActivity: string;
+customActivity: string;
   customSubCategory: string;
 
   companyEmail: string;
   phoneNumber: string;
   websiteLink: string;
-  
-  // Contact Sections (Design matching)
-  ownerSection: { name: string; tel: string; email: string };
+
+ownerSection: { name: string; tel: string; email: string };
   directorsSection: { name: string; tel: string; email: string };
   financialSection: { name: string; tel: string; email: string };
   commercialSection: { name: string; tel: string; email: string };
@@ -62,6 +59,6 @@ export interface User {
 }
 
 export interface Marketer extends User {
-  role: "Admin"; // Or however marketer is defined
+  role: "Admin"; 
   clientsManaged?: string[];
 }

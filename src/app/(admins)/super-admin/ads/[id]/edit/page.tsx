@@ -27,9 +27,8 @@ export default function EditAdPage() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[800px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/ads" className="hover:text-[#333]">ads</Link>
@@ -51,7 +50,7 @@ export default function EditAdPage() {
                </div>
 
                <div className="p-10 space-y-8">
-                  {/* Ad Title */}
+                  
                   <div className="space-y-3">
                     <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight">Ad Title</label>
                     <input 
@@ -63,8 +62,7 @@ export default function EditAdPage() {
                     />
                   </div>
 
-                  {/* Ad Link */}
-                  <div className="space-y-3">
+<div className="space-y-3">
                     <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight">Redirect Link (Optional)</label>
                     <input 
                       type="text" 
@@ -75,8 +73,7 @@ export default function EditAdPage() {
                     />
                   </div>
 
-                  {/* Ad Image Preview & Change */}
-                  <div className="space-y-3">
+<div className="space-y-3">
                     <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight">AD IMAGE</label>
                     <div className="flex flex-col gap-6">
                       <div className="w-full h-48 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl flex items-center justify-center text-[#999] relative overflow-hidden shadow-sm">
@@ -102,8 +99,7 @@ export default function EditAdPage() {
                     </div>
                   </div>
 
-                  {/* Status Toggle */}
-                  <div className="flex items-center gap-3 py-2">
+<div className="flex items-center gap-3 py-2">
                      <button 
                        onClick={() => setFormData({...formData, status: formData.status === 'active' ? 'inactive' : 'active'})}
                        className={cn(
@@ -119,8 +115,7 @@ export default function EditAdPage() {
                      <span className="text-sm font-bold text-[#1D1F24] lowercase" >Ad is active</span>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-end gap-4 pt-6">
+<div className="flex items-center justify-end gap-4 pt-6">
                     <button 
                       onClick={() => router.back()}
                       className="px-8 py-4 rounded-xl text-sm font-black text-[#999] hover:text-[#333] transition-colors uppercase tracking-widest"

@@ -65,7 +65,7 @@ export default function AdminSidebar({ role }: AdminSidebarProps) {
 
   return (
     <aside className="w-68 min-h-screen bg-white border-r border-[#F2F4F7] flex flex-col transition-all duration-300 overflow-y-auto shrink-0 z-50">
-      {/* Sidebar Header */}
+      
       <div className="p-8 pb-10 flex items-center justify-between">
         <Link href={role === "SuperAdmin" ? "/super-admin" : "/sub-admin"} className="flex items-center gap-3">
           <div className="relative">
@@ -83,7 +83,7 @@ export default function AdminSidebar({ role }: AdminSidebarProps) {
       </div>
 
       <nav className="flex-1 space-y-10">
-        {/* Data panel Section */}
+        
         <div className="px-4">
           <Link 
             href={role === "SuperAdmin" ? "/super-admin" : "/sub-admin"}
@@ -99,8 +99,7 @@ export default function AdminSidebar({ role }: AdminSidebarProps) {
           </Link>
         </div>
 
-        {/* PLATFORM Category */}
-        <div className="space-y-4">
+<div className="space-y-4">
           <p className="px-10 text-[11px] font-black text-[#999] uppercase tracking-widest mb-6">PLATFORM</p>
           <div className="space-y-1 px-4">
             {platformItems.map((item) => {
@@ -128,8 +127,7 @@ export default function AdminSidebar({ role }: AdminSidebarProps) {
         </div>
       </nav>
 
-      {/* Sidebar Footer */}
-      <div className="p-8 mt-auto border-t border-[#F2F4F7]">
+<div className="p-8 mt-auto border-t border-[#F2F4F7]">
         <button onClick={() => setIsLogoutModalOpen(true)} className="flex items-center gap-3 px-4 py-3 rounded-2xl w-full text-red-600 hover:bg-red-50 hover:font-bold transition-all mt-auto group">
           <LogOut size={20} />
           <span>Log out</span>

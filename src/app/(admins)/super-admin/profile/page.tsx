@@ -22,9 +22,8 @@ export default function AdminProfile() {
 
         <main className="flex-1 p-8">
           <div className="max-w-[1400px] mx-auto bg-white rounded-[32px] border border-[#F2F4F7] shadow-sm min-h-[800px] flex flex-col">
-            
-            {/* Horizontal Tabs */}
-            <div className="px-10 flex border-b border-[#F2F4F7]">
+
+<div className="px-10 flex border-b border-[#F2F4F7]">
                <button 
                  onClick={() => setActiveTab("user-info")}
                  className={cn(
@@ -54,7 +53,7 @@ export default function AdminProfile() {
                  <div className="max-w-4xl space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <form className="space-y-10">
                        <div className="space-y-8">
-                          {/* Unique Code */}
+                          
                           <div className="relative group">
                             <label className="absolute -top-3 left-4 bg-white px-2 text-[11px] font-medium text-[#999] group-focus-within:text-[#121111] transition-all tracking-tight">unique code</label>
                             <input 
@@ -65,8 +64,7 @@ export default function AdminProfile() {
                             />
                           </div>
 
-                          {/* Name */}
-                          <div className="relative group">
+<div className="relative group">
                             <label className="absolute -top-3 left-4 bg-white px-2 text-[11px] font-medium text-[#999] group-focus-within:text-[#121111] transition-all tracking-tight">Name</label>
                             <input 
                               type="text" 
@@ -75,8 +73,7 @@ export default function AdminProfile() {
                             />
                           </div>
 
-                          {/* Email */}
-                          <div className="relative group w-full md:w-2/3">
+<div className="relative group w-full md:w-2/3">
                             <label className="absolute -top-3 left-4 bg-white px-2 text-[11px] font-medium text-[#999] group-focus-within:text-[#121111] transition-all tracking-tight">Email</label>
                             <input 
                               type="email" 
@@ -85,8 +82,7 @@ export default function AdminProfile() {
                             />
                           </div>
 
-                          {/* Image Field */}
-                          <div className="space-y-4">
+<div className="space-y-4">
                              <label className="text-[14px] font-bold text-[#333] lowercase">Image</label>
                              <div className="flex items-center gap-4">
                                 <div className="text-[#999] w-10 flex justify-center">
@@ -102,11 +98,10 @@ export default function AdminProfile() {
                           </div>
                        </div>
 
-                       {/* Profile Picture Display */}
-                       <div className="flex flex-col items-center py-10">
+<div className="flex flex-col items-center py-10">
                           <div className="w-32 h-32 rounded-full overflow-hidden shadow-2xl ring-4 ring-[#F9FAFB]">
                               <Image 
-                                src="/super_admin/Drop list.png" // Using the cup from mockup if possible, or placeholder
+                                src="/super_admin/Drop list.png" 
                                 alt="Admin Avatar"
                                 width={128}
                                 height={128}
@@ -126,7 +121,7 @@ export default function AdminProfile() {
                  <div className="max-w-4xl space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <form className="space-y-10">
                        <div className="space-y-8">
-                          {/* Old Password */}
+                          
                           <div className="relative group">
                             <label className="absolute -top-3 left-4 bg-white px-2 text-[11px] font-medium text-[#999] group-focus-within:text-[#121111] transition-all tracking-tight">Old Password</label>
                             <div className="relative">
@@ -141,8 +136,7 @@ export default function AdminProfile() {
                             </div>
                           </div>
 
-                          {/* New and Confirm Password Grid */}
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                              <div className="relative group">
                                 <label className="absolute -top-3 left-4 bg-white px-2 text-[11px] font-medium text-[#999] group-focus-within:text-[#121111] transition-all tracking-tight">New Password</label>
                                 <div className="relative">

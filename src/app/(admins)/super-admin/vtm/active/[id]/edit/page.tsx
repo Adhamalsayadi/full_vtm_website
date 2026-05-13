@@ -29,9 +29,8 @@ export default function EditVtmPage() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[800px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/vtm" className="hover:text-[#333]">vtm</Link>
@@ -62,7 +61,7 @@ export default function EditVtmPage() {
 
                <div className="p-10 space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
-                     {/* Full Name */}
+                     
                      <div className="space-y-3">
                        <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">Full Name</label>
                        <input 
@@ -73,8 +72,7 @@ export default function EditVtmPage() {
                        />
                      </div>
 
-                     {/* Email */}
-                     <div className="space-y-3">
+<div className="space-y-3">
                        <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">Email</label>
                        <input 
                          type="email" 
@@ -84,8 +82,7 @@ export default function EditVtmPage() {
                        />
                      </div>
 
-                     {/* Password */}
-                     <div className="space-y-3">
+<div className="space-y-3">
                        <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">Change Password</label>
                        <div className="relative">
                           <input 
@@ -103,8 +100,7 @@ export default function EditVtmPage() {
                        </div>
                      </div>
 
-                     {/* Role / Segment */}
-                     <div className="space-y-3">
+<div className="space-y-3">
                        <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">Role / Segment</label>
                        <select 
                          className="w-full h-14 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl px-6 text-sm font-bold text-[#1D1F24] outline-none appearance-none lowercase"
@@ -116,8 +112,7 @@ export default function EditVtmPage() {
                        </select>
                      </div>
 
-                     {/* Phone Number */}
-                     <div className="space-y-3 md:col-span-2">
+<div className="space-y-3 md:col-span-2">
                        <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">Phone Number</label>
                        <input 
                          type="text" 
@@ -128,8 +123,7 @@ export default function EditVtmPage() {
                      </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-end gap-4 pt-10 border-t border-[#F2F4F7]">
+<div className="flex items-center justify-end gap-4 pt-10 border-t border-[#F2F4F7]">
                     <button 
                       onClick={() => router.back()}
                       className="px-8 py-4 rounded-xl text-sm font-black text-[#999] hover:text-[#333] transition-colors uppercase tracking-widest"

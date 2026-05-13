@@ -27,8 +27,7 @@ export default function SupplierEnquiriesPage() {
     useEnquiryModalStore();
   const { openEnquiry, renderModals } = useModalFlow();
 
-  /* ---------- pagination state ---------- */
-  const [currentPage, setCurrentPage] = useState(1);
+const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const {
@@ -47,8 +46,7 @@ export default function SupplierEnquiriesPage() {
   const deleteEnquiry = useDeleteEnquiry();
   const toggleVisibility = useToggleEnquiryVisibility();
 
-  /* ---------- pagination logic ---------- */
-  const totalItems = enquiries.length;
+const totalItems = enquiries.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
@@ -62,20 +60,18 @@ export default function SupplierEnquiriesPage() {
     const enquiry = enquiries.find((e: Enquiry) => e.id === id);
     if (!enquiry) return;
     switch (action) {
-      case "Hide":
-        openModal("delete", enquiry);
+      case "View":
+        openEnquiry(enquiry);
         break;
       case "Edit":
         openModal("edit", enquiry);
         break;
-      case "View":
-        openEnquiry(enquiry);
-        break;
       case "Hide":
-        toggleVisibility.mutate(id);
+        
+        openModal("hide", enquiry);
         break;
       default:
-        alert(`${action} action on enquiry ${id}`);
+        break;
     }
   };
 
@@ -86,7 +82,7 @@ export default function SupplierEnquiriesPage() {
 
   const loading = isLoading;
   const error = isError ? "Unable to load your enquiries right now." : null;
-  const isDeleteModalOpen = modalType === "delete";
+  const isHideModalOpen = modalType === "hide";
   const isEditModalOpen = modalType === "edit";
 
   return (
@@ -162,13 +158,12 @@ export default function SupplierEnquiriesPage() {
                               "bg-[#F2F4F7]/60 opacity-60 grayscale-[0.5]"
                           )}
                         >
-                          {/* # */}
+                          
                           <td className="px-4 py-5 text-sm text-[#667085]">
                             {startIndex + index + 1}
                           </td>
 
-                          {/* TITLE */}
-                          <td className="px-4 py-5 text-sm font-semibold text-[#101828]">
+<td className="px-4 py-5 text-sm font-semibold text-[#101828]">
                             <button 
                               onClick={() => openEnquiry(enq)}
                               className="flex items-center gap-1 truncate hover:text-primary transition-colors text-left w-full"
@@ -182,23 +177,19 @@ export default function SupplierEnquiriesPage() {
                             </button>
                           </td>
 
-                          {/* CATEGORY */}
-                          <td className="px-4 py-5 text-sm text-[#667085] truncate">
+<td className="px-4 py-5 text-sm text-[#667085] truncate">
                             {enq.categoryLabel || enq.category}
                           </td>
 
-                          {/* SUB CATEGORY */}
-                          <td className="px-4 py-5 text-sm text-[#667085] truncate">
+<td className="px-4 py-5 text-sm text-[#667085] truncate">
                             {enq.subCategoryLabel || enq.subCategory || "—"}
                           </td>
 
-                          {/* QUANTITY */}
-                          <td className="px-4 py-5 text-sm text-[#667085]">
+<td className="px-4 py-5 text-sm text-[#667085]">
                             {enq.quantity}
                           </td>
 
-                          {/* ENQUIRY STATUS */}
-                          <td className="px-4 py-5">
+<td className="px-4 py-5">
                             <span
                               className={cn(
                                 "px-3 py-1.5 rounded-full text-xs font-bold capitalize",
@@ -211,8 +202,7 @@ export default function SupplierEnquiriesPage() {
                             </span>
                           </td>
 
-                          {/* ACTIONS */}
-                          <td className="px-4 py-3">
+<td className="px-4 py-3">
                             <div className="flex flex-col items-center gap-1.5 text-[#667085]">
                               <button
                                 onClick={() => handleAction(enq.id, "View")}
@@ -237,9 +227,8 @@ export default function SupplierEnquiriesPage() {
                 </table>
               </div>
 
-              {/* ---- Pagination ---- */}
-              <div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
-                {/* Items per page */}
+<div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
+                
                 <div className="flex items-center gap-2">
                   <span>items per page</span>
                   <select
@@ -256,15 +245,13 @@ export default function SupplierEnquiriesPage() {
                   </select>
                 </div>
 
-                {/* Range text */}
-                <span>
+<span>
                   {totalItems === 0
                     ? "0 from 0"
                     : `${startIndex + 1}-${endIndex} from ${totalItems}`}
                 </span>
 
-                {/* Page navigation */}
-                <div className="flex items-center gap-1">
+<div className="flex items-center gap-1">
                   <button
                     onClick={() => goToPage(1)}
                     disabled={currentPage === 1}
@@ -305,7 +292,7 @@ export default function SupplierEnquiriesPage() {
       </div>
 
       <ConfirmationModal
-        isOpen={isDeleteModalOpen}
+        isOpen={isHideModalOpen}
         onClose={closeModal}
         onConfirm={confirmHide}
         title="Hide Enquiry"

@@ -6,7 +6,6 @@ import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
 import { Settings, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
-/* ── mock data matching the design ── */
 const mockDeals = [
   { id: "1", enquiry: "Second Enquiry", client: "Company name 2", supplier: "Company name 5", invoiceSent: "invoice sent", paymentReceived: "payment not received" },
   { id: "2", enquiry: "enquiry title new", client: "company 2", supplier: "My Company", invoiceSent: "invoice not sent", paymentReceived: "payment not received" },
@@ -16,14 +15,14 @@ function invoiceBadge(status: string) {
   const lower = status.toLowerCase();
   if (lower.includes("not sent"))
     return "bg-[#FEF2F2] text-[#B42318]";
-  return "bg-[#ECFDF3] text-[#027A48]"; // invoice sent
+  return "bg-[#ECFDF3] text-[#027A48]"; 
 }
 
 function paymentBadge(status: string) {
   const lower = status.toLowerCase();
   if (lower.includes("not received"))
     return "bg-[#FEF2F2] text-[#B42318]";
-  return "bg-[#ECFDF3] text-[#027A48]"; // payment received
+  return "bg-[#ECFDF3] text-[#027A48]"; 
 }
 
 export default function MarketerDealsPage() {
@@ -123,8 +122,7 @@ export default function MarketerDealsPage() {
                 </table>
               </div>
 
-              {/* Pagination */}
-              <div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
+<div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
                 <div className="flex items-center gap-2">
                   <span>items per page</span>
                   <select value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }} className="rounded-lg border border-[#D0D5DD] bg-white px-3 py-1.5 text-sm text-[#344054] outline-none focus:border-primary">

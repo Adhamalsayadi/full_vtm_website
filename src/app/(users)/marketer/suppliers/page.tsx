@@ -6,7 +6,6 @@ import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
 import { Eye, Settings, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
-/* ── mock data matching the design ── */
 const mockSuppliers = [
   { id: "1", companyName: "Company name test", code: "SA-SP-23BRX20S", vtmStatus: "pending", adminStatus: "pending" },
   { id: "2", companyName: "Company name 4", code: "SA-SP-23BRX20A", vtmStatus: "approved", adminStatus: "pending" },
@@ -22,7 +21,7 @@ function statusBadge(status: string) {
     return "bg-[#ECFDF3] text-[#027A48]";
   if (lower === "rejected")
     return "bg-[#FEF2F2] text-[#B42318]";
-  return "bg-[#F2F4F7] text-[#344054]"; // pending
+  return "bg-[#F2F4F7] text-[#344054]"; 
 }
 
 export default function MarketerSuppliersPage() {
@@ -118,8 +117,7 @@ export default function MarketerSuppliersPage() {
                 </table>
               </div>
 
-              {/* Pagination */}
-              <div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
+<div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
                 <div className="flex items-center gap-2">
                   <span>items per page</span>
                   <select value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }} className="rounded-lg border border-[#D0D5DD] bg-white px-3 py-1.5 text-sm text-[#344054] outline-none focus:border-primary">

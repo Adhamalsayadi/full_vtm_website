@@ -35,7 +35,7 @@ export default function SuperAdminSubAdmins() {
 
         <main className="flex-1 p-6 md:p-10 overflow-auto">
           <div className="max-w-7xl mx-auto space-y-8">
-            {/* Header Area */}
+            
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-[10px] font-black text-[#98A2B3] uppercase tracking-[4px] mb-2">
@@ -57,8 +57,7 @@ export default function SuperAdminSubAdmins() {
               </button>
             </div>
 
-            {/* VTM Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {mockVTMs.map((vtm) => (
                 <div key={vtm.id} className="bg-white rounded-[40px] p-10 border border-[#EAECF0] shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden group relative">
                   <div className="absolute top-0 right-0 p-12 bg-[#F2F4F7] rounded-bl-[60px] translate-x-12 -translate-y-12 group-hover:bg-primary/20 transition-all duration-500"></div>
@@ -109,8 +108,7 @@ export default function SuperAdminSubAdmins() {
         </main>
       </div>
 
-      {/* Account Creation Modal (VTM) */}
-      {showCreateModal && (
+{showCreateModal && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 lg:p-10">
           <div className="fixed inset-0 bg-black/70 backdrop-blur-xl" onClick={() => setShowCreateModal(false)}></div>
           <div className="relative bg-white w-full max-w-[720px] rounded-[48px] shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-500">

@@ -38,12 +38,10 @@ export default function AdminHeader({ role }: AdminHeaderProps) {
 
   return (
     <header className="h-[88px] bg-white border-b border-[#F2F4F7] flex items-center justify-end px-12 sticky top-0 z-[100] font-sans">
-      
-      {/* Right Side Actions */}
-      <div className="flex items-center gap-8">
-        
-        {/* User Profile Dropdown */}
-        <div className="relative">
+
+<div className="flex items-center gap-8">
+
+<div className="relative">
           <button 
             onClick={() => setIsOpen(!isOpen)}
             className="flex items-center gap-3 p-1.5 rounded-2xl hover:bg-[#F9FAFB] transition-all group"
@@ -64,7 +62,7 @@ export default function AdminHeader({ role }: AdminHeaderProps) {
              <>
                <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
                <div className="absolute right-0 mt-3 w-56 bg-white rounded-[24px] shadow-[0_20px_40px_rgba(0,0,0,0.1)] border border-[#F2F4F7] py-2 z-20 animate-in fade-in slide-in-from-top-4 duration-300">
-                  {/* User Info Row */}
+                  
                   <div className="px-5 py-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-[#1D1F24] flex items-center justify-center text-white text-[15px] font-black overflow-hidden shadow-sm">
                       A

@@ -13,7 +13,7 @@ export default function ForgotPasswordPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate API call
+    
     setTimeout(() => {
       setIsLoading(false);
       setSubmitted(true);
@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
       </header>
 
       <div className="flex flex-col lg:flex-row flex-1 relative pt-[80px] md:pt-[100px]">
-        {/* Sidebar */}
+        
         <div className="w-full lg:w-[300px] bg-[#2d2d2d] lg:rounded-r-[15px] flex p-10 md:p-[60px_40px] lg:min-h-[calc(100vh-100px)]">
           <div className="sidebar-text">
             <h1 className="text-white text-2xl md:text-[32px] font-bold mb-1.25">
@@ -59,8 +59,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
 
-        {/* Content Card */}
-        <div
+<div
           className="bg-white p-6 md:p-10 lg:p-[40px_60px] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] 
                         relative lg:absolute lg:left-[220px] lg:top-[140px] 
                         w-[90%] mx-auto lg:mx-0 lg:w-[1012px] max-w-[1200px] 

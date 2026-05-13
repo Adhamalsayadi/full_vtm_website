@@ -33,7 +33,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white relative overflow-x-hidden">
-      {/* Header */}
+      
       <header className="flex justify-between items-center py-4 px-6 md:py-5 md:px-10 absolute top-0 w-full z-20">
         <Link href="/">
           <Image src="/VT.png" alt="V&T Logo" width={50} height={35} />
@@ -46,7 +46,7 @@ export default function SignupPage() {
       </header>
 
       <div className="flex flex-col lg:flex-row flex-1 relative pt-[80px] md:pt-[100px]">
-        {/* Sidebar */}
+        
         <div className="w-full lg:w-[250px] bg-[#2d2d2d] lg:rounded-r-[15px] flex p-6 md:p-10 lg:p-[60px_30px] lg:min-h-[calc(100vh-100px)]">
           <div className="flex flex-row lg:flex-col gap-6 md:gap-10 relative overflow-x-auto lg:overflow-visible no-scrollbar w-full">
             <div className="hidden lg:block absolute left-2.5 top-2.5 bottom-2.5 w-px bg-[#555] z-0"></div>
@@ -84,8 +84,7 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* Main Form Container */}
-        <div className="bg-white p-6 md:p-10 lg:p-[40px_50px] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] relative lg:absolute lg:left-[200px] lg:top-[50px] w-[95%] lg:w-[850px] mx-auto lg:mx-0 mt-[-20px] lg:mt-0 z-10 min-h-[500px] md:min-h-[600px] mb-10">
+<div className="bg-white p-6 md:p-10 lg:p-[40px_50px] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] relative lg:absolute lg:left-[200px] lg:top-[50px] w-[95%] lg:w-[850px] mx-auto lg:mx-0 mt-[-20px] lg:mt-0 z-10 min-h-[500px] md:min-h-[600px] mb-10">
           {renderStepContent({
             step,
             formData,

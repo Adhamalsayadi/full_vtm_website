@@ -1,20 +1,13 @@
-import axios from "axios";
+import { axiosInstance } from "@/lib/api/axios";
 import { SignUpFormData } from "@/types/users";
 
-const api = axios.create({
-  baseURL: "", // Set your base URL here if needed (e.g., process.env.NEXT_PUBLIC_API_URL)
-  headers: { "Content-Type": "application/json" },
-});
-
-// Set to true when you have a real backend ready
-const Python_ap = false;
+const USE_REAL_API = false;
 
 export async function registerUser(
   formData: SignUpFormData
 ): Promise<{ success: boolean; message: string }> {
-  // 1. Prepare the payload (convert FormData to a format axios can send)
-  // Note: If you are sending files, you usually send a FormData object directly.
-  const payload = new FormData();
+
+const payload = new FormData();
 
   Object.entries(formData).forEach(([key, value]) => {
     if (value instanceof File) {
@@ -26,13 +19,10 @@ export async function registerUser(
     }
   });
 
-  // 2. Mock Implementation (Matches your pattern)
-  if (!Python_ap) {
+if (!USE_REAL_API) {
     console.log("--- [MOCK] Registration Data ---");
 
-    // Log the payload contents to verify
-    // Note: FormData needs to be iterated to be seen in console
-    for (let [key, value] of payload.entries()) {
+for (let [key, value] of payload.entries()) {
       if (value instanceof File) {
         console.log(`${key}: [File] ${value.name}`);
       } else {
@@ -40,24 +30,21 @@ export async function registerUser(
       }
     }
 
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Return mock success
-    return { success: true, message: "User registered successfully (Mock)" };
+return { success: true, message: "User registered successfully (Mock)" };
   }
 
-  // 3. Real Implementation (Axios)
-  try {
-    const response = await api.post("/api/v1/auth/register", payload, {
+try {
+    const response = await axiosInstance.post("/api/v1/auth/register", payload, {
       headers: {
-        "Content-Type": "multipart/form-data", // Important for file uploads
+        "Content-Type": "multipart/form-data", 
       },
     });
 
     return { success: true, message: response.data.message };
   } catch (error) {
-    console.error("Axios Registration Error:", error);
+    console.error("[registerUser] API error:", error);
     return { success: false, message: "Registration failed" };
   }
 }

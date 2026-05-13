@@ -23,12 +23,9 @@ interface StepsContentProps {
   setFormData: React.Dispatch<React.SetStateAction<SignUpFormData>>;
 }
 
-// --- MOCK DATA ---
-// Using placeholder images to prevent 404. Replace '/icons/...' with your real paths.
 const MOCK_SERVICES: ServiceItem[] = [
-  // If you have files in public/icons/
 
-  { id: "services", label: "Services", icon: "/icons/services.png" },
+{ id: "services", label: "Services", icon: "/icons/services.png" },
   { id: "rental", label: "Rental", icon: "/icons/rental.png" },
   { id: "materials", label: "Materials", icon: "/icons/materials.png" },
   { id: "manpower", label: "Man Power", icon: "/icons/manpower.png" },
@@ -89,8 +86,7 @@ export const renderStepContent = ({
     }
   };
 
-  // --- SUPPLIER FLOW ---
-  if (formData.userType === "Supplier") {
+if (formData.userType === "Supplier") {
     const handleServiceSelect = (item: ServiceItem) => {
       setFormData((prev) => ({
         ...prev,
@@ -351,8 +347,7 @@ export const renderStepContent = ({
               />
             </div>
 
-            {/* Render Sections */}
-            {[
+{[
               { id: 'ownerSection', label: 'Company owner' },
               { id: 'directorsSection', label: 'Company directors' },
               { id: 'financialSection', label: 'Financial directors' },

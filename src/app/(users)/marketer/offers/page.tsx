@@ -37,8 +37,7 @@ export default function MarketerOffersPage() {
 
   const goToPage = (p: number) => setCurrentPage(Math.min(Math.max(1, p), totalPages));
 
-  // Page number buttons (max 5 around current)
-  const pageNumbers: number[] = [];
+const pageNumbers: number[] = [];
   const start = Math.max(1, currentPage - 2);
   const end = Math.min(totalPages, start + 4);
   for (let i = start; i <= end; i++) pageNumbers.push(i);
@@ -107,8 +106,7 @@ export default function MarketerOffersPage() {
                 </table>
               </div>
 
-              {/* Pagination */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
+<div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#EAECF0] px-5 py-4 text-sm text-[#667085]">
                 <div className="flex items-center gap-2">
                   <span>Rows per page</span>
                   <select

@@ -1,12 +1,7 @@
-import axios from "axios";
+import { axiosInstance } from "@/lib/api/axios";
 import { Enquiry, SellerRating } from "@/types/enquiries";
 
-const api = axios.create({
-  baseURL: "",
-  headers: { "Content-Type": "application/json" },
-});
-
-const Python_ap = false;
+const USE_REAL_API = false;
 
 const mockEnquiries: Enquiry[] = [
   {
@@ -278,7 +273,7 @@ const mockEnquiries: Enquiry[] = [
   createdByUserId: index % 2 === 0 ? "1" : "2",
   createdByUserName: index % 2 === 0 ? "m" : "Demo Client",
   isHidden: false,
-  // Randomize mock status for the test data for UI verification
+  
   vtmStatus: index % 3 === 0 ? "pending" : "approved",
   adminStatus: index % 4 === 0 ? "pending" : "approved",
 }));
@@ -460,13 +455,13 @@ export interface UpdateEnquiryPayload {
 }
 
 export async function createEnquiry(payload: Partial<Enquiry>): Promise<Enquiry> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      const { data } = await api.post("/api/v1/enquiries", payload);
+      const { data } = await axiosInstance.post("/api/v1/enquiries", payload);
       return data?.item || data?.data || data;
     } catch (error) {
-       console.error("Axios Create Enquiry Error:", error);
-       throw error;
+      console.error("[createEnquiry] API error:", error);
+      throw error;
     }
   }
 
@@ -486,7 +481,7 @@ export async function createEnquiry(payload: Partial<Enquiry>): Promise<Enquiry>
     image: payload.image || "/enquiries.png",
     requiredDate: payload.requiredDate || new Date().toISOString().split("T")[0],
     requestType: payload.requestType || "Normal",
-    enquiryStatus: "Pending", // Starts out pending until both admins approve
+    enquiryStatus: "Pending", 
     vtmStatus: "pending",
     adminStatus: "pending",
     quantity: payload.quantity || 1,
@@ -506,15 +501,15 @@ export async function createEnquiry(payload: Partial<Enquiry>): Promise<Enquiry>
 export async function fetchEnquiries(
   params: FetchEnquiriesParams
 ): Promise<{ data: Enquiry[]; total: number }> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      const { data } = await api.get("/api/v1/enquiries", { params });
+      const { data } = await axiosInstance.get("/api/v1/enquiries", { params });
       return {
         data: data.items || data.data,
         total: data.total,
       };
     } catch (error) {
-      console.error("Axios Backend Error:", error);
+      console.error("[fetchEnquiries] API error:", error);
       return { data: [], total: 0 };
     }
   }
@@ -581,15 +576,15 @@ export async function updateEnquiryById(
   enquiryId: string,
   payload: UpdateEnquiryPayload
 ): Promise<Enquiry | null> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      const { data } = await api.patch(
+      const { data } = await axiosInstance.patch(
         `/api/v1/enquiries/${enquiryId}`,
         payload
       );
       return data?.item || data?.data || data;
     } catch (error) {
-      console.error("Axios Update Enquiry Error:", error);
+      console.error("[updateEnquiryById] API error:", error);
       return null;
     }
   }
@@ -609,9 +604,8 @@ export async function updateEnquiryById(
     title: payload.title ?? current.title,
   };
 
-  // Approval Pipeline Logic
-  if (updated.vtmStatus === "approved" && updated.adminStatus === "approved") {
-    updated.enquiryStatus = "Accepted"; // Or Active depending on UI preference, using Accepted
+if (updated.vtmStatus === "approved" && updated.adminStatus === "approved") {
+    updated.enquiryStatus = "Accepted"; 
   } else if (updated.vtmStatus === "rejected" || updated.adminStatus === "rejected") {
     updated.enquiryStatus = "Rejected";
   } else {
@@ -623,12 +617,12 @@ export async function updateEnquiryById(
 }
 
 export async function deleteEnquiryById(enquiryId: string): Promise<boolean> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      await api.delete(`/api/v1/enquiries/${enquiryId}`);
+      await axiosInstance.delete(`/api/v1/enquiries/${enquiryId}`);
       return true;
     } catch (error) {
-      console.error("Axios Delete Enquiry Error:", error);
+      console.error("[deleteEnquiryById] API error:", error);
       return false;
     }
   }
@@ -644,14 +638,14 @@ export async function deleteEnquiryById(enquiryId: string): Promise<boolean> {
 export async function toggleEnquiryVisibility(
   enquiryId: string
 ): Promise<Enquiry | null> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      const { data } = await api.patch(
+      const { data } = await axiosInstance.patch(
         `/api/v1/enquiries/${enquiryId}/visibility`
       );
       return data?.item || data?.data || data;
     } catch (error) {
-      console.error("Axios Toggle Visibility Error:", error);
+      console.error("[toggleEnquiryVisibility] API error:", error);
       return null;
     }
   }
@@ -672,12 +666,12 @@ export async function toggleEnquiryVisibility(
 export async function fetchSellerRatingBySellerId(
   sellerId: string
 ): Promise<SellerRating | null> {
-  if (Python_ap) {
+  if (USE_REAL_API) {
     try {
-      const { data } = await api.get(`/api/v1/sellers/${sellerId}/rating`);
+      const { data } = await axiosInstance.get(`/api/v1/sellers/${sellerId}/rating`);
       return data;
     } catch (error) {
-      console.error("Axios Seller Rating Error:", error);
+      console.error("[fetchSellerRatingBySellerId] API error:", error);
       return null;
     }
   }

@@ -33,8 +33,7 @@ export default function MarketerProfilePage() {
               &gt; <span className="text-[#98A2B3]">Edit Profile</span>
             </div>
 
-            {/* Avatar card */}
-            <div className="bg-white rounded-2xl border border-[#EAECF0] shadow-sm p-6 mb-6 flex items-center gap-5">
+<div className="bg-white rounded-2xl border border-[#EAECF0] shadow-sm p-6 mb-6 flex items-center gap-5">
               <div className="relative">
                 <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center text-2xl font-black overflow-hidden">
                   {user?.avatar ? (
@@ -82,8 +81,7 @@ export default function MarketerProfilePage() {
                 ))}
               </div>
 
-              {/* Actions */}
-              <div className="flex gap-3 pt-2 border-t border-[#F2F4F7]">
+<div className="flex gap-3 pt-2 border-t border-[#F2F4F7]">
                 <Link
                   href="/marketer"
                   className="flex-1 text-center py-3 rounded-xl border border-[#EAECF0] text-sm font-semibold text-[#344054] hover:bg-[#F9FAFB] transition-all"

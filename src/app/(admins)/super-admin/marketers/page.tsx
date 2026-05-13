@@ -56,9 +56,8 @@ export default function SuperAdminMarketers() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <span className="text-[#333]">marketers</span>
@@ -75,8 +74,7 @@ export default function SuperAdminMarketers() {
                </button>
             </div>
 
-            {/* Table Card */}
-            <div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
+<div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
                <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
                     <thead>
@@ -130,8 +128,7 @@ export default function SuperAdminMarketers() {
                   </table>
                </div>
 
-               {/* Pagination */}
-               <div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
+<div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
                   <div className="flex items-center gap-3">
                     <span className="text-[13px] font-medium text-[#666]">items per page</span>
                     <div className="relative">

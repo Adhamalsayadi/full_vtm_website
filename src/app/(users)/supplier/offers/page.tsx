@@ -5,7 +5,6 @@ import Link from "next/link";
 import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
 
-
 const initialOffers = [
   {
     id: 1,

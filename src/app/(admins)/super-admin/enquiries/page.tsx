@@ -67,9 +67,8 @@ export default function SuperAdminEnquiries() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1600px] mx-auto space-y-6">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-bold text-[#999] mb-8 lowercase">
+
+<div className="flex items-center gap-2 text-[13px] font-bold text-[#999] mb-8 lowercase">
               <Link href="/super-admin" className="hover:text-[#333] capitalize">Dashboard</Link>
               <ChevronRight size={14} className="text-[#999]" />
               <span className="text-[#CCC]">enquiries</span>

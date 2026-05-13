@@ -15,8 +15,7 @@ export default function DealDetailsPage() {
   const [activeTab, setActiveTab] = useState("client");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  // Mock data for the deal
-  const dealInfo = {
+const dealInfo = {
     client: {
       companyName: "Company Name 2",
       userName: "Adham Alsayadi",
@@ -52,9 +51,8 @@ export default function DealDetailsPage() {
 
         <main className="flex-1 p-8 overflow-auto pb-20">
           <div className="max-w-[1000px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/deals" className="hover:text-[#333]">deals</Link>
@@ -84,8 +82,7 @@ export default function DealDetailsPage() {
                   </button>
                </div>
 
-               {/* Tabs Sidebar/Top */}
-               <div className="flex flex-col md:flex-row">
+<div className="flex flex-col md:flex-row">
                   <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[#F2F4F7] p-8 space-y-4">
                      {[
                        { id: "client", label: "client details", icon: <Building2 size={18} /> },

@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
         } else if (result.role === "SubAdmin") {
           router.push("/sub-admin");
         } else if (result.role === "Admin") {
-           // Admin role in this system seems to be Marketer
+           
           router.push("/marketer");
         } else {
           setError("Access denied. Admin credentials required.");
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen flex bg-white font-sans overflow-hidden">
-      {/* Left Section - Image/Branding */}
+      
       <div className="hidden lg:flex w-[480px] bg-[#121111] p-16 flex-col justify-between relative overflow-hidden">
         <div className="relative z-10">
           <Link href="/">
@@ -73,13 +73,11 @@ export default function AdminLoginPage() {
            </div>
         </div>
 
-        {/* Decorative elements */}
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px]" />
+<div className="absolute -bottom-20 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px]" />
         <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/5 rounded-full blur-[100px]" />
       </div>
 
-      {/* Right Section - Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center px-10 md:px-20 bg-[#F9FAFB]">
+<div className="flex-1 flex flex-col justify-center items-center px-10 md:px-20 bg-[#F9FAFB]">
         <div className="w-full max-w-[480px] space-y-12">
            <div className="text-center lg:text-left">
               <h2 className="text-[32px] font-black text-[#1D1F24] lowercase mb-3 italic">Log in</h2>

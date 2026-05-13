@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { Enquiry } from "@/types/enquiries";
 
-type ModalType = "edit" | "delete" | null;
+type ModalType = "edit" | "hide" | null;
 
 interface EnquiryModalState {
   activeEnquiry: Enquiry | null;
   modalType: ModalType;
-  openModal: (type: "edit" | "delete", enquiry: Enquiry) => void;
+  openModal: (type: "edit" | "hide", enquiry: Enquiry) => void;
   closeModal: () => void;
 }
 
@@ -17,3 +17,4 @@ export const useEnquiryModalStore = create<EnquiryModalState>((set) => ({
     set({ activeEnquiry: enquiry, modalType: type }),
   closeModal: () => set({ activeEnquiry: null, modalType: null }),
 }));
+

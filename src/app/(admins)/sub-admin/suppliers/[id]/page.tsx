@@ -29,9 +29,8 @@ export default function SupplierDetailView() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
               <Link href="/sub-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/sub-admin/suppliers" className="hover:text-[#333]">Supplier</Link>
@@ -39,9 +38,8 @@ export default function SupplierDetailView() {
               <span className="text-[#333]">Company name test</span>
             </div>
 
-            {/* Content Card */}
-            <div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] flex overflow-hidden min-h-[500px]">
-               {/* Side Tabs */}
+<div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] flex overflow-hidden min-h-[500px]">
+               
                <aside className="w-80 border-r border-[#F2F4F7] py-6">
                   {tabs.map((tab) => (
                     <button
@@ -59,8 +57,7 @@ export default function SupplierDetailView() {
                   ))}
                </aside>
 
-               {/* Detail Grid */}
-               <div className="flex-1 p-12">
+<div className="flex-1 p-12">
                   <div className="grid grid-cols-2 gap-y-12 gap-x-16">
                      <div className="space-y-1">
                         <p className="text-[13px] font-medium text-[#999]">Name</p>

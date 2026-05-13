@@ -44,9 +44,8 @@ export default function EnquiryOffers() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/enquiries" className="hover:text-[#333]">enquires</Link>
@@ -115,8 +114,7 @@ export default function EnquiryOffers() {
           </div>
         </main>
 
-        {/* Edit Status Modal */}
-        {isEditModalOpen && (
+{isEditModalOpen && (
           <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-[100] p-6">
             <div className="bg-white rounded-2xl shadow-2xl border border-[#F2F4F7] w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
                <div className="p-8 pb-4 flex items-center justify-between border-b border-[#F2F4F7]">

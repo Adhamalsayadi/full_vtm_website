@@ -33,8 +33,7 @@ export default function VtmDashboard() {
             
             <h2 className="text-3xl font-bold text-[#333] tracking-tight">Quick links</h2>
 
-            {/* Quick Links Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {quickLinks.map((link) => (
                 <Link 
                   key={link.label} 
@@ -46,8 +45,7 @@ export default function VtmDashboard() {
               ))}
             </div>
 
-            {/* Empty Space for potential content as per design */}
-            <div className="min-h-[400px]"></div>
+<div className="min-h-[400px]"></div>
 
           </div>
         </main>

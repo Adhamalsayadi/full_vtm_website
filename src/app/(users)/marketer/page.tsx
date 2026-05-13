@@ -54,8 +54,7 @@ export default function MarketerDashboard() {
               <p className="text-[#667085] font-medium">Welcome back, here's what's happening today.</p>
             </div>
 
-            {/* Quick Links Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {quickLinks.map((link) => (
                 <Link 
                   key={link.title} 
@@ -77,8 +76,7 @@ export default function MarketerDashboard() {
               ))}
             </div>
 
-            {/* Recent Activity / Charts Placeholder */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                <div className="lg:col-span-2 bg-white rounded-3xl border border-[#EAECF0] p-8 min-h-[400px]">
                   <h3 className="text-lg font-bold text-[#101828] mb-6">Activity Overview</h3>
                   <div className="flex items-center justify-center h-full text-[#98A2B3]">

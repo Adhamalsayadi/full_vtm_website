@@ -31,9 +31,8 @@ export default function ClientDetailsPage() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/clients" className="hover:text-[#333]">clients</Link>
@@ -42,7 +41,7 @@ export default function ClientDetailsPage() {
             </div>
 
             <div className="bg-white rounded-[16px] shadow-sm border border-[#F2F4F7] overflow-hidden flex min-h-[500px]">
-               {/* Left Sidebar Tabs */}
+               
                <div className="w-[300px] border-r border-[#F2F4F7] py-6 flex flex-col">
                  {TABS.map((tab) => (
                    <button
@@ -61,8 +60,7 @@ export default function ClientDetailsPage() {
                  ))}
                </div>
 
-               {/* Right Side Content */}
-               <div className="flex-1 p-10">
+<div className="flex-1 p-10">
                  {activeTab === "USER INFORMATION" && (
                    <div className="space-y-12">
                       <div className="grid grid-cols-2 gap-10">

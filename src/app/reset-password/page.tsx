@@ -11,7 +11,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans flex flex-col">
-      {/* Header */}
+      
       <header className="p-8 flex justify-between items-center">
         <div className="relative w-20 h-10">
            <Image src="/logo.png" alt="VT Logo" fill className="object-contain" />
@@ -22,7 +22,7 @@ export default function ResetPasswordPage() {
       </header>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Dark Section */}
+        
         <div className="w-[30%] bg-[#2B2B2B] flex flex-col p-20 relative">
            <div className="mt-20">
               <h1 className="text-[64px] font-bold text-white leading-tight">
@@ -32,8 +32,7 @@ export default function ResetPasswordPage() {
            </div>
         </div>
 
-        {/* Right Form Section */}
-        <div className="flex-1 flex items-center justify-center p-20">
+<div className="flex-1 flex items-center justify-center p-20">
            <div className="w-full max-w-xl bg-white rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-[#F2F4F7] p-16 -ml-40 z-10">
               <p className="text-[#FBC435] text-sm font-bold mb-10">Change password</p>
               

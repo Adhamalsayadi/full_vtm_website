@@ -23,9 +23,8 @@ export default function CreateSubCategoryPage() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[800px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+
+<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
               <Link href="/super-admin/categories" className="hover:text-[#333]">categories</Link>
@@ -49,7 +48,7 @@ export default function CreateSubCategoryPage() {
                </div>
 
                <div className="p-10 space-y-10">
-                  {/* Category Name */}
+                  
                   <div className="space-y-3">
                     <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight">Sub Category Name</label>
                     <input 
@@ -61,8 +60,7 @@ export default function CreateSubCategoryPage() {
                     />
                   </div>
 
-                  {/* Icon Upload */}
-                  <div className="space-y-3">
+<div className="space-y-3">
                     <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight">ICON</label>
                     <div className="w-full h-40 bg-[#F9FAFB] border-2 border-dashed border-[#EAECF0] rounded-2xl flex flex-col items-center justify-center gap-3 text-[#999] hover:bg-[#F2F4F7] transition-all cursor-pointer group">
                       <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
@@ -72,8 +70,7 @@ export default function CreateSubCategoryPage() {
                     </div>
                   </div>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center justify-end gap-4 pt-6">
+<div className="flex items-center justify-end gap-4 pt-6">
                     <button 
                       onClick={() => router.back()}
                       className="px-8 py-4 rounded-xl text-sm font-black text-[#999] hover:text-[#333] transition-colors uppercase tracking-widest"

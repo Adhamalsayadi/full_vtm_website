@@ -12,18 +12,17 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Stat card icon colors matching the reference design
 const statCards = [
-  // Row 1 (4 cards)
+  
   { label: "accounts", value: 0, iconColor: "border-[#7B61FF]", bgColor: "bg-[#F0EEFF]", dotColor: "bg-[#7B61FF]" },
   { label: "deals", value: 0, iconColor: "border-[#27B973]", bgColor: "bg-[#E9F8F1]", dotColor: "bg-[#27B973]" },
   { label: "enquiries", value: 0, iconColor: "border-[#00B4D8]", bgColor: "bg-[#E0F7FC]", dotColor: "bg-[#00B4D8]" },
   { label: "offers", value: 0, iconColor: "border-[#F84F4F]", bgColor: "bg-[#FEEBEB]", dotColor: "bg-[#F84F4F]" },
-  // Row 2 (3 cards)
+  
   { label: "clients", value: 4, iconColor: "border-[#7B61FF]", bgColor: "bg-[#F0EEFF]", dotColor: "bg-[#7B61FF]" },
   { label: "supplier", value: 6, iconColor: "border-[#27B973]", bgColor: "bg-[#E9F8F1]", dotColor: "bg-[#27B973]" },
   { label: "marketer", value: 3, iconColor: "border-[#00B4D8]", bgColor: "bg-[#E0F7FC]", dotColor: "bg-[#00B4D8]" },
-  // Row 3 (2 cards)
+  
   { label: "Paid ads", value: 0, iconColor: "border-[#27B973]", bgColor: "bg-[#E9F8F1]", dotColor: "bg-[#27B973]" },
   { label: "Free ads", value: 0, iconColor: "border-[#F84F4F]", bgColor: "bg-[#FEEBEB]", dotColor: "bg-[#F84F4F]" },
 ];
@@ -48,8 +47,7 @@ export default function SuperAdminDashboard() {
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6 pb-10">
 
-            {/* Row 1: 4 stat cards */}
-            <div className="grid grid-cols-4 gap-5">
+<div className="grid grid-cols-4 gap-5">
               {statCards.slice(0, 4).map((stat, i) => (
                 <div key={i} className="bg-white rounded-[20px] border border-[#F2F4F7] shadow-sm p-6 flex flex-col items-center justify-center text-center">
                   <StatIcon iconColor={stat.iconColor} bgColor={stat.bgColor} dotColor={stat.dotColor} />
@@ -59,8 +57,7 @@ export default function SuperAdminDashboard() {
               ))}
             </div>
 
-            {/* Row 2: 3 stat cards */}
-            <div className="grid grid-cols-3 gap-5">
+<div className="grid grid-cols-3 gap-5">
               {statCards.slice(4, 7).map((stat, i) => (
                 <div key={i} className="bg-white rounded-[20px] border border-[#F2F4F7] shadow-sm p-6 flex flex-col items-center justify-center text-center">
                   <StatIcon iconColor={stat.iconColor} bgColor={stat.bgColor} dotColor={stat.dotColor} />
@@ -70,8 +67,7 @@ export default function SuperAdminDashboard() {
               ))}
             </div>
 
-            {/* Row 3: 2 stat cards (each takes up ~1/3) */}
-            <div className="grid grid-cols-3 gap-5">
+<div className="grid grid-cols-3 gap-5">
               {statCards.slice(7, 9).map((stat, i) => (
                 <div key={i} className="bg-white rounded-[20px] border border-[#F2F4F7] shadow-sm p-6 flex flex-col items-center justify-center text-center">
                   <StatIcon iconColor={stat.iconColor} bgColor={stat.bgColor} dotColor={stat.dotColor} />
@@ -79,12 +75,11 @@ export default function SuperAdminDashboard() {
                   <p className="text-[13px] font-medium text-[#999] mt-1">{stat.label}</p>
                 </div>
               ))}
-              {/* Empty spacer to maintain 3-col grid */}
+              
               <div />
             </div>
 
-            {/* Dashboard Table */}
-            <div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
+<div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse min-w-[1200px]">
                   <thead>
@@ -111,8 +106,7 @@ export default function SuperAdminDashboard() {
                 </table>
               </div>
 
-              {/* Pagination */}
-              <div className="px-6 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
+<div className="px-6 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
                 <div className="flex items-center gap-3">
                   <span className="text-[13px] font-medium text-[#666]">items per page</span>
                   <div className="relative">

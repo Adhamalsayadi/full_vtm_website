@@ -1,13 +1,13 @@
 import Image from "next/image";
 
 export default function WhyChooseSection() {
-  // Removed fixed 'absolute' from base classes for mobile-first safety
+  
   const cardBaseClasses =
     "w-full lg:w-[318px] min-h-[100px] bg-[#F8F9FA] flex items-center justify-start p-4 gap-4 text-sm rounded-2xl shadow-sm lg:absolute leading-[1.5] border border-gray-100";
 
   return (
     <div className="mt-10 md:mt-20 p-5 flex flex-col lg:flex-row justify-center items-center gap-8 min-h-[500px] relative max-w-[1200px] mx-auto">
-      {/* Group 1: Visible on top for mobile, left side for desktop */}
+      
       <div className="flex flex-col w-full lg:flex-1 gap-4 lg:relative lg:h-[400px]">
         <div className={`${cardBaseClasses} lg:right-0 lg:top-0`}>
           <Image src="/Server.png" alt="server" width={24} height={24} />
@@ -23,8 +23,7 @@ export default function WhyChooseSection() {
         </div>
       </div>
 
-      {/* Center Image: Hidden or scaled on small mobile if space is tight */}
-      <div className="flex justify-center flex-1 py-10 lg:py-0">
+<div className="flex justify-center flex-1 py-10 lg:py-0">
         <Image
           src="/choose.png"
           alt="choose"
@@ -34,8 +33,7 @@ export default function WhyChooseSection() {
         />
       </div>
 
-      {/* Group 2: Visible below image for mobile, right side for desktop */}
-      <div className="flex flex-col w-full lg:flex-1 gap-4 lg:relative lg:h-[400px]">
+<div className="flex flex-col w-full lg:flex-1 gap-4 lg:relative lg:h-[400px]">
         <div className={`${cardBaseClasses} lg:left-0 lg:top-0`}>
           <Image src="/Lightning.png" alt="lightning" width={24} height={24} />
           <span>Strong and Long-term cooperation with the clients.</span>

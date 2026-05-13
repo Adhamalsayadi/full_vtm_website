@@ -1,22 +1,15 @@
 import type { ServiceCategory } from "@/types/service.types";
-import axios from "axios";
+import { axiosInstance } from "@/lib/api/axios";
 
-export const api = axios.create({
-  baseURL: "",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-const Python_api = false;
+const USE_REAL_API = false;
 
 export async function getServiceCategories(): Promise<ServiceCategory[]> {
-  if (Python_api) {
+  if (USE_REAL_API) {
     try {
-      const response = await api.get<ServiceCategory[]>("/api/categories");
+      const response = await axiosInstance.get<ServiceCategory[]>("/api/v1/categories");
       return response.data;
     } catch (error) {
-      console.error("API Fetch Error:", error);
+      console.error("[getServiceCategories] API error:", error);
       return [];
     }
   }

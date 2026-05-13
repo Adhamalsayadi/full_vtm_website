@@ -1,3 +1,4 @@
+import { axiosInstance } from "@/lib/api/axios";
 import { User } from "@/types/users";
 
 export interface LoginResponse {
@@ -5,21 +6,37 @@ export interface LoginResponse {
   message: string;
   role?: "Client" | "Supplier" | "Admin" | "SuperAdmin" | "SubAdmin";
   user?: User;
+  token?: string;
 }
+
+const USE_REAL_API = false;
 
 export async function loginUser(
   email: string,
   password: string
 ): Promise<LoginResponse> {
-  // Simulate API Delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  
+  if (USE_REAL_API) {
+    try {
+      const { data } = await axiosInstance.post<LoginResponse>(
+        "/api/v1/auth/login",
+        { email, password }
+      );
+      return data;
+    } catch (error) {
+      console.error("[loginUser] API error:", error);
+      return { success: false, message: "Login failed. Please try again." };
+    }
+  }
 
-  // --- MOCK LOGIC ---
+await new Promise((resolve) => setTimeout(resolve, 1000));
+
   if (email === "super@vnt.com" && password === "super") {
     return {
       success: true,
       message: "Login successful",
       role: "SuperAdmin",
+      token: "mock-token-super",
       user: { id: "super-1", name: "Super Admin", email, role: "SuperAdmin" },
     };
   }
@@ -29,6 +46,7 @@ export async function loginUser(
       success: true,
       message: "Login successful",
       role: "SubAdmin",
+      token: "mock-token-vtm",
       user: { id: "vtm-1", name: "VTM Controller", email, role: "SubAdmin" },
     };
   }
@@ -38,6 +56,7 @@ export async function loginUser(
       success: true,
       message: "Login successful",
       role: "Client",
+      token: "mock-token-client",
       user: { id: "1", name: "mock Client", email, role: "Client", phone: "" },
     };
   }
@@ -47,6 +66,7 @@ export async function loginUser(
       success: true,
       message: "Login successful",
       role: "Supplier",
+      token: "mock-token-supplier",
       user: {
         id: "2",
         name: "mock Supplier",
@@ -62,6 +82,7 @@ export async function loginUser(
       success: true,
       message: "Login successful",
       role: "Admin",
+      token: "mock-token-marketer",
       user: {
         id: "3",
         name: "mock Marketer",

@@ -121,8 +121,7 @@ export default function VtmClients() {
           </div>
         </main>
 
-        {/* Edit Status Modal */}
-        {isEditModalOpen && (
+{isEditModalOpen && (
           <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-[100] p-6">
             <div className="bg-white rounded-2xl shadow-2xl border border-[#F2F4F7] w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
                <div className="p-8 pb-4 flex items-center justify-between">

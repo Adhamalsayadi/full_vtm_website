@@ -1,7 +1,6 @@
 import { useState, ChangeEvent, useMemo } from "react";
 import { SignUpFormData, FormErrors } from "@/types/users";
 import { registerUser } from "@/lib/api/auth/register/signup";
-const API_BASE_URL = "/api"; // Using local API route
 
 const CLIENT_STEPS = [
   "User info",
@@ -57,9 +56,8 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     companyEmail: "",
     phoneNumber: "",
     websiteLink: "",
-    
-    // Contact Sections
-    ownerSection: { name: "", tel: "", email: "" },
+
+ownerSection: { name: "", tel: "", email: "" },
     directorsSection: { name: "", tel: "", email: "" },
     financialSection: { name: "", tel: "", email: "" },
     commercialSection: { name: "", tel: "", email: "" },
@@ -133,7 +131,7 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     if (currentStep === 4) {
       if (!formData.companyEmail)
         newErrors.companyEmail = "Company email is required";
-      // Additional validations can be added for sections if required by user
+      
     }
 
     if (currentStep === 5) {
@@ -167,11 +165,11 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     setIsLoading(true);
 
     try {
-      // Call the lib function directly
+      
       const result = await registerUser(formData);
 
       if (result.success) {
-        setStep(6); // Move to success screen
+        setStep(6); 
         return { success: true };
       } else {
         setErrors({ api: result.message });

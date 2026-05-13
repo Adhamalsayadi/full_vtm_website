@@ -86,7 +86,7 @@ const Sidebar = ({ role }: SidebarProps) => {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed bottom-6 right-6 z-[60] bg-primary text-black p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all"
@@ -94,8 +94,7 @@ const Sidebar = ({ role }: SidebarProps) => {
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Overlay */}
-      {isOpen && (
+{isOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[51] transition-opacity"
           onClick={() => setIsOpen(false)}
@@ -155,8 +154,7 @@ const Sidebar = ({ role }: SidebarProps) => {
           </div>
         </nav>
 
-        {/* Action Logout Mobile only */}
-        <div className="lg:hidden mt-auto pt-6 border-t border-[#F2F4F7]">
+<div className="lg:hidden mt-auto pt-6 border-t border-[#F2F4F7]">
           <button
             className="w-full flex items-center gap-3 p-3 text-red-600 font-bold"
             onClick={() => setIsLogoutModalOpen(true)}

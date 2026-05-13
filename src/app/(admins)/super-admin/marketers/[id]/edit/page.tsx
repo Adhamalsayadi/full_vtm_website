@@ -19,9 +19,8 @@ export default function EditMarketerPage() {
 
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1500px] mx-auto space-y-8">
-            
-            {/* Breadcrumbs */}
-            <div className="flex items-center gap-2 text-[13px] font-bold lowercase">
+
+<div className="flex items-center gap-2 text-[13px] font-bold lowercase">
               <Link href="/super-admin" className="text-[#333] capitalize">Dashboard</Link>
               <ChevronRight size={14} className="text-[#999]" />
               <Link href="/super-admin/marketers" className="text-[#333] capitalize">Marketers</Link>
@@ -29,12 +28,11 @@ export default function EditMarketerPage() {
               <span className="text-[#999]">create client account</span>
             </div>
 
-            {/* Form Card */}
-            <div className="bg-white rounded-[32px] border border-[#F2F4F7] shadow-sm p-14 mt-10">
+<div className="bg-white rounded-[32px] border border-[#F2F4F7] shadow-sm p-14 mt-10">
                <form className="space-y-12" onSubmit={(e) => e.preventDefault()}>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
-                    {/* Name */}
+                    
                     <div className="relative group">
                        <label className="absolute -top-2.5 left-5 px-1.5 bg-white text-[11px] font-medium text-[#999] transition-all z-10">
                           Name
@@ -46,8 +44,7 @@ export default function EditMarketerPage() {
                        />
                     </div>
 
-                    {/* Email */}
-                    <div className="relative group">
+<div className="relative group">
                        <label className="absolute -top-2.5 left-5 px-1.5 bg-white text-[11px] font-medium text-[#999] transition-all z-10">
                           SulimanMokhtar1995@Gmail.Com
                        </label>
@@ -57,8 +54,7 @@ export default function EditMarketerPage() {
                        />
                     </div>
 
-                    {/* Mobile Code & Phone Row */}
-                    <div className="grid grid-cols-[130px_1fr] gap-6">
+<div className="grid grid-cols-[130px_1fr] gap-6">
                        <div className="relative">
                           <label className="absolute -top-2.5 left-5 px-1.5 bg-white text-[11px] font-medium text-[#999] transition-all z-10">
                              Mobile Code
@@ -79,8 +75,7 @@ export default function EditMarketerPage() {
                        </div>
                     </div>
 
-                    {/* Country Dropdown */}
-                    <div className="relative">
+<div className="relative">
                        <div className="relative">
                          <select className="w-full px-5 h-14 bg-white border border-[#EAECF0] rounded-xl text-[14px] font-medium text-[#1D1F24] outline-none appearance-none cursor-pointer">
                             <option>Saudi Arabia</option>
@@ -90,8 +85,7 @@ export default function EditMarketerPage() {
                     </div>
                   </div>
 
-                  {/* Image Upload */}
-                  <div className="space-y-4">
+<div className="space-y-4">
                      <p className="text-[14px] font-bold text-[#1D1F24] lowercase">Image</p>
                      <div className="flex items-center gap-4 max-w-2xl">
                         <div className="text-[#999]">
@@ -106,8 +100,7 @@ export default function EditMarketerPage() {
                      </div>
                   </div>
 
-                  {/* Buttons */}
-                  <div className="flex gap-4 pt-10">
+<div className="flex gap-4 pt-10">
                      <button 
                        type="button"
                        onClick={() => router.back()}

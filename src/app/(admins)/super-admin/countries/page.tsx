@@ -100,8 +100,7 @@ export default function SuperAdminCountries() {
                   </table>
                </div>
 
-               {/* Pagination */}
-               <div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
+<div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
                   <div className="flex items-center gap-4">
                     <span className="text-[13px] font-bold text-[#666]">items per page</span>
                     <div className="relative group">

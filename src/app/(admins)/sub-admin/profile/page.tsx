@@ -41,7 +41,7 @@ export default function SubAdminProfile() {
             <h1 className="text-[28px] font-black text-[#1D1F24] mb-10 tracking-tight lowercase">Account management</h1>
 
             <div className="flex flex-col lg:flex-row gap-12">
-               {/* Left Navigation Sidebar inside page */}
+               
                <aside className="w-full lg:w-72 shrink-0 space-y-3">
                   <button 
                     onClick={() => setActiveTab("basic")}
@@ -69,8 +69,7 @@ export default function SubAdminProfile() {
                   </button>
                </aside>
 
-               {/* Right Content Area */}
-               <div className="flex-1">
+<div className="flex-1">
                   {activeTab === "basic" ? (
                     <div className="bg-white rounded-[40px] shadow-sm border border-[#EAECF0] p-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
                        <div className="flex flex-col items-center mb-16">
@@ -89,22 +88,22 @@ export default function SubAdminProfile() {
 
                        <form className="space-y-10 max-w-4xl mx-auto">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10">
-                             {/* User name */}
+                             
                              <div className="space-y-2.5">
                                 <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">FULL NAME</label>
                                 <input type="text" defaultValue="Abdullah Controller" className="w-full h-14 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl px-6 text-sm font-bold text-[#1D1F24] outline-none focus:ring-2 focus:ring-[#1D1F24]/5 focus:border-[#1D1F24] transition-all" />
                              </div>
-                             {/* Email */}
+                             
                              <div className="space-y-2.5">
                                 <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">WORK EMAIL</label>
                                 <input type="email" defaultValue="vtm.support@vnt.com" className="w-full h-14 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl px-6 text-sm font-bold text-[#1D1F24] outline-none focus:ring-2 focus:ring-[#1D1F24]/5 focus:border-[#1D1F24] transition-all" />
                              </div>
-                             {/* Region */}
+                             
                              <div className="space-y-2.5">
                                 <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">REGION ASSIGNMENT</label>
                                 <input type="text" defaultValue="Middle East (KSA/UAE)" disabled className="w-full h-14 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl px-6 text-sm font-bold text-[#1D1F24] opacity-60" />
                              </div>
-                             {/* Staff ID */}
+                             
                              <div className="space-y-2.5">
                                 <label className="text-[14px] font-black text-[#1D1F24] lowercase tracking-tight ml-1">STAFF ID</label>
                                 <div className="w-full h-14 bg-[#F9FAFB] border border-[#EAECF0] rounded-2xl px-6 flex items-center text-sm font-black text-[#1D1F24] uppercase tracking-widest">

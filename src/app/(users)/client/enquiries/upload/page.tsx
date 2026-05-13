@@ -65,8 +65,7 @@ export default function UploadEnquiryPage() {
               &gt; <span className="text-[#98A2B3]">Post Enquiry</span>
             </div>
 
-            {/* Page header */}
-            <div className="mb-8">
+<div className="mb-8">
               <h1 className="text-3xl font-black text-[#101828] mb-1">
                 Upload enquiry
                 <span className="block h-1 w-24 bg-primary rounded-full mt-2" />
@@ -78,11 +77,9 @@ export default function UploadEnquiryPage() {
               <div className="bg-white rounded-2xl border border-[#EAECF0] shadow-sm p-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                  {/* LEFT COLUMN */}
-                  <div className="space-y-6">
+<div className="space-y-6">
 
-                    {/* Enquiry title */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Enquiry title <span className="text-red-500">*</span>
                       </label>
@@ -94,8 +91,7 @@ export default function UploadEnquiryPage() {
                       />
                     </div>
 
-                    {/* Description */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Enquiry description <span className="text-red-500">*</span>
                       </label>
@@ -108,8 +104,7 @@ export default function UploadEnquiryPage() {
                       />
                     </div>
 
-                    {/* Purpose */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">Purpose</label>
                       <select name="purpose" className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                         <option value="">Select purpose...</option>
@@ -117,8 +112,7 @@ export default function UploadEnquiryPage() {
                       </select>
                     </div>
 
-                    {/* File upload */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">Upload image / document</label>
                       <div
                         onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
@@ -158,8 +152,7 @@ export default function UploadEnquiryPage() {
                       </div>
                     </div>
 
-                    {/* Required date */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Required date <span className="text-red-500">*</span>
                       </label>
@@ -171,8 +164,7 @@ export default function UploadEnquiryPage() {
                       />
                     </div>
 
-                    {/* Required qualification */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">Required qualification</label>
                       <select name="qualification" className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                         <option value="">Select qualification...</option>
@@ -181,11 +173,9 @@ export default function UploadEnquiryPage() {
                     </div>
                   </div>
 
-                  {/* RIGHT COLUMN */}
-                  <div className="space-y-6">
+<div className="space-y-6">
 
-                    {/* Category */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Enquiry category <span className="text-red-500">*</span>
                       </label>
@@ -195,8 +185,7 @@ export default function UploadEnquiryPage() {
                       </select>
                     </div>
 
-                    {/* Sub‑category */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">Enquiry subcategory</label>
                       <select name="subCategory" className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                         <option value="">Select subcategory...</option>
@@ -204,8 +193,7 @@ export default function UploadEnquiryPage() {
                       </select>
                     </div>
 
-                    {/* Required standard */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">Required standard</label>
                       <select name="standard" className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                         <option value="">Select standard...</option>
@@ -213,8 +201,7 @@ export default function UploadEnquiryPage() {
                       </select>
                     </div>
 
-                    {/* Quantity */}
-                    <div>
+<div>
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Quantity <span className="text-red-500">*</span>
                       </label>
@@ -241,8 +228,7 @@ export default function UploadEnquiryPage() {
                   </div>
                 </div>
 
-                {/* Submit row */}
-                <div className="flex gap-3 mt-10 pt-6 border-t border-[#F2F4F7]">
+<div className="flex gap-3 mt-10 pt-6 border-t border-[#F2F4F7]">
                   <button
                     type="button"
                     className="flex-1 py-3 border border-[#EAECF0] text-sm font-semibold text-[#344054] rounded-xl hover:bg-[#F9FAFB] transition-all"
@@ -260,11 +246,10 @@ export default function UploadEnquiryPage() {
             </form>
           </div>
 
-          {/* Success overlay */}
-          {submitted && (
+{submitted && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
               <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full mx-4 text-center animate-in zoom-in duration-200">
-                {/* Monitor + checkmark illustration */}
+                
                 <div className="w-24 h-24 mx-auto mb-6 relative">
                   <div className="w-full h-full bg-[#F9FAFB] rounded-2xl border-4 border-[#EAECF0] flex items-center justify-center">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
@@ -273,7 +258,7 @@ export default function UploadEnquiryPage() {
                       </svg>
                     </div>
                   </div>
-                  {/* Connector */}
+                  
                   <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-8 h-3 bg-[#EAECF0] rounded" />
                   <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-14 h-1.5 bg-[#EAECF0] rounded-full" />
                 </div>
