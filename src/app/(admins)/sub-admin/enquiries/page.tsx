@@ -42,6 +42,8 @@ function StatusPill({ status }: { status: string }) {
 export default function VtmEnquiries() {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   
   const { data: enquiries = [], isLoading } = useEnquiries({
     page: 1,
@@ -55,6 +57,12 @@ export default function VtmEnquiries() {
     setSelectedEnquiry(enq);
     setIsStatusModalOpen(true);
   };
+
+  const totalItems = enquiries.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedEnquiries = enquiries.slice(startIndex, endIndex);
   
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
@@ -78,6 +86,7 @@ export default function VtmEnquiries() {
                   <table className="w-full text-left border-collapse min-w-[1200px]">
                     <thead>
                       <tr className="border-b border-[#F2F4F7]">
+                        <th className="px-6 py-5 text-[11px] font-bold text-[#999] uppercase tracking-wider w-16 text-center">#</th>
                         <th className="px-6 py-5 text-[11px] font-bold text-[#999] uppercase tracking-wider">CATEGORY</th>
                         <th className="px-6 py-5 text-[11px] font-bold text-[#999] uppercase tracking-wider">SUB CATEGORY</th>
                         <th className="px-6 py-5 text-[11px] font-bold text-[#999] uppercase tracking-wider whitespace-nowrap">REQUEST TYPE</th>
@@ -94,11 +103,12 @@ export default function VtmEnquiries() {
                     <tbody className="divide-y divide-[#F2F4F7]">
                       {isLoading ? (
                         <tr>
-                           <td colSpan={11} className="px-6 py-8 text-center text-sm text-[#999]">Loading enquiries...</td>
+                           <td colSpan={12} className="px-6 py-8 text-center text-sm text-[#999]">Loading enquiries...</td>
                         </tr>
                       ) : (
-                        enquiries.map((enq) => (
+                        paginatedEnquiries.map((enq, index) => (
                           <tr key={enq.id} className="hover:bg-[#F9FAFB] transition-colors group">
+                            <td className="px-6 py-6 text-sm text-[#333] font-medium text-center">{startIndex + index + 1}</td>
                             <td className="px-6 py-6 text-sm text-[#333] font-medium">{enq.categoryLabel || enq.category}</td>
                             <td className="px-6 py-6 text-sm text-[#333] font-medium">{enq.subCategoryLabel || enq.subCategory}</td>
                             <td className="px-6 py-6 whitespace-nowrap"><StatusPill status={enq.requestType} /></td>
@@ -127,17 +137,40 @@ export default function VtmEnquiries() {
                   <div className="flex items-center gap-3">
                     <span className="text-[13px] font-medium text-[#666]">items per page</span>
                     <div className="relative group">
-                      <select className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-lg px-4 py-2 pr-10 text-[13px] font-bold text-[#1D1F24] outline-none cursor-pointer">
-                        <option>10</option>
+                      <select 
+                        value={itemsPerPage}
+                        onChange={(e) => {
+                          setItemsPerPage(Number(e.target.value));
+                          setCurrentPage(1);
+                        }}
+                        className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-lg px-4 py-2 pr-10 text-[13px] font-bold text-[#1D1F24] outline-none cursor-pointer"
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
                       </select>
                       <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none" />
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-[13px] font-medium text-[#666]">1-4 from 4</span>
+                    <span className="text-[13px] font-medium text-[#666]">
+                      {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                    </span>
                     <div className="flex items-center gap-2">
-                       <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[#CCC]"><ChevronLeft size={18} /></button>
-                       <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[#CCC]"><ChevronRight size={18} /></button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                         disabled={currentPage === 1}
+                         className="w-8 h-8 rounded-lg flex items-center justify-center text-[#999] hover:bg-[#F2F4F7] disabled:text-[#CCC] disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronLeft size={18} />
+                       </button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                         disabled={currentPage === totalPages}
+                         className="w-8 h-8 rounded-lg flex items-center justify-center text-[#999] hover:bg-[#F2F4F7] disabled:text-[#CCC] disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronRight size={18} />
+                       </button>
                     </div>
                   </div>
                </div>

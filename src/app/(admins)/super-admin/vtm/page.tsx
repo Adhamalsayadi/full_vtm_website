@@ -28,6 +28,14 @@ const mockVtms = [
 
 export default function SuperAdminVtmManagement() {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalItems = mockVtms.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedVtms = mockVtms.slice(startIndex, endIndex);
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
@@ -38,13 +46,13 @@ export default function SuperAdminVtmManagement() {
         <main className="flex-1 p-8 overflow-auto">
           <div className="max-w-[1400px] mx-auto space-y-6">
 
-<div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
+            <div className="flex items-center gap-2 text-[13px] font-medium text-[#999]">
               <Link href="/super-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRightBread size={14} />
               <span className="text-[#333]">VTM</span>
             </div>
 
-<div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold text-[#333]">VTMs</h1>
               <button
                 onClick={() => router.push("/super-admin/vtm/create")}
@@ -55,7 +63,7 @@ export default function SuperAdminVtmManagement() {
               </button>
             </div>
 
-<div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
+            <div className="bg-white rounded-[20px] shadow-sm border border-[#F2F4F7] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -68,16 +76,16 @@ export default function SuperAdminVtmManagement() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F2F4F7]">
-                    {mockVtms.map((vtm, index) => (
+                    {paginatedVtms.map((vtm, index) => (
                       <tr key={vtm.id} className="hover:bg-[#F9FAFB] transition-colors">
-                        <td className="px-8 py-5 text-sm font-medium text-[#333]">{index + 1}</td>
+                        <td className="px-8 py-5 text-sm font-medium text-[#333]">{startIndex + index + 1}</td>
                         <td className="px-8 py-5 text-sm font-medium text-[#333]">{vtm.name}</td>
                         <td className="px-8 py-5 text-sm font-medium text-[#333]">{vtm.phone}</td>
                         <td className="px-8 py-5 text-sm font-medium text-[#333]">{vtm.email}</td>
                         <td className="px-8 py-5 text-right">
                           <div className="flex items-center justify-end gap-3 text-[#999]">
                             <Link
-                              href={`/super-admin/vtm/active/${vtm.id}`}
+                              href={`/super-admin/vtm/active/${vtm.id}/edit`}
                               className="hover:text-[#333] transition-colors"
                             >
                               <Pencil size={18} />
@@ -90,23 +98,58 @@ export default function SuperAdminVtmManagement() {
                 </table>
               </div>
 
-<div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
+              <div className="px-8 py-4 flex items-center justify-between border-t border-[#F2F4F7]">
                 <div className="flex items-center gap-3">
                   <span className="text-[13px] font-medium text-[#666]">items per page</span>
                   <div className="relative">
-                    <select className="appearance-none bg-white border border-[#EAECF0] rounded-lg px-4 py-2 pr-8 text-[13px] font-medium text-[#1D1F24] outline-none cursor-pointer">
-                      <option>10</option>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="appearance-none bg-white border border-[#EAECF0] rounded-lg px-4 py-2 pr-8 text-[13px] font-medium text-[#1D1F24] outline-none cursor-pointer"
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
                     </select>
                     <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none" />
                   </div>
                 </div>
                 <div className="flex items-center gap-6">
-                  <span className="text-[13px] font-medium text-[#999]">1-7 from 7</span>
+                  <span className="text-[13px] font-medium text-[#999]">
+                    {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                  </span>
                   <div className="flex items-center gap-1">
-                    <button className="text-[#CCC] hover:text-[#999] transition-colors"><ChevronFirst size={18} /></button>
-                    <button className="text-[#CCC] hover:text-[#999] transition-colors"><ChevronLeft size={18} /></button>
-                    <button className="text-[#CCC] hover:text-[#999] transition-colors"><ChevronRight size={18} /></button>
-                    <button className="text-[#CCC] hover:text-[#999] transition-colors"><ChevronLast size={18} /></button>
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="text-[#CCC] hover:text-[#999] disabled:text-[#CCC] disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronFirst size={18} />
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="text-[#CCC] hover:text-[#999] disabled:text-[#CCC] disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="text-[#CCC] hover:text-[#999] disabled:text-[#CCC] disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="text-[#CCC] hover:text-[#999] disabled:text-[#CCC] disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronLast size={18} />
+                    </button>
                   </div>
                 </div>
               </div>

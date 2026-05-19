@@ -28,7 +28,7 @@ export default function ServiceGrid({
 
   const variantClasses = {
     hero: "w-full sm:w-[239px] h-[107px] rounded-[10px]",
-    home: "rounded-md",
+    home: "w-full sm:w-[239px] h-[107px] rounded-[16px] p-4",
     enquiries: "w-[251px] h-[90px] bg-[#EFEFEF] p-3 rounded-lg",
   };
 

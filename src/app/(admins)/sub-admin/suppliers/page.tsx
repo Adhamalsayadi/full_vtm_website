@@ -36,6 +36,15 @@ function StatusPill({ status }: { status: string }) {
 }
 
 export default function VtmSuppliers() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalItems = mockSuppliers.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedSuppliers = mockSuppliers.slice(startIndex, endIndex);
+
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
       <AdminSidebar role="SubAdmin" />
@@ -67,9 +76,9 @@ export default function VtmSuppliers() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#F2F4F7]">
-                      {mockSuppliers.map((sup) => (
+                      {paginatedSuppliers.map((sup, index) => (
                         <tr key={sup.id} className="hover:bg-[#F9FAFB] transition-colors group">
-                          <td className="px-8 py-5 text-sm font-medium text-[#333]">{sup.id}</td>
+                          <td className="px-8 py-5 text-sm font-medium text-[#333]">{startIndex + index + 1}</td>
                           <td className="px-8 py-5">
                             <span className="text-sm font-bold text-[#333] hover:underline transition-all cursor-pointer">
                               {sup.name}
@@ -100,17 +109,40 @@ export default function VtmSuppliers() {
                   <div className="flex items-center gap-3">
                     <span className="text-[13px] font-medium text-[#666]">items per page</span>
                     <div className="relative group">
-                      <select className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-lg px-4 py-2 pr-10 text-[13px] font-bold text-[#1D1F24] outline-none cursor-pointer">
-                        <option>10</option>
+                      <select 
+                        value={itemsPerPage}
+                        onChange={(e) => {
+                          setItemsPerPage(Number(e.target.value));
+                          setCurrentPage(1);
+                        }}
+                        className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-lg px-4 py-2 pr-10 text-[13px] font-bold text-[#1D1F24] outline-none cursor-pointer"
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
                       </select>
                       <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none" />
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-[13px] font-medium text-[#666]">0-0 from 0</span>
+                    <span className="text-[13px] font-medium text-[#666]">
+                      {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                    </span>
                     <div className="flex items-center gap-2">
-                       <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[#CCC]"><ChevronLeft size={18} /></button>
-                       <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[#CCC]"><ChevronRight size={18} /></button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                         disabled={currentPage === 1}
+                         className="w-8 h-8 rounded-lg flex items-center justify-center text-[#999] hover:bg-[#F2F4F7] disabled:text-[#CCC] disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronLeft size={18} />
+                       </button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                         disabled={currentPage === totalPages}
+                         className="w-8 h-8 rounded-lg flex items-center justify-center text-[#999] hover:bg-[#F2F4F7] disabled:text-[#CCC] disabled:hover:bg-transparent disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronRight size={18} />
+                       </button>
                     </div>
                   </div>
                </div>

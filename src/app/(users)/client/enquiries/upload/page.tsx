@@ -160,6 +160,7 @@ export default function UploadEnquiryPage() {
                         type="date"
                         name="requiredDate"
                         required
+                        min={new Date().toISOString().split("T")[0]}
                         className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                       />
                     </div>

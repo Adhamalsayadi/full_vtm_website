@@ -48,7 +48,7 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     location: "",
 
     serviceScope: "",
-    activityClassification: "",
+    activityClassification: [],
     subCategories: "",
     customActivity: "",
     customSubCategory: "",
@@ -57,7 +57,7 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     phoneNumber: "",
     websiteLink: "",
 
-ownerSection: { name: "", tel: "", email: "" },
+    ownerSection: { name: "", tel: "", email: "" },
     directorsSection: { name: "", tel: "", email: "" },
     financialSection: { name: "", tel: "", email: "" },
     commercialSection: { name: "", tel: "", email: "" },
@@ -108,12 +108,10 @@ ownerSection: { name: "", tel: "", email: "" },
         newErrors.serviceScope = "Please select a service category";
 
       if (isSupplier) {
-        if (
-          formData.activityClassification === "other" &&
-          !formData.customActivity
-        ) {
+        const hasOther = formData.activityClassification.includes("other");
+        if (hasOther && !formData.customActivity) {
           newErrors.customActivity = "Please specify the activity";
-        } else if (!formData.activityClassification) {
+        } else if (formData.activityClassification.length === 0) {
           newErrors.activityClassification = "Classification is required";
         }
 
@@ -123,7 +121,7 @@ ownerSection: { name: "", tel: "", email: "" },
           newErrors.subCategories = "Subcategory is required";
         }
       } else {
-        if (!formData.activityClassification)
+        if (formData.activityClassification.length === 0)
           newErrors.activityClassification = "Classification is required";
       }
     }
@@ -131,7 +129,6 @@ ownerSection: { name: "", tel: "", email: "" },
     if (currentStep === 4) {
       if (!formData.companyEmail)
         newErrors.companyEmail = "Company email is required";
-      
     }
 
     if (currentStep === 5) {
@@ -165,11 +162,10 @@ ownerSection: { name: "", tel: "", email: "" },
     setIsLoading(true);
 
     try {
-      
       const result = await registerUser(formData);
 
       if (result.success) {
-        setStep(6); 
+        setStep(6);
         return { success: true };
       } else {
         setErrors({ api: result.message });

@@ -97,11 +97,19 @@ export default function SuperAdminSuppliers() {
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(
     null,
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const handleEditStatus = (supplier: Supplier) => {
     setSelectedSupplier(supplier);
     setIsStatusModalOpen(true);
   };
+
+  const totalItems = mockSuppliers.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedSuppliers = mockSuppliers.slice(startIndex, endIndex);
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
@@ -124,7 +132,7 @@ export default function SuperAdminSuppliers() {
               suppliers
             </h1>
 
-<div className="bg-white rounded-[32px] shadow-sm border border-[#F2F4F7] overflow-hidden">
+            <div className="bg-white rounded-[32px] shadow-sm border border-[#F2F4F7] overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -150,13 +158,13 @@ export default function SuperAdminSuppliers() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F2F4F7]">
-                    {mockSuppliers.map((sup) => (
+                    {paginatedSuppliers.map((sup, index) => (
                       <tr
                         key={sup.id}
                         className="hover:bg-[#F9FAFB] transition-colors group"
                       >
                         <td className="px-8 py-5 text-sm font-medium text-[#333]">
-                          {sup.id}
+                          {startIndex + index + 1}
                         </td>
                         <td className="px-8 py-5">
                           <Link
@@ -199,14 +207,23 @@ export default function SuperAdminSuppliers() {
                 </table>
               </div>
 
-<div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
+              <div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
                 <div className="flex items-center gap-4">
                   <span className="text-[13px] font-bold text-[#666]">
                     items per page
                   </span>
                   <div className="relative group">
-                    <select className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-xl px-4 py-2.5 pr-10 text-[13px] font-black text-[#1D1F24] outline-none cursor-pointer">
-                      <option>10</option>
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-xl px-4 py-2.5 pr-10 text-[13px] font-black text-[#1D1F24] outline-none cursor-pointer"
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
                     </select>
                     <ChevronDown
                       size={14}
@@ -216,19 +233,35 @@ export default function SuperAdminSuppliers() {
                 </div>
                 <div className="flex items-center gap-8">
                   <span className="text-[13px] font-black text-[#1D1F24]">
-                    1-6 from 6
+                    {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
                   </span>
                   <div className="flex items-center gap-4">
-                    <button className="text-[#CCC]">
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      disabled={currentPage === 1}
+                      className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                    >
                       <ChevronFirst size={20} />
                     </button>
-                    <button className="text-[#CCC]">
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                    >
                       <ChevronLeft size={20} />
                     </button>
-                    <button className="text-[#CCC]">
+                    <button
+                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                    >
                       <ChevronRight size={20} />
                     </button>
-                    <button className="text-[#CCC]">
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      disabled={currentPage === totalPages}
+                      className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                    >
                       <ChevronLast size={20} />
                     </button>
                   </div>

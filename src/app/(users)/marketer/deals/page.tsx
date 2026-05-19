@@ -62,10 +62,9 @@ export default function MarketerDealsPage() {
                 <table className="w-full border-collapse" style={{ tableLayout: "fixed", minWidth: 800 }}>
                   <colgroup>
                     <col style={{ width: "5%" }} />
-                    <col style={{ width: "17%" }} />
-                    <col style={{ width: "15%" }} />
-                    <col style={{ width: "15%" }} />
-                    <col style={{ width: "17%" }} />
+                    <col style={{ width: "22%" }} />
+                    <col style={{ width: "20%" }} />
+                    <col style={{ width: "22%" }} />
                     <col style={{ width: "20%" }} />
                     <col style={{ width: "11%" }} />
                   </colgroup>
@@ -74,7 +73,6 @@ export default function MarketerDealsPage() {
                       <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">#</th>
                       <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">ENQUIRY</th>
                       <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">CLIENT</th>
-                      <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">SUPPLIER</th>
                       <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">INVOICE SENT</th>
                       <th className="text-left px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">PAYMENT RECEIVED</th>
                       <th className="text-center px-4 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider">ACTIONS</th>
@@ -83,7 +81,7 @@ export default function MarketerDealsPage() {
                   <tbody className="divide-y divide-[#EAECF0]">
                     {paginated.length === 0 ? (
                       <tr>
-                        <td className="px-4 py-8 text-sm text-[#667085]" colSpan={7}>No deals found.</td>
+                        <td className="px-4 py-8 text-sm text-[#667085]" colSpan={6}>No deals found.</td>
                       </tr>
                     ) : (
                       paginated.map((d, i) => (
@@ -94,9 +92,6 @@ export default function MarketerDealsPage() {
                           </td>
                           <td className="px-4 py-5 text-sm text-[#101828] underline truncate">
                             <Link href="#">{d.client}</Link>
-                          </td>
-                          <td className="px-4 py-5 text-sm text-[#101828] underline truncate">
-                            <Link href="#">{d.supplier}</Link>
                           </td>
                           <td className="px-4 py-5">
                             <span className={`px-2.5 py-1.5 rounded-full text-xs font-bold ${invoiceBadge(d.invoiceSent)}`}>

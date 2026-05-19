@@ -24,6 +24,14 @@ const mockCountries = [
 export default function SuperAdminCountries() {
   const router = useRouter();
   const [selectedCountry, setSelectedCountry] = useState<any>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalItems = mockCountries.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedCountries = mockCountries.slice(startIndex, endIndex);
 
   return (
     <div className="flex min-h-screen bg-[#F5F5F5]">
@@ -65,9 +73,9 @@ export default function SuperAdminCountries() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#F2F4F7]">
-                      {mockCountries.map((c) => (
+                      {paginatedCountries.map((c, index) => (
                         <tr key={c.id} className="hover:bg-[#F9FAFB] transition-colors group">
-                          <td className="px-8 py-6 text-sm font-medium text-[#333]">{c.id}</td>
+                          <td className="px-8 py-6 text-sm font-medium text-[#333]">{startIndex + index + 1}</td>
                           <td className="px-8 py-6 font-bold text-sm text-[#1D1F24]">{c.name}</td>
                           <td className="px-8 py-6 text-sm font-bold text-[#666]">{c.code}</td>
                           <td className="px-8 py-6">
@@ -100,23 +108,58 @@ export default function SuperAdminCountries() {
                   </table>
                </div>
 
-<div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
+               <div className="p-10 flex items-center justify-between border-t border-[#F2F4F7]">
                   <div className="flex items-center gap-4">
                     <span className="text-[13px] font-bold text-[#666]">items per page</span>
                     <div className="relative group">
-                      <select className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-xl px-4 py-2.5 pr-10 text-[13px] font-black text-[#1D1F24] outline-none cursor-pointer">
-                        <option>10</option>
+                      <select 
+                        value={itemsPerPage}
+                        onChange={(e) => {
+                          setItemsPerPage(Number(e.target.value));
+                          setCurrentPage(1);
+                        }}
+                        className="appearance-none bg-[#F9FAFB] border border-[#EAECF0] rounded-xl px-4 py-2.5 pr-10 text-[13px] font-black text-[#1D1F24] outline-none cursor-pointer"
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={20}>20</option>
                       </select>
                       <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none" />
                     </div>
                   </div>
                   <div className="flex items-center gap-8">
-                    <span className="text-[13px] font-black text-[#1D1F24]">1-2 from {mockCountries.length}</span>
+                    <span className="text-[13px] font-black text-[#1D1F24]">
+                      {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                    </span>
                     <div className="flex items-center gap-4">
-                       <button className="text-[#CCC]"><ChevronFirst size={20} /></button>
-                       <button className="text-[#CCC]"><ChevronLeft size={20} /></button>
-                       <button className="text-[#CCC]"><ChevronRight size={20} /></button>
-                       <button className="text-[#CCC]"><ChevronLast size={20} /></button>
+                       <button 
+                         onClick={() => setCurrentPage(1)}
+                         disabled={currentPage === 1}
+                         className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronFirst size={20} />
+                       </button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                         disabled={currentPage === 1}
+                         className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronLeft size={20} />
+                       </button>
+                       <button 
+                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                         disabled={currentPage === totalPages}
+                         className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronRight size={20} />
+                       </button>
+                       <button 
+                         onClick={() => setCurrentPage(totalPages)}
+                         disabled={currentPage === totalPages}
+                         className="text-[#999] disabled:text-[#CCC] hover:text-[#333] disabled:cursor-not-allowed transition-colors"
+                       >
+                         <ChevronLast size={20} />
+                       </button>
                     </div>
                   </div>
                </div>

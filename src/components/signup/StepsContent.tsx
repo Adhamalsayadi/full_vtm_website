@@ -1,5 +1,5 @@
-import React from "react";
-import { Users, Handshake, ClipboardCheck } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { Users, Handshake, ClipboardCheck, ChevronDown, Check } from "lucide-react";
 import {
   SignUpFormData,
   FormErrors,
@@ -25,10 +25,10 @@ interface StepsContentProps {
 
 const MOCK_SERVICES: ServiceItem[] = [
 
-{ id: "services", label: "Services", icon: "/icons/services.png" },
-  { id: "rental", label: "Rental", icon: "/icons/rental.png" },
-  { id: "materials", label: "Materials", icon: "/icons/materials.png" },
-  { id: "manpower", label: "Man Power", icon: "/icons/manpower.png" },
+  { id: "services", label: "Services", icon: "/Services.png" },
+  { id: "rental", label: "Rental", icon: "/for-rent.png" },
+  { id: "materials", label: "Materials", icon: "/product.png" },
+  { id: "manpower", label: "Man Power", icon: "/power.png" },
 ];
 
 const ACTIVITY_MAP: Record<string, SelectOption[]> = {
@@ -55,6 +55,14 @@ const ACTIVITY_MAP: Record<string, SelectOption[]> = {
   ],
 };
 
+const CLIENT_ACTIVITIES: SelectOption[] = [
+  { value: "up", label: "Up stream" },
+  { value: "down", label: "Down stream" },
+  { value: "engineering", label: "Engineering" },
+  { value: "logistics", label: "Logistics" },
+  { value: "procurement", label: "Procurement" },
+];
+
 const SUBCATEGORY_MAP: Record<string, SelectOption[]> = {
   "up-stream": [
     { value: "slickline", label: "Slickline" },
@@ -72,6 +80,143 @@ const SUBCATEGORY_MAP: Record<string, SelectOption[]> = {
   ],
 };
 
+// ─── Checkbox Dropdown Component ─────────────────────────────────────────────
+interface CheckboxDropdownProps {
+  label: string;
+  options: SelectOption[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  required?: boolean;
+  error?: string;
+  placeholder?: string;
+}
+
+const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
+  label,
+  options,
+  selected,
+  onChange,
+  required,
+  error,
+  placeholder = "Select options",
+}) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggle = (value: string) => {
+    if (selected.includes(value)) {
+      onChange(selected.filter((v) => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  };
+
+  const displayLabel =
+    selected.length === 0
+      ? placeholder
+      : options
+          .filter((o) => selected.includes(o.value))
+          .map((o) => o.label)
+          .join(", ");
+
+  return (
+    <div className="flex flex-col" ref={ref}>
+      <label className="block text-base md:text-lg font-bold mb-2 text-[#101828]">
+        {label} {required && <span className="text-[#ff4d4f]">*</span>}
+      </label>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          className={cn(
+            "w-full p-4 bg-[#ebeef5] border-none rounded-lg outline-none text-left flex items-center justify-between transition-all",
+            "focus:ring-2 focus:ring-primary/30",
+            open && "ring-2 ring-primary/30",
+            error && "ring-2 ring-red-500"
+          )}
+        >
+          <span
+            className={cn(
+              "text-sm truncate pr-2",
+              selected.length === 0 ? "text-gray-400" : "text-[#101828] font-medium"
+            )}
+          >
+            {displayLabel}
+          </span>
+          <ChevronDown
+            size={18}
+            className={cn(
+              "shrink-0 text-gray-500 transition-transform duration-200",
+              open && "rotate-180"
+            )}
+          />
+        </button>
+
+        {open && (
+          <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAECF0] rounded-xl shadow-xl z-[200] overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+            <div className="max-h-56 overflow-y-auto py-1">
+              {options.map((opt) => {
+                const isChecked = selected.includes(opt.value);
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => toggle(opt.value)}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-4 py-2.5 text-sm text-left transition-colors",
+                      isChecked
+                        ? "bg-primary/10 text-[#101828] font-semibold"
+                        : "hover:bg-[#F9FAFB] text-[#344054]"
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "w-4 h-4 rounded flex items-center justify-center border shrink-0 transition-all",
+                        isChecked
+                          ? "bg-primary border-primary"
+                          : "bg-white border-[#D0D5DD]"
+                      )}
+                    >
+                      {isChecked && <Check size={10} className="text-black" strokeWidth={3} />}
+                    </span>
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+            {selected.length > 0 && (
+              <div className="border-t border-[#EAECF0] px-4 py-2 flex justify-between items-center bg-[#F9FAFB]">
+                <span className="text-xs text-[#667085]">
+                  {selected.length} selected
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onChange([])}
+                  className="text-xs text-red-500 hover:underline font-medium"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
+    </div>
+  );
+};
+
+// ─── Main render function ─────────────────────────────────────────────────────
 export const renderStepContent = ({
   step,
   formData,
@@ -91,27 +236,20 @@ if (formData.userType === "Supplier") {
       setFormData((prev) => ({
         ...prev,
         serviceScope: item.id || "",
-        activityClassification: "",
+        activityClassification: [],
         subCategories: "",
         customActivity: "",
         customSubCategory: "",
       }));
     };
 
-    const handleActivityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const val = e.target.value;
-      setFormData((prev) => ({
-        ...prev,
-        activityClassification: val,
-        subCategories: "",
-        customActivity: val === "other" ? prev.customActivity : "",
-      }));
-    };
-
     const availableActivities = ACTIVITY_MAP[formData.serviceScope] || [];
+    const hasOther = formData.activityClassification.includes("other");
+
+    // For sub-categories, use first non-"other" selected activity, or default
+    const firstActivity = formData.activityClassification.find((v) => v !== "other");
     const availableSubCategories =
-      SUBCATEGORY_MAP[formData.activityClassification] ||
-      SUBCATEGORY_MAP["default"];
+      SUBCATEGORY_MAP[firstActivity || ""] || SUBCATEGORY_MAP["default"];
 
     switch (step) {
       case 1:
@@ -270,17 +408,24 @@ if (formData.userType === "Supplier") {
 
             {formData.serviceScope && (
               <div className="mb-8">
-                <Select
+                <CheckboxDropdown
                   label="2. What is the Company's Activities Classification?"
-                  name="activityClassification"
-                  value={formData.activityClassification}
-                  onChange={handleActivityChange}
                   options={availableActivities}
+                  selected={formData.activityClassification}
+                  onChange={(vals) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      activityClassification: vals,
+                      subCategories: "",
+                      customActivity: vals.includes("other") ? prev.customActivity : "",
+                    }))
+                  }
                   required
                   error={errors.activityClassification}
+                  placeholder="Select activities"
                 />
 
-                {formData.activityClassification === "other" && (
+                {hasOther && (
                   <div className="mt-4">
                     <Input
                       label="Please specify the Activity"
@@ -296,8 +441,8 @@ if (formData.userType === "Supplier") {
               </div>
             )}
 
-            {formData.activityClassification &&
-              formData.activityClassification !== "other" && (
+            {formData.activityClassification.length > 0 &&
+              !formData.activityClassification.every((v) => v === "other") && (
                 <div className="mb-0">
                   <Select
                     label="3. What is the company's subcategories?"
@@ -439,7 +584,7 @@ if (formData.userType === "Supplier") {
                 2. How did you know us? *
               </label>
               <div className="grid grid-cols-2 gap-5">
-                {["Social media", "Google search", "Friend", "Other"].map(
+                {["Social media", "Google search", "Friend", "Marketer"].map(
                   (src) => (
                     <Button
                       key={src}
@@ -653,16 +798,19 @@ if (formData.userType === "Supplier") {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-            <Select
-              label="2. Activities Classification"
-              name="activityClassification"
-              value={formData.activityClassification}
-              onChange={handleChange}
-              options={[
-                { value: "up", label: "Up stream" },
-                { value: "down", label: "Down stream" },
-              ]}
+            <CheckboxDropdown
+              label="2. Activities Classification *"
+              options={CLIENT_ACTIVITIES}
+              selected={formData.activityClassification}
+              onChange={(vals) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  activityClassification: vals,
+                }))
+              }
               required
+              error={errors.activityClassification}
+              placeholder="Select activities"
             />
             <Select
               label="3. Subcategories"
@@ -734,7 +882,7 @@ if (formData.userType === "Supplier") {
               2. How did you know us? *
             </label>
             <div className="grid grid-cols-2 gap-4">
-              {["Social media", "Google search", "Friend", "Other"].map(
+              {["Social media", "Google search", "Friend", "Marketer"].map(
                 (src) => (
                   <Button
                     key={src}
@@ -799,8 +947,5 @@ if (formData.userType === "Supplier") {
           </p>
         </div>
       );
-
-    default:
-      return null;
   }
 };

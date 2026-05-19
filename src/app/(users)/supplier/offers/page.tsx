@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, ChevronDown } from "lucide-react";
 
 const initialOffers = [
   {
@@ -18,6 +19,18 @@ const initialOffers = [
 
 export default function SupplierOffersPage() {
   const [offers, setOffers] = useState(initialOffers);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalItems = offers.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedOffers = offers.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.min(Math.max(1, page), totalPages));
+  };
 
   return (
     <div className="flex min-h-screen bg-[#F9FAFB]">
@@ -49,10 +62,10 @@ export default function SupplierOffersPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#EAECF0]">
-                  {offers.map((offer, index) => (
+                  {paginatedOffers.map((offer, index) => (
                     <tr key={offer.id} className="hover:bg-[#F9FAFB] transition-all duration-300">
                       <td className="px-6 py-5 text-sm font-semibold text-[#101828]">
-                        {index + 1}
+                        {startIndex + index + 1}
                       </td>
                       <td className="px-6 py-5 text-sm font-semibold text-[#101828]">
                         {offer.enquiryTitle}
@@ -87,24 +100,57 @@ export default function SupplierOffersPage() {
               <div className="flex items-center justify-end px-6 py-4 border-t border-[#EAECF0] gap-4 text-sm text-[#667085]">
                 <div className="flex items-center gap-2">
                   <span>items per page</span>
-                  <div className="flex items-center border border-[#EAECF0] rounded px-3 py-1.5 cursor-pointer">
-                    <span>10</span>
-                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  <div className="relative group">
+                    <select
+                      value={itemsPerPage}
+                      onChange={(e) => {
+                        setItemsPerPage(Number(e.target.value));
+                        setCurrentPage(1);
+                      }}
+                      className="appearance-none rounded-lg border border-[#D0D5DD] bg-white px-3 py-1.5 pr-8 text-sm text-[#344054] outline-none focus:border-primary cursor-pointer font-medium"
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                    </select>
+                    <ChevronDown size={14} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#999] pointer-events-none" />
                   </div>
                 </div>
-                <div>1-1 from 1</div>
-                <div className="flex items-center gap-3 ml-2">
-                  <button className="text-[#D0D5DD] cursor-not-allowed">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+                <div>
+                  {totalItems === 0 ? "0 from 0" : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => goToPage(1)}
+                    disabled={currentPage === 1}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="First page"
+                  >
+                    <ChevronsLeft size={16} />
                   </button>
-                  <button className="text-[#D0D5DD] cursor-not-allowed">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Previous page"
+                  >
+                    <ChevronLeft size={16} />
                   </button>
-                  <button className="text-[#D0D5DD] cursor-not-allowed">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Next page"
+                  >
+                    <ChevronRight size={16} />
                   </button>
-                  <button className="text-[#D0D5DD] cursor-not-allowed">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 17l5-5-5-5M6 17l5-5-5-5"/></svg>
+                  <button
+                    onClick={() => goToPage(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    title="Last page"
+                  >
+                    <ChevronsRight size={16} />
                   </button>
                 </div>
               </div>

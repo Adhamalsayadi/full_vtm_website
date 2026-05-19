@@ -138,29 +138,40 @@ export default function EnquiryModal({
             </div>
 
             <div className="flex flex-col gap-2 w-full max-w-[300px] md:max-w-none mx-auto">
-              <div className="w-full h-10 bg-[#F4D361] rounded-[8px] flex items-center px-4 text-[12px] font-semibold text-black/70 shadow-sm">
-                Required date
+              <div className="w-full h-auto min-h-10 bg-[#F4D361] rounded-[8px] flex flex-col justify-center px-4 py-2 text-[12px] shadow-sm">
+                <span className="font-medium text-black/50 text-[10px] uppercase tracking-wider">Required date</span>
+                <span className="font-bold text-black/80 mt-0.5">
+                  {enquiry.requiredDate
+                    ? new Date(enquiry.requiredDate).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })
+                    : "—"}
+                </span>
               </div>
 
-              <button
-                onClick={onOpenRating}
-                className="w-full h-10 bg-[#F4D361] rounded-[8px] flex items-center justify-between px-4 text-[12px] font-semibold text-black/70 shadow-sm hover:brightness-95 transition-all"
-              >
-                <span>Seller rating</span>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {user?.role !== "Marketer" && (
+                <button
+                  onClick={onOpenRating}
+                  className="w-full h-10 bg-[#F4D361] rounded-[8px] flex items-center justify-between px-4 text-[12px] font-semibold text-black/70 shadow-sm hover:brightness-95 transition-all"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                  />
-                </svg>
-              </button>
+                  <span>Seller rating</span>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.921-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.784.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    />
+                  </svg>
+                </button>
+              )}
               {(user?.role === "Supplier" || !user) && (
                 <form action={submitAction}>
                   <button className="w-full h-[52px] md:h-[58px] bg-[#F4D361] rounded-[10px] font-bold text-[18px] md:text-[20px] text-black shadow-md hover:scale-[0.98] transition-all mt-1">

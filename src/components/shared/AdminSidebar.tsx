@@ -56,11 +56,10 @@ export default function AdminSidebar({ role }: AdminSidebarProps) {
     { name: "countries", icon: <MapPin size={18} />, href: "/super-admin/countries" },
     { name: "ads", icon: <Megaphone size={18} />, href: "/super-admin/ads" },
   ] : [
-    { name: "VTM", icon: <Users size={18} />, href: "/sub-admin/vtm" },
     { name: "Clients", icon: <Users size={18} />, href: "/sub-admin/clients" },
     { name: "Suppliers", icon: <Handshake size={18} />, href: "/sub-admin/suppliers" },
     { name: "enquiries", icon: <FileText size={18} />, href: "/sub-admin/enquiries" },
-    { name: "deals", icon: <Handshake size={18} />, href: "/sub-admin/deals" },
+    { name: "Ads", icon: <Megaphone size={18} />, href: "/sub-admin/ads" },
   ];
 
   return (

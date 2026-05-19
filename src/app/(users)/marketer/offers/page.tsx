@@ -65,7 +65,7 @@ const pageNumbers: number[] = [];
                 <table className="w-full border-collapse min-w-[900px]">
                   <thead>
                     <tr className="bg-[#F9FAFB] border-b border-[#EAECF0]">
-                      {["#", "Enquiry Title", "Client", "Supplier", "Price", "VTM Status", "Admin Status", "Acceptance", ""].map((h) => (
+                      {["#", "Enquiry Title", "Client", "VTM Status", "Admin Status", "Acceptance", ""].map((h) => (
                         <th key={h} className="text-left px-5 py-4 text-[#667085] text-xs font-bold uppercase tracking-wider whitespace-nowrap">
                           {h}
                         </th>
@@ -78,8 +78,6 @@ const pageNumbers: number[] = [];
                         <td className="px-5 py-4 text-sm text-[#667085]">{startIndex + idx + 1}</td>
                         <td className="px-5 py-4 text-sm font-semibold text-[#101828] max-w-[200px] truncate">{offer.enquiryTitle}</td>
                         <td className="px-5 py-4 text-sm text-[#475467]">{offer.client}</td>
-                        <td className="px-5 py-4 text-sm text-[#475467]">{offer.supplier}</td>
-                        <td className="px-5 py-4 text-sm font-bold text-[#027A48]">{offer.price}</td>
                         <td className="px-5 py-4">
                           <span className={cn("px-2.5 py-1 rounded-full text-xs font-bold capitalize", statusColor[offer.vtmStatus])}>
                             {offer.vtmStatus}
