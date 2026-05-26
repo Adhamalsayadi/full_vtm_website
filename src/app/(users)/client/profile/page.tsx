@@ -2,836 +2,528 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useAuthStore } from "@/store/authStore";
-import { Check, FileText, X, Save, UploadCloud, Folder, Paperclip } from "lucide-react";
-import Button from "@/components/ui/button";
+import { Paperclip } from "lucide-react";
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 
 const steps = [
-  "Company info",
-  "User info",
-  "Contact details",
+  "Company Info",
+  "User Info",
+  "Contact Details",
   "Extra Doc",
   "Documentation",
-  "Final step"
+  "Final Step",
 ];
 
-const referralOptions = ["Social media", "Google search", "Friend", "Marketer"];
+const referralOptions = ["Social media", "google search", "Clients", "Marketer"];
 
 export default function ClientProfilePage() {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
-  
+
   const [step, setStep] = useState(1);
-  const [saved, setSaved] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  
-  // Form State Pre-populated with High-Fidelity Mock/User Data
+
   const [formData, setFormData] = useState({
     email: user?.email || "Gmail@gmail.com",
-    password: "••••••••",
-    confirmPassword: "••••••••",
-    companyName: "VnT Services Ltd.",
-    location: "Riyadh, Saudi Arabia",
-    branch: "Main Branch",
-    crNumber: "1010123456",
-    
+    password: "",
+    confirmPassword: "",
+    companyName: "",
+    location: "",
+    branch: "",
+    crNumber: "",
+    companyRegistration: "",
+
     // Step 2
     serviceScope: "Services",
-    categoryClassification: "Pipe line classification",
-    establishedWhen: "2018",
-    establishedWhere: "Riyadh",
-    assessmentName: "Ahmad Al-Subaie",
-    assessmentPosition: "QHSE Manager",
-    website: "https://vnt-services.com",
-    premisesArea: "4500",
-    premisesOffice: "200",
-    premisesInsideStorage: "1200",
-    premisesOutsideStorage: "2500",
+    categoryClassification: "Pipe line calssification",
+    establishedWhen: "",
+    establishedWhere: "",
+    assessmentName: "",
+    assessmentPosition: "",
+    website: "",
+    premisesArea: "",
+    premisesOffice: "",
+    premisesInsideStorage: "",
+    premisesOutsideStorage: "",
 
-    // Step 3 (Nested Contacts)
-    directorsSection: { name: "Saleh Al-Omran", tel: "+966501234567", email: "saleh@vnt.com" },
-    financialSection: { name: "Omar Bakr", tel: "+966502345678", email: "financial@vnt.com" },
-    technicalSection: { name: "Khalid Mansour", tel: "+966503456789", email: "technical@vnt.com" },
-    afterHoursSection: { name: "Duty Support", tel: "+966504567890", email: "support@vnt.com" },
-    qhseSection: { name: "Yousef Qahtani", tel: "+966505678901", email: "qhse@vnt.com" },
-    commercialSection: { name: "Fahad Harbi", tel: "+966506789012", email: "commercial@vnt.com" },
+    // Step 3
+    directorsSection: { name: "", tel: "", email: "" },
+    financialSection: { name: "", tel: "", email: "" },
+    technicalSection: { name: "", tel: "", email: "" },
+    afterHoursSection: { name: "", tel: "", email: "" },
+    qhseSection: { name: "", tel: "", email: "" },
+    commercialSection: { name: "", tel: "", email: "" },
 
-    // Step 4 (Extra Doc textareas)
-    insuranceText: "We hold a comprehensive third-party liability insurance policy with Al Rajhi Takaful covering up to 5,000,000 SAR.",
-    accreditationText: "ISO 9001:2015 Quality Management System, ISO 14001:2015 Environmental Management System, and ISO 45001:2018 Health & Safety.",
-    financialCapabilityText: "Supported by a paid-up capital of 2,000,000 SAR and active credit lines with SABB and SNB.",
-    majorClientsText: "Saudi Aramco, SABIC, SEC (Saudi Electricity Company), and Ma'aden.",
+    // Step 4
+    insuranceText: "",
+    accreditationText: "",
+    financialCapabilityText: "",
+    majorClientsText: "",
 
+    // Step 6
     referralSource: "Marketer",
-    agreedToTerms: true,
+    marketerCode: "",
   });
 
-  // Document files mock state
-  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
-  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(user?.avatar || "/profile-image.png");
-  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File>>({
-    crFile: new File([""], "cr_certificate.pdf", { type: "application/pdf" }),
-    zakat: new File([""], "zakat_certificate.pdf", { type: "application/pdf" }),
-    gosi: new File([""], "gosi_registration.pdf", { type: "application/pdf" }),
-    saudization: new File([""], "saudization_compliance.pdf", { type: "application/pdf" }),
-    vat: new File([""], "vat_certificate.pdf", { type: "application/pdf" }),
-  });
+  const [uploadedFiles, setUploadedFiles] = useState<Record<string, File | null>>({});
+  const [companyPhoto, setCompanyPhoto] = useState<File | null>(null);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: "" }));
-    }
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleNestedInputChange = (section: string, field: string, value: string) => {
-    setFormData(prev => ({
+  const handleNestedInput = (section: string, field: string, value: string) => {
+    setFormData((prev) => ({
       ...prev,
-      [section]: {
-        ...(prev as any)[section],
-        [field]: value
-      }
+      [section]: { ...(prev as any)[section], [field]: value },
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (name === "profilePhoto") {
-        setProfilePhoto(file);
-        setProfilePhotoPreview(URL.createObjectURL(file));
-      } else {
-        setUploadedFiles(prev => ({ ...prev, [name]: file }));
-      }
-    }
-  };
-
-  const removeUploadedFile = (name: string) => {
-    if (name === "profilePhoto") {
-      setProfilePhoto(null);
-      setProfilePhotoPreview(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, key: string) => {
+    const file = e.target.files?.[0] || null;
+    if (key === "companyPhoto") {
+      setCompanyPhoto(file);
     } else {
-      setUploadedFiles(prev => {
-        const copy = { ...prev };
-        delete copy[name];
-        return copy;
-      });
+      setUploadedFiles((prev) => ({ ...prev, [key]: file }));
     }
   };
 
-  const validateStep = (currentStep: number): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (currentStep === 1) {
-      if (!formData.companyName) newErrors.companyName = "Company name is required";
-      if (!formData.crNumber) newErrors.crNumber = "CR number is required";
-      if (!formData.location) newErrors.location = "Location is required";
-    }
-
-    if (currentStep === 2) {
-      if (!formData.categoryClassification) newErrors.categoryClassification = "Classification is required";
-      if (!formData.establishedWhen) newErrors.establishedWhen = "Established year is required";
-    }
-
-    if (currentStep === 6) {
-      if (!formData.referralSource) newErrors.referralSource = "Please select a referral source";
-      if (!formData.agreedToTerms) newErrors.agreedToTerms = "You must agree to the terms";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (validateStep(step)) {
-      setStep(prev => Math.min(prev + 1, steps.length));
-    }
-  };
-
-  const handleBack = () => {
-    setStep(prev => Math.max(prev - 1, 1));
-  };
+  const handleNext = () => setStep((s) => Math.min(s + 1, steps.length));
+  const handleBack = () => setStep((s) => Math.max(s - 1, 1));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateStep(6)) return;
-
     if (user) {
-      setUser({
-        ...user,
-        name: formData.assessmentName,
-        avatar: profilePhotoPreview || undefined,
-      });
+      setUser({ ...user });
     }
-
-    setSaved(true);
-    setTimeout(() => {
-      setSaved(false);
-      setStep(1);
-    }, 4500);
+    alert("Profile updated successfully!");
   };
 
-  const activeNavIndex = step - 1;
+  // Shared input style
+  const inp = "w-full px-4 py-3.5 bg-[#F0F2F5] rounded-xl text-[14px] text-[#333] placeholder:text-[#9CA3AF] outline-none focus:ring-2 focus:ring-primary/30 transition-all border border-transparent focus:border-primary/20";
 
   return (
-    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
-      {/* Global Navigation Header */}
+    <div className="min-h-screen flex flex-col bg-[#F5F6FA]">
       <Navbar />
 
-      {/* Main Profile Wizard Layout */}
-      <div className="flex flex-col lg:flex-row max-w-[1200px] w-full mx-auto px-4 md:px-6 py-10 gap-8 relative min-h-[calc(100vh-80px)]">
-        
-        {/* Left Column: Progress Stepper */}
-        <div className="w-full lg:w-[280px] bg-[#2d2d2d] rounded-2xl flex flex-col p-6 md:p-8 shrink-0 shadow-lg select-none h-fit">
-          <h3 className="text-white/40 text-[10px] uppercase font-bold tracking-widest mb-6">Edit Profile Stages</h3>
-          <div className="flex flex-col gap-6 relative">
-            {steps.map((s, i) => {
-              const isActive = i === activeNavIndex;
-              const isCompleted = step > i + 1;
+      <div className="flex-1 flex max-w-[1100px] w-full mx-auto px-4 py-10 gap-0 items-start">
 
+        {/* Left Sidebar */}
+        <div className="w-[230px] shrink-0 bg-[#2B2B2B] rounded-2xl rounded-r-none pt-8 pb-10 px-6 self-stretch flex flex-col">
+          <h2 className="text-white font-black text-2xl mb-8">Profile</h2>
+          <div className="flex flex-col gap-0 relative">
+            {/* Vertical line */}
+            <div className="absolute left-[11px] top-6 bottom-6 w-[2px] bg-[#444]" />
+
+            {steps.map((s, i) => {
+              const isActive = i + 1 === step;
+              const isCompleted = step > i + 1;
               return (
-                <div
-                  key={i}
-                  onClick={() => {
-                    if (i + 1 < step || validateStep(step)) {
-                      setStep(i + 1);
-                    }
-                  }}
-                  className={`flex items-center gap-4 text-xs md:text-sm font-medium z-[1] cursor-pointer transition-all duration-200 ${
-                    isActive ? "text-white scale-105 origin-left" : "text-[#aaaaaa] hover:text-white"
-                  }`}
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setStep(i + 1)}
+                  className="flex items-center gap-3 py-3 text-left z-10 group"
                 >
+                  {/* Dot */}
                   <div
-                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center bg-[#2d2d2d] transition-all duration-300 ${
-                      isActive 
-                        ? "border-primary" 
-                        : isCompleted 
-                        ? "border-primary bg-primary text-black" 
-                        : "border-[#555]"
+                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
+                      isActive || isCompleted
+                        ? "border-primary bg-primary"
+                        : "border-[#555] bg-[#2B2B2B]"
                     }`}
                   >
-                    {isCompleted ? (
-                      <Check size={12} strokeWidth={3} className="text-black" />
-                    ) : isActive ? (
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></div>
-                    ) : (
-                      <div className="w-2 h-2 rounded-full bg-transparent"></div>
+                    {(isActive || isCompleted) && (
+                      <div className="w-2 h-2 rounded-full bg-[#2B2B2B]" />
                     )}
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] text-white/30 uppercase tracking-widest">Step {i + 1}</span>
-                    <span className="font-bold -mt-0.5">{s}</span>
-                  </div>
-                </div>
+                  <span
+                    className={`text-[13px] font-semibold transition-colors ${
+                      isActive ? "text-white" : "text-[#888] group-hover:text-white"
+                    }`}
+                  >
+                    {s}
+                  </span>
+                </button>
               );
             })}
           </div>
         </div>
 
-        {/* Right Column: Floating Form Card */}
-        <div className="flex-1 bg-white p-6 md:p-10 rounded-2xl shadow-[0_10px_45px_rgba(0,0,0,0.06)] border border-[#EAECF0] min-h-[600px] flex flex-col justify-between">
-          <form onSubmit={handleSubmit} className="space-y-8 flex flex-col justify-between h-full">
-            
-            {/* STEP 1: Company info */}
+        {/* Right Form Card */}
+        <div className="flex-1 bg-white rounded-2xl rounded-l-none shadow-lg min-h-[600px] flex flex-col">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col p-8 md:p-10">
+
+            {/* ─── STEP 1: Company Info ─── */}
             {step === 1 && (
-              <div className="space-y-6">
+              <div className="flex-1 flex flex-col gap-6">
+                <h2 className="text-primary font-bold text-xl">Company Info</h2>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <input name="email" value={formData.email} onChange={handleInput} placeholder="Gamil@gmail.com" className={inp} />
+                  <input name="password" type="password" value={formData.password} onChange={handleInput} placeholder="Password" className={inp} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <input name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleInput} placeholder="re_write password" className={inp} />
+                  <input name="companyName" value={formData.companyName} onChange={handleInput} placeholder="Company name" className={inp} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <input name="location" value={formData.location} onChange={handleInput} placeholder="Location of the company" className={inp} />
+                  <input name="branch" value={formData.branch} onChange={handleInput} placeholder="Branch" className={inp} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <input name="crNumber" value={formData.crNumber} onChange={handleInput} placeholder="Registration number" className={inp} />
+                  <input name="companyRegistration" value={formData.companyRegistration} onChange={handleInput} placeholder="Company registertion" className={inp} />
+                </div>
+
                 <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Basic Corporate Info</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">1. What is the company info?</h2>
-                  <p className="text-xs text-gray-500 mt-1">Please provide accurate corporate registration details.</p>
+                  <p className="font-semibold text-[#333] text-[15px] mb-3">Upload a company photo?</p>
+                  <label className="flex items-center gap-4 w-full bg-[#F0F2F5] rounded-xl border border-dashed border-[#CCC] px-6 py-5 cursor-pointer hover:border-primary transition-all">
+                    <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center shrink-0">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#B8860B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="#B8860B" strokeWidth="1.5"/></svg>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[14px] font-semibold text-[#333]">
+                        Drag & drop files or{" "}
+                        <span className="text-primary underline">upload file</span>
+                      </p>
+                      <p className="text-[11px] text-[#9CA3AF] mt-0.5">
+                        Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT
+                      </p>
+                      {companyPhoto && (
+                        <p className="text-xs text-primary font-semibold mt-1">{companyPhoto.name}</p>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      className="bg-primary text-black font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-primary/90 transition-all shrink-0"
+                    >
+                      Upload
+                    </button>
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileChange(e, "companyPhoto")} />
+                  </label>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Valid Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      readOnly
-                      value={formData.email}
-                      className="w-full p-4 bg-[#eef2f6] text-gray-500 border border-transparent rounded-xl outline-none cursor-not-allowed text-sm font-semibold"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Password *</label>
-                    <input
-                      type="password"
-                      name="password"
-                      readOnly
-                      value={formData.password}
-                      className="w-full p-4 bg-[#eef2f6] text-gray-500 border border-transparent rounded-xl outline-none cursor-not-allowed text-sm font-semibold"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Re-write Password *</label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      readOnly
-                      value={formData.confirmPassword}
-                      className="w-full p-4 bg-[#eef2f6] text-gray-500 border border-transparent rounded-xl outline-none cursor-not-allowed text-sm font-semibold"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Company Name *</label>
-                    <input
-                      type="text"
-                      name="companyName"
-                      value={formData.companyName}
-                      onChange={handleInputChange}
-                      className={`w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-semibold transition-all ${
-                        errors.companyName ? "border-red-500" : ""
-                      }`}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Location of the company *</label>
-                    <input
-                      type="text"
-                      name="location"
-                      value={formData.location}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-semibold transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Branch</label>
-                    <input
-                      type="text"
-                      name="branch"
-                      value={formData.branch}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-semibold transition-all"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Registration Number (CR) *</label>
-                    <input
-                      type="text"
-                      name="crNumber"
-                      value={formData.crNumber}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-semibold transition-all"
-                    />
-                  </div>
-                </div>
-
-                {/* Company registration file upload */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Company Registration Certificate *</label>
-                    {uploadedFiles.crFile ? (
-                      <div className="flex items-center justify-between p-4 bg-[#eef2f6] rounded-xl border border-gray-200">
-                        <div className="flex items-center gap-3">
-                          <FileText className="text-primary" size={24} />
-                          <span className="text-sm font-bold text-[#101828]">{uploadedFiles.crFile.name}</span>
-                        </div>
-                        <button type="button" onClick={() => removeUploadedFile("crFile")} className="text-gray-400 hover:text-red-500 p-1">
-                          <X size={18} />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center bg-[#eef2f6] relative hover:border-primary transition-all">
-                        <UploadCloud size={40} className="mx-auto text-gray-400 mb-2" />
-                        <p className="text-xs font-bold text-[#101828]">Drag & drop or <span className="text-primary underline cursor-pointer">upload</span></p>
-                        <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleFileChange(e, "crFile")} />
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Upload a company photo?</label>
-                    {profilePhotoPreview ? (
-                      <div className="flex items-center justify-between p-4 bg-[#eef2f6] rounded-xl border border-gray-200">
-                        <div className="flex items-center gap-3">
-                          <img src={profilePhotoPreview} alt="Preview" className="w-12 h-12 rounded-full object-cover border border-white" />
-                          <span className="text-sm font-bold text-[#101828]">{profilePhoto?.name || "company-photo.png"}</span>
-                        </div>
-                        <button type="button" onClick={() => removeUploadedFile("profilePhoto")} className="text-gray-400 hover:text-red-500 p-1">
-                          <X size={18} />
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center bg-[#eef2f6] relative hover:border-primary transition-all">
-                        <Folder className="mx-auto text-primary mb-2" size={40} />
-                        <p className="text-xs font-bold text-[#101828]">Drag & drop or <span className="text-primary underline cursor-pointer">upload</span></p>
-                        <input type="file" accept="image/*" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleFileChange(e, "profilePhoto")} />
-                      </div>
-                    )}
-                  </div>
+                <div className="mt-auto flex justify-end pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleNext} className="bg-primary text-black font-bold px-10 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                    Continue
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* STEP 2: User info */}
+            {/* ─── STEP 2: User Info ─── */}
             {step === 2 && (
-              <div className="space-y-6">
-                <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Scope & Operational details</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">2. What is the scope & category info?</h2>
-                </div>
+              <div className="flex-1 flex flex-col gap-6">
+                <h2 className="text-primary font-bold text-xl">User info</h2>
 
-                {/* Scope selector */}
-                <div className="space-y-3">
-                  <label className="text-sm font-bold text-[#344054]">Company scope of services *</label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-[15px] font-semibold text-[#333] mb-3">company scope of services</p>
+                  <div className="grid grid-cols-4 gap-3">
                     {[
                       { id: "Services", label: "Services", img: "/Services.png" },
                       { id: "Rental", label: "Rental", img: "/for-rent.png" },
-                      { id: "Manpower", label: "Man Power", img: "/power.png" },
-                      { id: "Products", label: "Products", img: "/product.png" }
+                      { id: "Manpower", label: "Man power", img: "/power.png" },
+                      { id: "Products", label: "Products", img: "/product.png" },
                     ].map((scope) => (
                       <button
                         key={scope.id}
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, serviceScope: scope.id }))}
-                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${
+                        onClick={() => setFormData((p) => ({ ...p, serviceScope: scope.id }))}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 font-semibold text-[13px] transition-all ${
                           formData.serviceScope === scope.id
-                            ? "border-primary bg-primary text-black font-black"
-                            : "border-transparent bg-[#eef2f6] text-gray-600 hover:bg-gray-200"
+                            ? "border-primary bg-primary text-black"
+                            : "border-transparent bg-[#F0F2F5] text-[#555] hover:bg-[#E8EAF0]"
                         }`}
                       >
-                        <img src={scope.img} alt={scope.label} className="w-8 h-8 object-contain mb-2" />
-                        <span className="text-xs font-bold">{scope.label}</span>
+                        <img src={scope.img} alt={scope.label} className="w-5 h-5 object-contain" />
+                        {scope.label}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Company category classification *</label>
-                    <select
-                      name="categoryClassification"
-                      value={formData.categoryClassification}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                    >
-                      <option value="Pipe line classification">Pipe line classification</option>
+                <div>
+                  <p className="text-[15px] font-semibold text-[#333] mb-3">company category classification</p>
+                  <div className="relative">
+                    <select name="categoryClassification" value={formData.categoryClassification} onChange={handleInput} className={`${inp} appearance-none pr-10`}>
+                      <option value="Pipe line calssification">Pipe line calssification</option>
                       <option value="Industrial classification">Industrial classification</option>
                       <option value="Electrical classification">Electrical classification</option>
                     </select>
+                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
+                </div>
 
+                <div>
+                  <p className="text-[13px] font-bold text-primary mb-2">Company Background</p>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col">
-                      <label className="text-sm font-bold text-[#344054] mb-2">Background: When?</label>
-                      <input
-                        type="text"
-                        name="establishedWhen"
-                        placeholder="Year"
-                        value={formData.establishedWhen}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                      />
-                    </div>
-                    <div className="flex flex-col">
-                      <label className="text-sm font-bold text-[#344054] mb-2">Where?</label>
-                      <input
-                        type="text"
-                        name="establishedWhere"
-                        placeholder="City"
-                        value={formData.establishedWhere}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                      />
-                    </div>
+                    <input name="establishedWhen" value={formData.establishedWhen} onChange={handleInput} placeholder="When" className={inp} />
+                    <input name="establishedWhere" value={formData.establishedWhere} onChange={handleInput} placeholder="Where" className={inp} />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Initial Assessment Submitter Name</label>
-                    <input
-                      type="text"
-                      name="assessmentName"
-                      value={formData.assessmentName}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                    />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Submitter Position</label>
-                    <input
-                      type="text"
-                      name="assessmentPosition"
-                      value={formData.assessmentPosition}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                    />
+                <div>
+                  <p className="text-[13px] font-bold text-primary mb-2">Person Completing the initial Assessment submission</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input name="assessmentName" value={formData.assessmentName} onChange={handleInput} placeholder="Name" className={inp} />
+                    <input name="assessmentPosition" value={formData.assessmentPosition} onChange={handleInput} placeholder="Position" className={inp} />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2">Company Website *</label>
-                    <input
-                      type="text"
-                      name="website"
-                      value={formData.website}
-                      onChange={handleInputChange}
-                      className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                    />
-                  </div>
+                <div>
+                  <p className="text-[13px] font-bold text-primary mb-2">Company Registration Details</p>
+                  <input name="website" value={formData.website} onChange={handleInput} placeholder="Website" className={inp} />
+                </div>
 
-                  <div className="grid grid-cols-4 gap-2">
-                    <div className="flex flex-col col-span-1">
-                      <label className="text-[10px] font-bold text-[#344054] mb-2 truncate">Premises Area m²</label>
+                <div>
+                  <p className="text-[13px] font-bold text-primary mb-2">Premises area</p>
+                  <div className="grid grid-cols-4 gap-3">
+                    {[
+                      { name: "premisesArea", placeholder: "Area m/ft" },
+                      { name: "premisesOffice", placeholder: "Office m" },
+                      { name: "premisesInsideStorage", placeholder: "Inside Storage" },
+                      { name: "premisesOutsideStorage", placeholder: "Outside Storage" },
+                    ].map((f, idx) => (
                       <input
-                        type="text"
-                        name="premisesArea"
-                        value={formData.premisesArea}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
+                        key={f.name}
+                        name={f.name}
+                        value={(formData as any)[f.name]}
+                        onChange={handleInput}
+                        placeholder={f.placeholder}
+                        className={`${inp} ${idx === 0 ? "bg-primary placeholder:text-black text-black font-bold" : ""}`}
                       />
-                    </div>
-                    <div className="flex flex-col col-span-1">
-                      <label className="text-[10px] font-bold text-[#344054] mb-2 truncate">Office m²</label>
-                      <input
-                        type="text"
-                        name="premisesOffice"
-                        value={formData.premisesOffice}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                      />
-                    </div>
-                    <div className="flex flex-col col-span-1">
-                      <label className="text-[10px] font-bold text-[#344054] mb-2 truncate">Inside Storage</label>
-                      <input
-                        type="text"
-                        name="premisesInsideStorage"
-                        value={formData.premisesInsideStorage}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                      />
-                    </div>
-                    <div className="flex flex-col col-span-1">
-                      <label className="text-[10px] font-bold text-[#344054] mb-2 truncate">Outside Storage</label>
-                      <input
-                        type="text"
-                        name="premisesOutsideStorage"
-                        value={formData.premisesOutsideStorage}
-                        onChange={handleInputChange}
-                        className="w-full p-4 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-sm font-semibold"
-                      />
-                    </div>
+                    ))}
                   </div>
+                </div>
+
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleBack} className="px-8 py-3.5 rounded-xl border-2 border-[#DDD] text-[#444] font-bold text-[15px] hover:bg-[#F5F5F5] transition-all">
+                    Back
+                  </button>
+                  <button type="button" onClick={handleNext} className="bg-primary text-black font-bold px-10 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                    Continue
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* STEP 3: Contact details */}
+            {/* ─── STEP 3: Contact Details ─── */}
             {step === 3 && (
-              <div className="space-y-6">
-                <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Authority Channels</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">3. Who are the responsible contacts?</h2>
-                </div>
+              <div className="flex-1 flex flex-col gap-5">
+                <h2 className="text-primary font-bold text-xl">Contact Details</h2>
 
-                <div className="space-y-6 max-h-[420px] overflow-y-auto pr-2 no-scrollbar">
-                  {[
-                    { id: "directorsSection", label: "Company Directors" },
-                    { id: "financialSection", label: "Financial Contact" },
-                    { id: "technicalSection", label: "Technical Contact" },
-                    { id: "afterHoursSection", label: "After Office Hours Contact" },
-                    { id: "qhseSection", label: "QHSE Contact" },
-                    { id: "commercialSection", label: "Commercial Contact" }
-                  ].map((sec) => (
-                    <div key={sec.id} className="border-b border-[#EAECF0] pb-5 last:border-0 last:pb-0">
-                      <div className="bg-[#f0d05c] px-4 py-2 rounded-lg mb-4">
-                        <h4 className="text-black font-extrabold text-sm uppercase tracking-wider">{sec.label}</h4>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="flex flex-col">
-                          <label className="text-xs font-bold text-[#344054] mb-1">Name</label>
-                          <input
-                            type="text"
-                            value={(formData as any)[sec.id].name}
-                            onChange={(e) => handleNestedInputChange(sec.id, "name", e.target.value)}
-                            className="w-full p-3 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <label className="text-xs font-bold text-[#344054] mb-1">Tele</label>
-                          <input
-                            type="text"
-                            value={(formData as any)[sec.id].tel}
-                            onChange={(e) => handleNestedInputChange(sec.id, "tel", e.target.value)}
-                            className="w-full p-3 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <label className="text-xs font-bold text-[#344054] mb-1">Email</label>
-                          <input
-                            type="email"
-                            value={(formData as any)[sec.id].email}
-                            onChange={(e) => handleNestedInputChange(sec.id, "email", e.target.value)}
-                            className="w-full p-3 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold"
-                          />
-                        </div>
-                      </div>
+                {[
+                  { id: "directorsSection", label: "Company directors" },
+                  { id: "financialSection", label: "Financial contact" },
+                  { id: "technicalSection", label: "Technical contact" },
+                  { id: "afterHoursSection", label: "After office hours" },
+                  { id: "qhseSection", label: "QHSE Contact" },
+                  { id: "commercialSection", label: "Commercial Contact" },
+                ].map((sec) => (
+                  <div key={sec.id}>
+                    <p className="text-[13px] font-bold text-primary mb-2">{sec.label}</p>
+                    <div className="grid grid-cols-3 gap-4">
+                      <input
+                        placeholder="name"
+                        value={(formData as any)[sec.id].name}
+                        onChange={(e) => handleNestedInput(sec.id, "name", e.target.value)}
+                        className={inp}
+                      />
+                      <input
+                        placeholder="Tele"
+                        value={(formData as any)[sec.id].tel}
+                        onChange={(e) => handleNestedInput(sec.id, "tel", e.target.value)}
+                        className={inp}
+                      />
+                      <input
+                        placeholder="Email"
+                        value={(formData as any)[sec.id].email}
+                        onChange={(e) => handleNestedInput(sec.id, "email", e.target.value)}
+                        className={inp}
+                      />
                     </div>
-                  ))}
+                  </div>
+                ))}
+
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleBack} className="px-8 py-3.5 rounded-xl border-2 border-[#DDD] text-[#444] font-bold text-[15px] hover:bg-[#F5F5F5] transition-all">
+                    Back
+                  </button>
+                  <button type="button" onClick={handleNext} className="bg-primary text-black font-bold px-10 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                    Continue
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* STEP 4: Extra Doc */}
+            {/* ─── STEP 4: Extra Doc ─── */}
             {step === 4 && (
-              <div className="space-y-6">
-                <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Supplemental Records</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">4. Extra accreditations & qualifications</h2>
-                </div>
+              <div className="flex-1 flex flex-col gap-6">
+                <h2 className="text-primary font-bold text-xl">Extra Doc</h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex gap-4 items-start">
-                    <div className="w-[180px] bg-[#eef2f6] p-4 rounded-xl border border-[#EAECF0] shrink-0 text-xs text-[#344054]">
-                      <span className="font-extrabold block mb-1 text-black">Insurance Details</span>
-                      What type of insurance do you have? write the insurances details below.
-                    </div>
+                {[
+                  {
+                    name: "insuranceText",
+                    title: "Insurance",
+                    subtitle: "What type of insurance do you have? write the insurances details below.",
+                    value: formData.insuranceText,
+                  },
+                  {
+                    name: "accreditationText",
+                    title: "Company accreditation",
+                    subtitle: "What kind of quality standard do you manage your company and QA facilities to? (i.e. ISO, API, LEEA, GMP, Food, Dietary Supplement, etc...):",
+                    value: formData.accreditationText,
+                  },
+                  {
+                    name: "financialCapabilityText",
+                    title: "Financial Capapility",
+                    subtitle: "Do you have a financial audit report or bank guarantee?",
+                    value: formData.financialCapabilityText,
+                  },
+                  {
+                    name: "majorClientsText",
+                    title: "List of majors client",
+                    subtitle: "List of major clients & vender registration number:",
+                    value: formData.majorClientsText,
+                  },
+                ].map((item) => (
+                  <div key={item.name}>
+                    <p className="text-[14px] font-bold text-primary">{item.title}</p>
+                    <p className="text-[12px] text-primary/80 mb-2">{item.subtitle}</p>
                     <textarea
-                      name="insuranceText"
-                      value={formData.insuranceText}
-                      onChange={handleInputChange}
-                      className="flex-1 p-4 h-32 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold resize-none"
+                      name={item.name}
+                      value={item.value}
+                      onChange={handleInput}
+                      rows={4}
+                      className={`${inp} resize-none`}
                     />
                   </div>
+                ))}
 
-                  <div className="flex gap-4 items-start">
-                    <div className="w-[180px] bg-[#eef2f6] p-4 rounded-xl border border-[#EAECF0] shrink-0 text-xs text-[#344054]">
-                      <span className="font-extrabold block mb-1 text-black">Accreditation</span>
-                      Does the company have any accreditation? write the details below.
-                    </div>
-                    <textarea
-                      name="accreditationText"
-                      value={formData.accreditationText}
-                      onChange={handleInputChange}
-                      className="flex-1 p-4 h-32 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold resize-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="flex gap-4 items-start">
-                    <div className="w-[180px] bg-[#eef2f6] p-4 rounded-xl border border-[#EAECF0] shrink-0 text-xs text-[#344054]">
-                      <span className="font-extrabold block mb-1 text-black">Financial Capability</span>
-                      What is the financial capability of the company? write the details below.
-                    </div>
-                    <textarea
-                      name="financialCapabilityText"
-                      value={formData.financialCapabilityText}
-                      onChange={handleInputChange}
-                      className="flex-1 p-4 h-32 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold resize-none"
-                    />
-                  </div>
-
-                  <div className="flex gap-4 items-start">
-                    <div className="w-[180px] bg-[#eef2f6] p-4 rounded-xl border border-[#EAECF0] shrink-0 text-xs text-[#344054]">
-                      <span className="font-extrabold block mb-1 text-black">List of Major Clients</span>
-                      Write the list of major clients below.
-                    </div>
-                    <textarea
-                      name="majorClientsText"
-                      value={formData.majorClientsText}
-                      onChange={handleInputChange}
-                      className="flex-1 p-4 h-32 bg-[#eef2f6] text-[#101828] border border-transparent rounded-xl outline-none focus:border-primary text-xs font-semibold resize-none"
-                    />
-                  </div>
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleBack} className="px-8 py-3.5 rounded-xl border-2 border-[#DDD] text-[#444] font-bold text-[15px] hover:bg-[#F5F5F5] transition-all">
+                    Back
+                  </button>
+                  <button type="button" onClick={handleNext} className="bg-primary text-black font-bold px-10 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                    Continue
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* STEP 5: Documentation */}
+            {/* ─── STEP 5: Documentation ─── */}
             {step === 5 && (
-              <div className="space-y-6">
+              <div className="flex-1 flex flex-col gap-4">
                 <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Verify Certificates</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">5. Upload necessary verification certificates</h2>
+                  <h2 className="text-primary font-bold text-xl">Documentation & Attachments</h2>
+                  <p className="text-primary font-semibold text-[13px] mt-1">Please prepare these documents and make them ready at the time of the visit:</p>
+                  <div className="border-b border-[#DDD] mt-3 mb-2" />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[380px] overflow-y-auto pr-2 no-scrollbar">
-                  {[
-                    { id: "zakat", label: "Zakat & Income Tax Certificate" },
-                    { id: "gosi", label: "GOSI Compliance Certificate" },
-                    { id: "saudization", label: "Saudization National Certificate" },
-                    { id: "industrial", label: "Industrial License" },
-                    { id: "vat", label: "VAT Registration Certificate" },
-                    { id: "materialsList", label: "List of Materials / Products" },
-                    { id: "authorizedPersons", label: "List of Authorized Signatories" },
-                    { id: "auditedStatement", label: "Latest Audited Financial Statement" },
-                    { id: "previousPOs", label: "Previous Purchase Orders (POs)" }
-                  ].map((doc) => (
-                    <div key={doc.id} className="flex flex-col bg-[#eef2f6] p-4 rounded-xl border border-[#EAECF0] justify-between gap-3">
-                      <span className="text-xs font-extrabold text-[#101828]">{doc.label}</span>
-                      
-                      {uploadedFiles[doc.id] ? (
-                        <div className="flex items-center justify-between p-2.5 bg-white rounded-lg border border-gray-200">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <Paperclip size={14} className="text-primary shrink-0" />
-                            <span className="text-xs text-gray-700 truncate font-semibold">{uploadedFiles[doc.id].name}</span>
-                          </div>
-                          <button type="button" onClick={() => removeUploadedFile(doc.id)} className="text-gray-400 hover:text-red-500">
-                            <X size={14} />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="relative border border-dashed border-gray-300 rounded-lg py-4 text-center bg-white hover:border-primary transition-all">
-                          <UploadCloud size={20} className="mx-auto text-gray-400 mb-1" />
-                          <span className="text-[10px] text-gray-600 block">Drag & drop or <span className="text-primary underline cursor-pointer font-bold">Upload</span></span>
-                          <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => handleFileChange(e, doc.id)} />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* STEP 6: Final step */}
-            {step === 6 && (
-              <div className="space-y-6">
-                <div>
-                  <p className="text-primary font-bold mb-1.5 text-xs uppercase tracking-widest">Confirmation</p>
-                  <h2 className="text-xl md:text-2xl font-black text-[#101828]">6. Submit and save profile changes</h2>
-                </div>
-
-                <div className="bg-[#eef2f6] p-6 rounded-2xl border border-[#EAECF0] space-y-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold text-[#344054] block">How did you know us? *</label>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                      {referralOptions.map((refOpt) => (
-                        <button
-                          key={refOpt}
-                          type="button"
-                          onClick={() => setFormData(prev => ({ ...prev, referralSource: refOpt }))}
-                          className={`py-3 px-4 rounded-xl border-2 transition-all font-bold text-xs ${
-                            formData.referralSource === refOpt
-                              ? "border-primary bg-primary text-black"
-                              : "border-transparent bg-white text-gray-600 hover:bg-gray-100"
-                          }`}
-                        >
-                          {refOpt}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4 p-4 bg-white rounded-xl border border-gray-200">
-                    <input
-                      type="checkbox"
-                      id="termsCheckbox"
-                      name="agreedToTerms"
-                      checked={formData.agreedToTerms}
-                      onChange={handleInputChange}
-                      className="mt-1 h-4 w-4 accent-primary cursor-pointer"
-                    />
-                    <label htmlFor="termsCheckbox" className="text-xs text-[#344054] font-semibold leading-relaxed cursor-pointer select-none">
-                      I hereby verify that all provided data is true, valid, and authentic. I agree to terms and privacy guidelines.
+                {[
+                  { id: "zakat", label: "1 - Zakat Certificate" },
+                  { id: "gosi", label: "2 - Social Insurance (GOSI) Certificate" },
+                  { id: "saudization", label: "3 - Ministry of Labor to adherence official saudization (Except new manufacturer)" },
+                  { id: "industrial", label: "4 - Industrial License (for manufacturer only)" },
+                  { id: "vat", label: "5 - VAT Certificate" },
+                  { id: "materialsList", label: "6 - List of materials/products your company is handling" },
+                  { id: "authorizedPersons", label: "7 - List of authorized persons, contacts (phones, e-mails), and owners contact details endorsed by Chamber of Commerce" },
+                  { id: "auditedStatement", label: "8 - Latest Audited Financial Statement from authorized office (Except new establishment)" },
+                  { id: "previousPOs", label: "9 - Previous P.Os from other companies or agency/representation letter (Except new manufacturer)" },
+                ].map((doc) => (
+                  <div key={doc.id}>
+                    <p className="text-[13px] font-semibold text-[#333] mb-1.5">{doc.label}</p>
+                    <label className="flex items-center gap-3 bg-[#F0F2F5] rounded-xl px-4 py-3 cursor-pointer hover:bg-[#E8EAF0] transition-all border border-transparent hover:border-primary/20">
+                      <Paperclip size={16} className="text-[#888] shrink-0" />
+                      <span className="text-[13px] text-[#777] flex-1">
+                        {uploadedFiles[doc.id]
+                          ? <span className="text-primary font-semibold">{uploadedFiles[doc.id]!.name}</span>
+                          : <>
+                              Drag & drop files or{" "}
+                              <span className="text-primary underline font-semibold">upload file</span>
+                              {"  "}
+                              <span className="text-[11px] text-[#AAA]">Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</span>
+                            </>
+                        }
+                      </span>
+                      <input type="file" className="hidden" onChange={(e) => handleFileChange(e, doc.id)} />
                     </label>
                   </div>
+                ))}
+
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleBack} className="px-8 py-3.5 rounded-xl border-2 border-[#DDD] text-[#444] font-bold text-[15px] hover:bg-[#F5F5F5] transition-all">
+                    Back
+                  </button>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={handleNext} className="bg-primary text-black font-bold px-8 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                      Save and continue
+                    </button>
+                    <button type="button" className="bg-primary/80 text-black font-bold px-8 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                      Save as draft
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Stepper Footer Action Buttons */}
-            <div className="flex items-center justify-between border-t border-[#EAECF0] pt-6 mt-6">
-              {step > 1 ? (
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="h-12 px-6 bg-[#eef2f6] text-[#344054] font-black rounded-xl hover:bg-gray-200 transition-all text-xs"
-                >
-                  Previous Step
-                </button>
-              ) : (
-                <Link
-                  href="/client"
-                  className="h-12 px-6 bg-[#eef2f6] text-gray-500 font-black rounded-xl hover:bg-gray-200 transition-all text-xs flex items-center justify-center"
-                >
-                  Exit Profile
-                </Link>
-              )}
+            {/* ─── STEP 6: Final Step ─── */}
+            {step === 6 && (
+              <div className="flex-1 flex flex-col gap-6">
+                <h2 className="text-primary font-bold text-xl">Final step</h2>
 
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSaved(true);
-                    setTimeout(() => setSaved(false), 2000);
-                  }}
-                  className="h-12 px-6 bg-[#eef2f6] text-primary font-black rounded-xl hover:bg-gray-200 transition-all text-xs border border-primary/20"
-                >
-                  Save Draft
-                </button>
+                <div>
+                  <p className="text-[14px] font-semibold text-primary mb-3">How you know us?</p>
+                  <div className="flex flex-wrap gap-3">
+                    {referralOptions.map((opt) => (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => setFormData((p) => ({ ...p, referralSource: opt }))}
+                        className={`px-6 py-3 rounded-xl border-2 font-semibold text-[14px] transition-all ${
+                          formData.referralSource === opt
+                            ? "border-primary bg-primary text-black"
+                            : "border-[#DDD] bg-white text-[#444] hover:border-primary/30"
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                {step < steps.length ? (
-                  <Button
-                    variant="primary"
-                    size="md"
-                    type="button"
-                    onClick={handleNext}
-                    className="h-12 px-6 font-black text-xs"
-                  >
-                    Save and Continue
-                  </Button>
-                ) : (
-                  <Button
-                    variant="primary"
-                    size="md"
-                    type="submit"
-                    className="h-12 px-8 font-black text-xs flex items-center gap-2"
-                  >
-                    <Save size={14} />
-                    Submit Final Changes
-                  </Button>
+                {formData.referralSource === "Marketer" && (
+                  <input
+                    name="marketerCode"
+                    value={formData.marketerCode}
+                    onChange={handleInput}
+                    placeholder="Marketer code"
+                    className={inp}
+                  />
                 )}
+
+                <div className="mt-auto flex justify-between items-center pt-4 border-t border-[#F0F2F5]">
+                  <button type="button" onClick={handleBack} className="px-8 py-3.5 rounded-xl border-2 border-[#DDD] text-[#444] font-bold text-[15px] hover:bg-[#F5F5F5] transition-all">
+                    Back
+                  </button>
+                  <button type="submit" className="bg-primary text-black font-bold px-10 py-3.5 rounded-xl text-[15px] hover:bg-primary/90 transition-all">
+                    Update
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+
           </form>
         </div>
       </div>
 
-      {/* Global Footer */}
       <Footer />
-
-      {/* Save Success Alert Modal */}
-      {saved && (
-        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 text-center animate-in zoom-in-95 duration-200 border border-[#EAECF0]">
-            <div className="w-16 h-16 bg-green-50 border-4 border-green-100 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
-              <Check className="text-green-600" size={28} strokeWidth={3} />
-            </div>
-            <h3 className="text-xl font-bold text-[#101828] mb-2">Profile Saved Successfully!</h3>
-            <p className="text-sm text-[#667085] leading-relaxed mb-6">
-              Your company records and documents have been updated successfully.
-            </p>
-            <div className="bg-primary/10 text-primary-dark p-3 rounded-lg border border-primary/20 text-xs font-bold">
-              Returning to Dashboard Overview...
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

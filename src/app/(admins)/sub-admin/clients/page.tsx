@@ -164,8 +164,14 @@ export default function VtmClients() {
 
                <div className="p-8 pt-0 space-y-6">
                   <div className="relative">
-                    <label className="absolute -top-2.5 left-4 bg-white px-1.5 text-[11px] font-bold text-[#98A2B3] uppercase tracking-widest z-10">Stauts</label>
-                    <input type="text" defaultValue="Pending" className="w-full border border-[#EAECF0] rounded-xl px-5 py-4 text-sm font-bold text-[#1A1C1E] outline-none focus:border-black transition-colors" />
+                    <label className="absolute -top-2.5 left-4 bg-white px-1.5 text-[11px] font-bold text-[#98A2B3] uppercase tracking-widest z-10">Status</label>
+                    <div className="relative">
+                      <select defaultValue="Pending" className="w-full appearance-none border border-[#EAECF0] rounded-xl px-5 py-4 text-sm font-bold text-[#1A1C1E] outline-none focus:border-black transition-colors bg-white cursor-pointer">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                      </select>
+                      <ChevronDown size={20} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3] pointer-events-none" />
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-4 pt-4">

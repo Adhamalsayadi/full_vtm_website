@@ -139,14 +139,19 @@ export default function EnquiryModal({
 
             <div className="flex flex-col gap-2 w-full max-w-[300px] md:max-w-none mx-auto">
               <div className="w-full h-auto min-h-10 bg-[#F4D361] rounded-[8px] flex flex-col justify-center px-4 py-2 text-[12px] shadow-sm">
-                <span className="font-medium text-black/50 text-[10px] uppercase tracking-wider">Required date</span>
+                <span className="font-medium text-black/50 text-[10px] uppercase tracking-wider">
+                  Required date
+                </span>
                 <span className="font-bold text-black/80 mt-0.5">
                   {enquiry.requiredDate
-                    ? new Date(enquiry.requiredDate).toLocaleDateString("en-GB", {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      })
+                    ? new Date(enquiry.requiredDate).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        },
+                      )
                     : "—"}
                 </span>
               </div>

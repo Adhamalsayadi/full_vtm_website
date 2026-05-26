@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useModalFlow } from "@/hooks/useModalFlow";
+import { Enquiry } from "@/types/enquiries";
 import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
 import { Eye, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
@@ -26,6 +28,7 @@ const statusColor: Record<string, string> = {
 };
 
 export default function MarketerOffersPage() {
+  const { openEnquiry, renderModals } = useModalFlow();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -76,7 +79,23 @@ const pageNumbers: number[] = [];
                     {paginatedOffers.map((offer, idx) => (
                       <tr key={offer.id} className="hover:bg-[#F9FAFB] transition-colors">
                         <td className="px-5 py-4 text-sm text-[#667085]">{startIndex + idx + 1}</td>
-                        <td className="px-5 py-4 text-sm font-semibold text-[#101828] max-w-[200px] truncate">{offer.enquiryTitle}</td>
+                        <td className="px-5 py-4 text-sm font-semibold text-[#101828] max-w-[200px] truncate">
+                          <button 
+                            onClick={() => openEnquiry({
+                              id: offer.id,
+                              title: offer.enquiryTitle,
+                              vtmStatus: offer.vtmStatus,
+                              adminStatus: offer.adminStatus,
+                              category: "", subCategory: "", sellerId: "", sellerName: "",
+                              time: "", clientRate: 0, vtRate: 0, image: "", requiredDate: "",
+                              requestType: "", enquiryStatus: "", quantity: 0, purpose: "",
+                              enquiryEta: "", standard: "", offersReceived: false
+                            } as Enquiry)}
+                            className="text-[#101828] hover:text-primary hover:underline transition-colors text-left truncate w-full"
+                          >
+                            {offer.enquiryTitle}
+                          </button>
+                        </td>
                         <td className="px-5 py-4 text-sm text-[#475467]">{offer.client}</td>
                         <td className="px-5 py-4">
                           <span className={cn("px-2.5 py-1 rounded-full text-xs font-bold capitalize", statusColor[offer.vtmStatus])}>
@@ -94,7 +113,20 @@ const pageNumbers: number[] = [];
                           </span>
                         </td>
                         <td className="px-5 py-4">
-                          <button className="p-1.5 text-[#667085] hover:text-primary transition-colors" title="View">
+                          <button 
+                            onClick={() => openEnquiry({
+                              id: offer.id,
+                              title: offer.enquiryTitle,
+                              vtmStatus: offer.vtmStatus,
+                              adminStatus: offer.adminStatus,
+                              category: "", subCategory: "", sellerId: "", sellerName: "",
+                              time: "", clientRate: 0, vtRate: 0, image: "", requiredDate: "",
+                              requestType: "", enquiryStatus: "", quantity: 0, purpose: "",
+                              enquiryEta: "", standard: "", offersReceived: false
+                            } as Enquiry)}
+                            className="p-1.5 text-[#667085] hover:text-primary transition-colors" 
+                            title="View"
+                          >
                             <Eye size={16} />
                           </button>
                         </td>
@@ -156,6 +188,7 @@ const pageNumbers: number[] = [];
           </div>
         </main>
       </div>
+      {renderModals()}
     </div>
   );
 }

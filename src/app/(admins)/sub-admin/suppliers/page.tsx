@@ -36,6 +36,7 @@ function StatusPill({ status }: { status: string }) {
 }
 
 export default function VtmSuppliers() {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -80,9 +81,9 @@ export default function VtmSuppliers() {
                         <tr key={sup.id} className="hover:bg-[#F9FAFB] transition-colors group">
                           <td className="px-8 py-5 text-sm font-medium text-[#333]">{startIndex + index + 1}</td>
                           <td className="px-8 py-5">
-                            <span className="text-sm font-bold text-[#333] hover:underline transition-all cursor-pointer">
+                            <Link href={`/sub-admin/suppliers/${sup.id}`} className="text-sm font-bold text-[#333] hover:underline transition-all cursor-pointer">
                               {sup.name}
-                            </span>
+                            </Link>
                           </td>
                           <td className="px-8 py-5">
                             <span className="text-sm font-medium text-[#666]">{sup.code}</span>
@@ -96,7 +97,7 @@ export default function VtmSuppliers() {
                           <td className="px-8 py-5 text-right">
                              <div className="flex items-center justify-end gap-3 text-[#999]">
                                <button className="hover:text-[#333] transition-colors"><Eye size={18} /></button>
-                               <button className="hover:text-[#333] transition-colors"><RefreshCcw size={16} /></button>
+                               <button onClick={() => setIsEditModalOpen(true)} className="hover:text-[#333] transition-colors"><RefreshCcw size={16} /></button>
                              </div>
                           </td>
                         </tr>
@@ -150,6 +151,41 @@ export default function VtmSuppliers() {
 
           </div>
         </main>
+
+        {isEditModalOpen && (
+          <div className="fixed inset-0 bg-black/5 flex items-center justify-center z-[100] p-6">
+            <div className="bg-white rounded-2xl shadow-2xl border border-[#F2F4F7] w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+               <div className="p-8 pb-4 flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-[#333]">Edit Status</h3>
+                  <button onClick={() => setIsEditModalOpen(false)} className="text-[#999] hover:text-[#333] border border-[#E5E5E5] p-1 rounded-md transition-colors">
+                     <span className="text-xl leading-none">×</span>
+                  </button>
+               </div>
+
+               <div className="p-8 pt-0 space-y-6">
+                  <div className="relative">
+                    <label className="absolute -top-2.5 left-4 bg-white px-1.5 text-[11px] font-bold text-[#98A2B3] uppercase tracking-widest z-10">Status</label>
+                    <div className="relative">
+                      <select defaultValue="Pending" className="w-full appearance-none border border-[#EAECF0] rounded-xl px-5 py-4 text-sm font-bold text-[#1A1C1E] outline-none focus:border-black transition-colors bg-white cursor-pointer">
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                      </select>
+                      <ChevronDown size={20} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3] pointer-events-none" />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4 pt-4">
+                    <button onClick={() => setIsEditModalOpen(false)} className="flex-1 py-4 text-sm font-bold text-[#666] uppercase tracking-widest border border-[#E5E5E5] rounded-xl hover:bg-gray-50 transition-all">
+                      CANCEL
+                    </button>
+                    <button onClick={() => setIsEditModalOpen(false)} className="flex-1 py-4 text-sm font-bold text-white uppercase tracking-widest bg-[#202E5C] rounded-xl hover:opacity-90 transition-all">
+                      UPDATE
+                    </button>
+                  </div>
+               </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

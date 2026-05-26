@@ -70,7 +70,6 @@ const Sidebar = ({ role }: SidebarProps) => {
       href: "/marketer/enquiries",
       icon: <FileText size={18} />,
     },
-    { name: "offers", href: "/marketer/offers", icon: <Star size={18} /> },
     { name: "deals", href: "/marketer/deals", icon: <Tag size={18} /> },
   ];
 
@@ -78,15 +77,14 @@ const Sidebar = ({ role }: SidebarProps) => {
     role === "Client"
       ? clientLinks
       : role === "Supplier"
-      ? supplierLinks
-      : marketerLinks;
+        ? supplierLinks
+        : marketerLinks;
   const dashboardHref = `/${role.toLowerCase()}`;
 
   const isActive = (href: string) => pathname === href;
 
   return (
     <>
-      
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed bottom-6 right-6 z-[60] bg-primary text-black p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all"
@@ -94,7 +92,7 @@ const Sidebar = ({ role }: SidebarProps) => {
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-{isOpen && (
+      {isOpen && (
         <div
           className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[51] transition-opacity"
           onClick={() => setIsOpen(false)}
@@ -104,7 +102,7 @@ const Sidebar = ({ role }: SidebarProps) => {
       <aside
         className={cn(
           "w-[260px] bg-white h-screen border-r border-[#EBEEF5] p-[30px_20px] flex flex-col shrink-0 fixed lg:sticky top-0 z-[52] transition-transform duration-300 ease-in-out",
-          !isOpen && "-translate-x-full lg:translate-x-0"
+          !isOpen && "-translate-x-full lg:translate-x-0",
         )}
       >
         <div className="flex items-center gap-3 mb-[50px]">
@@ -154,7 +152,7 @@ const Sidebar = ({ role }: SidebarProps) => {
           </div>
         </nav>
 
-<div className="lg:hidden mt-auto pt-6 border-t border-[#F2F4F7]">
+        <div className="lg:hidden mt-auto pt-6 border-t border-[#F2F4F7]">
           <button
             className="w-full flex items-center gap-3 p-3 text-red-600 font-bold"
             onClick={() => setIsLogoutModalOpen(true)}

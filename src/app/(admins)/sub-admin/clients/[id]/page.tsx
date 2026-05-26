@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronRight, ArrowLeft, Trash2, Globe, Mail, Phone, User, Building2, MapPin, Award, Layers } from "lucide-react";
+import { ChevronRight, ArrowLeft, Trash2, Pencil, Globe, Mail, Phone, User, Building2, MapPin } from "lucide-react";
 import AdminSidebar from "@/components/shared/AdminSidebar";
 import AdminHeader from "@/components/shared/AdminHeader";
 import { cn } from "@/lib/utils";
 import { ConfirmationModal } from "@/components/shared/Modals";
 import EditStatusModal from "@/components/shared/EditStatusModal";
 
-export default function SupplierDetailsPage() {
+export default function ClientDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
   
@@ -35,9 +35,9 @@ export default function SupplierDetailsPage() {
             <div className="flex items-center gap-2 text-[13px] font-medium text-[#999] mb-8">
               <Link href="/sub-admin" className="hover:text-[#333]">Dashboard</Link>
               <ChevronRight size={14} />
-              <Link href="/sub-admin/suppliers" className="hover:text-[#333]">suppliers</Link>
+              <Link href="/sub-admin/clients" className="hover:text-[#333]">clients</Link>
               <ChevronRight size={14} />
-              <span className="text-[#333]">Company name 4</span>
+              <span className="text-[#333]">Company name test</span>
             </div>
 
             <div className="bg-white rounded-[16px] shadow-sm border border-[#F2F4F7] overflow-hidden flex min-h-[500px]">
@@ -66,17 +66,17 @@ export default function SupplierDetailsPage() {
                       <div className="grid grid-cols-2 gap-10">
                         <div className="flex border-b border-[#F2F4F7] pb-4">
                            <span className="w-40 text-[13px] font-bold text-[#999]">Name</span>
-                           <span className="text-[14px] font-black text-[#1D1F24]">Ahmed Suleman</span>
+                           <span className="text-[14px] font-black text-[#1D1F24]">Suliman</span>
                         </div>
                         <div className="flex border-b border-[#F2F4F7] pb-4">
                            <span className="w-40 text-[13px] font-bold text-[#999]">Email</span>
-                           <span className="text-[14px] font-black text-[#1D1F24]">ahmed@example.com</span>
+                           <span className="text-[14px] font-black text-[#1D1F24]">SulimanMokhtar1995@gmail.com</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-10">
                         <div className="flex border-b border-[#F2F4F7] pb-4">
                            <span className="w-40 text-[13px] font-bold text-[#999]">Phone</span>
-                           <span className="text-[14px] font-black text-[#1D1F24]">+966 50 987 6543</span>
+                           <span className="text-[14px] font-black text-[#1D1F24]">0555555559</span>
                         </div>
                         <div className="flex border-b border-[#F2F4F7] pb-4">
                            <span className="w-40 text-[13px] font-bold text-[#999]">Image</span>

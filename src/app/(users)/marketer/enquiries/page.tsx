@@ -1,27 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Sidebar from "../../client/Sidebar/Sidebar";
 import Header from "../../client/header";
-import { Eye, Edit3, EyeOff } from "lucide-react";
-import {
-  ConfirmationModal,
-  EditEnquiryModal,
-} from "@/components/shared/Modals";
+import { Eye, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEnquiryModalStore } from "@/store/enquiryModalStore";
-import {
-  useEnquiries,
-  useUpdateEnquiry,
-  useToggleEnquiryVisibility,
-} from "@/hooks/useEnquiries";
+import { useEnquiries } from "@/hooks/useEnquiries";
 import { Enquiry } from "@/types/enquiries";
 import { useModalFlow } from "@/hooks/useModalFlow";
 
 export default function MarketerEnquiriesPage() {
   const { openEnquiry, renderModals } = useModalFlow();
-  const { activeEnquiry, modalType, openModal, closeModal } =
-    useEnquiryModalStore();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
 const {
     data: enquiries = [],
@@ -33,54 +25,24 @@ const {
     pageSize: 200,
   });
 
-  const updateEnquiry = useUpdateEnquiry();
-  const toggleVisibility = useToggleEnquiryVisibility();
-
   const handleAction = (id: string, action: string) => {
     const enquiry = enquiries.find((e: Enquiry) => e.id === id);
     if (!enquiry) return;
-    switch (action) {
-      case "Edit":
-        openModal("edit", enquiry);
-        break;
-      case "View":
-        openEnquiry(enquiry);
-        break;
-      case "Hide":
-        toggleVisibility.mutate(id);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const confirmHide = (id: string) => {
-     toggleVisibility.mutate(id, { onSuccess: closeModal });
-  };
-
-  const saveEdit = (data: {
-    title?: string;
-    quantity?: string;
-    status?: string;
-  }) => {
-    if (activeEnquiry)
-      updateEnquiry.mutate(
-        {
-          id: activeEnquiry.id,
-          payload: {
-            title: data.title,
-            quantity: data.quantity ? Number(data.quantity) : undefined,
-            enquiryStatus: data.status,
-          },
-        },
-        { onSuccess: closeModal }
-      );
+    if (action === "View") openEnquiry(enquiry);
   };
 
   const loading = isLoading;
   const error = isError ? "Unable to load enquiries right now." : null;
-  const isHideModalOpen = modalType === "hide";
-  const isEditModalOpen = modalType === "edit";
+
+  const totalItems = enquiries.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const paginatedEnquiries = enquiries.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.min(Math.max(1, page), totalPages));
+  };
 
   return (
     <div className="flex min-h-screen bg-[#F9FAFB]">
@@ -156,7 +118,7 @@ const {
                       </td>
                     </tr>
                   ) : (
-                    enquiries.map((enq, index) => (
+                    paginatedEnquiries.map((enq, index) => (
                       <tr
                         key={enq.id}
                         className={cn(
@@ -166,7 +128,7 @@ const {
                         )}
                       >
                         <td className="px-6 py-5 text-sm text-[#667085]">
-                          {index + 1}
+                          {startIndex + index + 1}
                         </td>
                         <td className="px-6 py-5 text-sm font-semibold text-[#101828]">
                           <button 
@@ -201,24 +163,6 @@ const {
                             >
                               <Eye size={18} />
                             </button>
-                            <button
-                              onClick={() => handleAction(enq.id, "Edit")}
-                              className="p-1 hover:text-primary transition-colors"
-                            >
-                              <Edit3 size={18} />
-                            </button>
-                            <button
-                              onClick={() => handleAction(enq.id, "Hide")}
-                              className={cn(
-                                "p-1 transition-colors",
-                                enq.isHidden
-                                  ? "text-primary"
-                                  : "hover:text-primary"
-                              )}
-                              title={enq.isHidden ? "Unhide" : "Hide"}
-                            >
-                              <EyeOff size={18} />
-                            </button>
                           </div>
                         </td>
                       </tr>
@@ -226,39 +170,62 @@ const {
                   )}
                 </tbody>
               </table>
+              <div className="flex items-center justify-end gap-6 border-t border-[#EAECF0] px-6 py-4 text-sm text-[#667085]">
+                <div className="flex items-center gap-2">
+                  <span>items per page</span>
+                  <select
+                    value={itemsPerPage}
+                    onChange={(e) => {
+                      setItemsPerPage(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="rounded-lg border border-[#D0D5DD] bg-white px-3 py-1.5 text-sm text-[#344054] outline-none focus:border-primary"
+                  >
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
+                <span>
+                  {totalItems === 0
+                    ? "0 from 0"
+                    : `${startIndex + 1}-${endIndex} from ${totalItems}`}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => goToPage(1)}
+                    disabled={currentPage === 1}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronsLeft size={18} />
+                  </button>
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+                  <button
+                    onClick={() => goToPage(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="p-1.5 rounded-lg hover:bg-[#F2F4F7] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronsRight size={18} />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </main>
       </div>
-
-      <ConfirmationModal
-        isOpen={isHideModalOpen}
-        onClose={closeModal}
-        onConfirm={() => activeEnquiry && confirmHide(activeEnquiry.id)}
-        title="Hide Enquiry"
-        message={`Are you sure you want to hide "${activeEnquiry?.title}"?`}
-        confirmText="Hide"
-      />
-
-      <EditEnquiryModal
-        isOpen={isEditModalOpen}
-        onClose={closeModal}
-        enquiry={activeEnquiry}
-        onSave={(data) => {
-          if (activeEnquiry) {
-            updateEnquiry.mutate(
-              {
-                id: activeEnquiry.id,
-                payload: {
-                  ...data,
-                  quantity: data.quantity ? Number(data.quantity) : undefined,
-                },
-              },
-              { onSuccess: closeModal }
-            );
-          }
-        }}
-      />
 
       {renderModals()}
     </div>
