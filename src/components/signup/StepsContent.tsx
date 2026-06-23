@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Users, Handshake, ClipboardCheck, ChevronDown, Check } from "lucide-react";
+import Image from "next/image";
+import { MapPin, ChevronDown, Check } from "lucide-react";
 import {
   SignUpFormData,
   FormErrors,
@@ -7,10 +8,8 @@ import {
   ServiceItem,
 } from "@/types/users";
 import { Input } from "../ui/input";
-import { Select } from "../ui/select";
 import { FileUpload } from "../ui/fileUpload";
 import Button from "../ui/button";
-import ServiceGrid from "../shared/service";
 import { cn } from "@/lib/utils";
 
 interface StepsContentProps {
@@ -23,14 +22,15 @@ interface StepsContentProps {
   setFormData: React.Dispatch<React.SetStateAction<SignUpFormData>>;
 }
 
+// ─── Service Items ─────────────────────────────────────────────────────────────
 const MOCK_SERVICES: ServiceItem[] = [
-
   { id: "services", label: "Services", icon: "/Services.png" },
   { id: "rental", label: "Rental", icon: "/for-rent.png" },
-  { id: "materials", label: "Materials", icon: "/product.png" },
-  { id: "manpower", label: "Man Power", icon: "/power.png" },
+  { id: "manpower", label: "Man power", icon: "/power.png" },
+  { id: "products", label: "Products", icon: "/Highlight.png" },
 ];
 
+// ─── Activity & Subcategory Maps ───────────────────────────────────────────────
 const ACTIVITY_MAP: Record<string, SelectOption[]> = {
   services: [
     { value: "up-stream", label: "Up Stream" },
@@ -53,6 +53,12 @@ const ACTIVITY_MAP: Record<string, SelectOption[]> = {
     { value: "consultants", label: "Consultants" },
     { value: "other", label: "Other (Add New)" },
   ],
+  products: [
+    { value: "up", label: "Up stream" },
+    { value: "down", label: "Down stream" },
+    { value: "engineering", label: "Engineering" },
+    { value: "other", label: "Other (Add New)" },
+  ],
 };
 
 const CLIENT_ACTIVITIES: SelectOption[] = [
@@ -61,26 +67,46 @@ const CLIENT_ACTIVITIES: SelectOption[] = [
   { value: "engineering", label: "Engineering" },
   { value: "logistics", label: "Logistics" },
   { value: "procurement", label: "Procurement" },
+  { value: "other", label: "Other (Add New)" },
 ];
 
 const SUBCATEGORY_MAP: Record<string, SelectOption[]> = {
   "up-stream": [
     { value: "slickline", label: "Slickline" },
     { value: "pressure-control", label: "Pressure Control" },
+    { value: "directional-drilling", label: "Directional drilling" },
+    { value: "completions", label: "Completions" },
+    { value: "water-injection", label: "Water injection" },
+    { value: "mwd-lwd", label: "MWD/LWD" },
     { value: "other", label: "Other (Add New)" },
   ],
   "well-testing": [
     { value: "ssv", label: "SSV" },
-    { value: "deisander", label: "Deisander" },
+    { value: "desander", label: "Desander" },
     { value: "other", label: "Other (Add New)" },
   ],
   default: [
     { value: "general", label: "General" },
+    { value: "vapor-blasting", label: "Vapor blasting" },
+    { value: "inspection-testing", label: "Inspection & Testing" },
+    { value: "laser-engraving", label: "Laser engraving" },
+    { value: "transportation", label: "Transportation" },
+    { value: "laboratory", label: "Laboratory" },
     { value: "other", label: "Other (Add New)" },
   ],
 };
 
-// ─── Checkbox Dropdown Component ─────────────────────────────────────────────
+// ─── Premises Options ──────────────────────────────────────────────────────────
+const PREMISES_OPTIONS = [
+  "Area m²/ft²",
+  "Office m²",
+  "Inside Storage",
+  "Outside Storage",
+  "Workshop m²",
+  "Warehouse",
+];
+
+// ─── Checkbox Dropdown ─────────────────────────────────────────────────────────
 interface CheckboxDropdownProps {
   label: string;
   options: SelectOption[];
@@ -98,7 +124,7 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
   onChange,
   required,
   error,
-  placeholder = "Select options",
+  placeholder = "Select the category you need",
 }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -131,7 +157,7 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
 
   return (
     <div className="flex flex-col" ref={ref}>
-      <label className="block text-base md:text-lg font-bold mb-2 text-[#101828]">
+      <label className="block text-base md:text-lg font-semibold mb-2 text-[#333]">
         {label} {required && <span className="text-[#ff4d4f]">*</span>}
       </label>
       <div className="relative">
@@ -139,10 +165,9 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
           type="button"
           onClick={() => setOpen((o) => !o)}
           className={cn(
-            "w-full p-4 bg-[#ebeef5] border-none rounded-lg outline-none text-left flex items-center justify-between transition-all",
-            "focus:ring-2 focus:ring-primary/30",
-            open && "ring-2 ring-primary/30",
-            error && "ring-2 ring-red-500"
+            "w-full p-4 bg-[#ebeef5] border rounded-lg outline-none text-left flex items-center justify-between transition-all",
+            open ? "border-primary" : "border-transparent",
+            error && "border-red-500"
           )}
         >
           <span
@@ -163,7 +188,7 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
         </button>
 
         {open && (
-          <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAECF0] rounded-xl shadow-xl z-[200] overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#EAECF0] rounded-xl shadow-xl z-[200] overflow-hidden">
             <div className="max-h-56 overflow-y-auto py-1">
               {options.map((opt) => {
                 const isChecked = selected.includes(opt.value);
@@ -216,7 +241,108 @@ const CheckboxDropdown: React.FC<CheckboxDropdownProps> = ({
   );
 };
 
-// ─── Main render function ─────────────────────────────────────────────────────
+// ─── Location Input ────────────────────────────────────────────────────────────
+interface LocationInputProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  error?: string;
+  placeholder?: string;
+}
+
+const LocationInput: React.FC<LocationInputProps> = ({
+  label,
+  name,
+  value,
+  onChange,
+  required,
+  error,
+  placeholder,
+}) => (
+  <div className="flex flex-col">
+    <label className="block text-base md:text-lg font-semibold mb-2 text-[#333]">
+      {label} {required && <span className="text-[#ff4d4f]">*</span>}
+    </label>
+    <div className="relative flex items-center">
+      <input
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={cn(
+          "w-full p-4 bg-[#ebeef5] border-none rounded-lg outline-none transition-all focus:ring-2 focus:ring-primary/50 pr-16",
+          error && "ring-2 ring-red-500"
+        )}
+      />
+      <button
+        type="button"
+        className="absolute right-0 h-full px-4 bg-primary rounded-r-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
+      >
+        <MapPin size={20} className="text-black" />
+      </button>
+    </div>
+    {error && <span className="text-red-500 text-xs mt-1">{error}</span>}
+  </div>
+);
+
+// ─── Contact Section ───────────────────────────────────────────────────────────
+interface ContactSectionProps {
+  index: number;
+  title: string;
+  sectionKey: string;
+  value: { name: string; tel: string; email: string };
+  onChange: (key: string, field: string, val: string) => void;
+}
+
+const ContactSection: React.FC<ContactSectionProps> = ({
+  index,
+  title,
+  sectionKey,
+  value,
+  onChange,
+}) => (
+  <div className="mb-8">
+    <p className="text-primary font-bold text-base md:text-lg mb-4">
+      {index}. {title}
+    </p>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="flex flex-col">
+        <label className="text-sm font-semibold text-[#344054] mb-2">1. Name</label>
+        <input
+          type="text"
+          placeholder="Full name"
+          className="w-full p-3 bg-[#ebeef5] border-none rounded-lg outline-none focus:ring-2 focus:ring-primary/20"
+          value={value.name}
+          onChange={(e) => onChange(sectionKey, "name", e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col">
+        <label className="text-sm font-semibold text-[#344054] mb-2">2. Tel</label>
+        <input
+          type="text"
+          placeholder="+123..."
+          className="w-full p-3 bg-[#ebeef5] border-none rounded-lg outline-none focus:ring-2 focus:ring-primary/20"
+          value={value.tel}
+          onChange={(e) => onChange(sectionKey, "tel", e.target.value)}
+        />
+      </div>
+      <div className="flex flex-col">
+        <label className="text-sm font-semibold text-[#344054] mb-2">3. Email</label>
+        <input
+          type="email"
+          placeholder="email@..."
+          className="w-full p-3 bg-[#ebeef5] border-none rounded-lg outline-none focus:ring-2 focus:ring-primary/20"
+          value={value.email}
+          onChange={(e) => onChange(sectionKey, "email", e.target.value)}
+        />
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Main render function ──────────────────────────────────────────────────────
 export const renderStepContent = ({
   step,
   formData,
@@ -224,728 +350,609 @@ export const renderStepContent = ({
   handleChange,
   setFormData,
 }: StepsContentProps): React.ReactNode => {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, files } = e.target;
-    if (files && files[0]) {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
-    }
+
+  // Generic section updater for contact sections
+  const updateSection = (key: string, field: string, val: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { ...(prev as any)[key], [field]: val },
+    }));
   };
 
-if (formData.userType === "Supplier") {
-    const handleServiceSelect = (item: ServiceItem) => {
-      setFormData((prev) => ({
-        ...prev,
-        serviceScope: item.id || "",
-        activityClassification: [],
-        subCategories: "",
-        customActivity: "",
-        customSubCategory: "",
-      }));
+  const handleServiceSelect = (item: ServiceItem) => {
+    setFormData((prev) => ({
+      ...prev,
+      serviceScope: item.id || "",
+      activityClassification: [],
+      subCategories: [],
+      customActivity: "",
+      customSubCategory: "",
+    }));
+  };
+
+  const isSupplier = formData.userType === "Supplier";
+  const availableActivities = isSupplier
+    ? ACTIVITY_MAP[formData.serviceScope] || []
+    : CLIENT_ACTIVITIES;
+
+  const hasOtherActivity = formData.activityClassification.includes("other");
+
+  const firstActivity = formData.activityClassification.find((v) => v !== "other");
+  const availableSubCategories =
+    SUBCATEGORY_MAP[firstActivity || ""] || SUBCATEGORY_MAP["default"];
+
+  // ── STEP 1: User Info ────────────────────────────────────────────────────────
+  if (step === 1) {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, files } = e.target;
+      if (files && files[0]) {
+        setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      }
     };
 
-    const availableActivities = ACTIVITY_MAP[formData.serviceScope] || [];
-    const hasOther = formData.activityClassification.includes("other");
+    return (
+      <div className="step-content">
+        <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
+          Seclect user
+        </p>
+        <h2 className="text-lg md:text-xl font-semibold mb-6 text-[#333]">
+          1.According to the services you want, select who you are?
+          <span className="text-[#ff4d4f]">*</span>
+        </h2>
 
-    // For sub-categories, use first non-"other" selected activity, or default
-    const firstActivity = formData.activityClassification.find((v) => v !== "other");
-    const availableSubCategories =
-      SUBCATEGORY_MAP[firstActivity || ""] || SUBCATEGORY_MAP["default"];
-
-    switch (step) {
-      case 1:
-        return (
-          <div className="step-content">
-            <p className="text-primary font-bold mb-3 text-xs md:text-sm uppercase tracking-widest">
-              Select user type
-            </p>
-            <h2 className="text-lg md:text-xl font-bold mb-8 text-[#101828]">
-              1. Select who you are? *
-            </h2>
-
-            <div className="flex flex-col sm:flex-row gap-5 mb-10">
-              {(["Client", "Supplier"] as const).map((type) => (
-                <Button
-                  key={type}
-                  variant={formData.userType === type ? "primary" : "ghost"}
-                  size="md"
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-3 border-2 py-4 rounded-xl",
-                    formData.userType === type 
-                      ? "border-primary bg-primary text-black shadow-lg" 
-                      : "bg-[#F2F4F7] border-transparent text-[#667085] hover:bg-[#E4E7EC]"
-                  )}
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, userType: type }))
-                  }
-                >
-                  {type === "Client" ? (
-                    <Users size={22} />
-                  ) : (
-                    <Handshake size={22} />
-                  )}
-                  <span className="font-bold text-base">{type}</span>
-                </Button>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Input
-                label="2. Valid Email"
-                name="email"
-                type="email"
-                placeholder="Enter email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                error={errors.email}
-              />
-              <Input
-                label="3. Password"
-                name="password"
-                type="password"
-                placeholder="Enter password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                error={errors.password}
-              />
-            </div>
-            <div className="mb-8">
-              <Input
-                label="4. Owner name"
-                name="ownerName"
-                placeholder="Full name"
-                value={formData.ownerName}
-                onChange={handleChange}
-                required
-                error={errors.ownerName}
-              />
-            </div>
-            <div className="mb-0">
-              <FileUpload
-                label="5. Profile photo"
-                name="profilePhoto"
-                onChange={handleFileChange}
-                required
-                error={errors.profilePhoto}
-              />
-            </div>
-          </div>
-        );
-
-      case 2:
-        return (
-          <div className="step-content">
-            <p className="text-primary font-bold mb-3 text-xs md:text-sm uppercase tracking-widest">
-              Basic info
-            </p>
-            <div className="flex flex-col gap-6 mb-0">
-              <Input
-                label="1. What is the company name?"
-                name="companyName"
-                placeholder="Company Name"
-                value={formData.companyName}
-                onChange={handleChange}
-                required
-                error={errors.companyName}
-              />
-              <Input
-                label="2. What is the company CR number?"
-                name="crNumber"
-                placeholder="10 digits"
-                value={formData.crNumber}
-                onChange={handleChange}
-                required
-                error={errors.crNumber}
-              />
-              <Input
-                label="3. How many years of experience?"
-                name="experienceYears"
-                type="number"
-                placeholder="Years"
-                value={formData.experienceYears}
-                onChange={handleChange}
-                required
-                error={errors.experienceYears}
-              />
-              <Input
-                label="4. Where is the company located?"
-                name="location"
-                placeholder="City, Country"
-                value={formData.location}
-                onChange={handleChange}
-                required
-                error={errors.location}
-              />
-            </div>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="step-content">
-            <p className="text-primary font-bold mb-3 text-xs md:text-sm uppercase tracking-widest">
-              Services questions
-            </p>
-
-            <div className="mb-8">
-              <label className="block text-base md:text-lg font-bold mb-4 text-[#101828]">
-                1. What is the company's scope of services?{" "}
-                <span className="text-[#ff4d4f]">*</span>
-              </label>
-              <ServiceGrid
-                items={MOCK_SERVICES}
-                variant="home"
-                activeId={formData.serviceScope}
-                onItemClick={handleServiceSelect}
-              />
-              {errors.serviceScope && (
-                <span className="text-red-500 text-xs mt-1 block">
-                  {errors.serviceScope}
-                </span>
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          {(["Client", "Supplier"] as const).map((type) => (
+            <Button
+              key={type}
+              variant={formData.userType === type ? "primary" : "ghost"}
+              size="md"
+              className={cn(
+                "flex-1 flex items-center justify-center gap-3 border-2 py-4 rounded-xl",
+                formData.userType === type
+                  ? "border-primary bg-primary text-black"
+                  : "bg-[#ebeef5] border-transparent text-gray-600 hover:bg-[#e2e5ec]"
               )}
-            </div>
-
-            {formData.serviceScope && (
-              <div className="mb-8">
-                <CheckboxDropdown
-                  label="2. What is the Company's Activities Classification?"
-                  options={availableActivities}
-                  selected={formData.activityClassification}
-                  onChange={(vals) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      activityClassification: vals,
-                      subCategories: "",
-                      customActivity: vals.includes("other") ? prev.customActivity : "",
-                    }))
-                  }
-                  required
-                  error={errors.activityClassification}
-                  placeholder="Select activities"
-                />
-
-                {hasOther && (
-                  <div className="mt-4">
-                    <Input
-                      label="Please specify the Activity"
-                      name="customActivity"
-                      value={formData.customActivity}
-                      onChange={handleChange}
-                      required
-                      error={errors.customActivity}
-                      placeholder="Enter your activity classification"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {formData.activityClassification.length > 0 &&
-              !formData.activityClassification.every((v) => v === "other") && (
-                <div className="mb-0">
-                  <Select
-                    label="3. What is the company's subcategories?"
-                    name="subCategories"
-                    value={formData.subCategories}
-                    onChange={handleChange}
-                    options={availableSubCategories}
-                    required
-                    error={errors.subCategories}
-                  />
-
-                  {formData.subCategories === "other" && (
-                    <div className="mt-4">
-                      <Input
-                        label="Please specify the Subcategory"
-                        name="customSubCategory"
-                        value={formData.customSubCategory}
-                        onChange={handleChange}
-                        required
-                        error={errors.customSubCategory}
-                        placeholder="Enter your subcategory"
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="step-content">
-            <p className="text-primary font-bold mb-3 text-xs md:text-sm uppercase tracking-widest">
-              Contact Details
-            </p>
-            
-            <div className="mb-10">
-              <Input
-                label="1. What is the company's email? *"
-                name="companyEmail"
-                type="email"
-                placeholder="email@company.com"
-                value={formData.companyEmail}
-                onChange={handleChange}
-                required
-                error={errors.companyEmail}
+              onClick={() =>
+                setFormData((prev) => ({ ...prev, userType: type }))
+              }
+            >
+              <Image
+                src={type === "Client" ? "/Group.png" : "/Services.png"}
+                alt={type}
+                width={28}
+                height={28}
               />
-            </div>
+              <span className="font-semibold text-base">{type}</span>
+            </Button>
+          ))}
+        </div>
 
-{[
-              { id: 'ownerSection', label: 'Company owner' },
-              { id: 'directorsSection', label: 'Company directors' },
-              { id: 'financialSection', label: 'Financial directors' },
-              { id: 'commercialSection', label: 'Commercial contact' },
-              { id: 'afterHoursSection', label: 'After office hours' },
-              { id: 'qhseSection', label: 'QHSE content' },
-            ].map((section, idx) => (
-              <div key={section.id} className="mb-10">
-                <div className="bg-[#f3d45a] px-5 py-2.5 rounded-lg mb-6 shadow-sm">
-                  <h3 className="text-black font-bold text-base md:text-lg">
-                    {idx + 2}. {section.label}
-                  </h3>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2 px-1">Name</label>
-                    <input
-                      type="text"
-                      placeholder="Full name"
-                      className="w-full p-3 bg-[#F2F4F7] border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/20"
-                      value={(formData as any)[section.id]?.name || ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setFormData(prev => ({
-                          ...prev,
-                          [section.id]: { ...(prev as any)[section.id], name: val }
-                        }))
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2 px-1">Tel</label>
-                    <input
-                      type="text"
-                      placeholder="+123..."
-                      className="w-full p-3 bg-[#F2F4F7] border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/20"
-                      value={(formData as any)[section.id]?.tel || ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setFormData(prev => ({
-                          ...prev,
-                          [section.id]: { ...(prev as any)[section.id], tel: val }
-                        }))
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label className="text-sm font-bold text-[#344054] mb-2 px-1">Email</label>
-                    <input
-                      type="email"
-                      placeholder="email@..."
-                      className="w-full p-3 bg-[#F2F4F7] border-none rounded-xl outline-none focus:ring-2 focus:ring-primary/20"
-                      value={(formData as any)[section.id]?.email || ""}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setFormData(prev => ({
-                          ...prev,
-                          [section.id]: { ...(prev as any)[section.id], email: val }
-                        }))
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        );
-
-      case 5:
-        return (
-          <div className="step-content">
-            <p className="text-primary font-bold mb-3 text-xs md:text-sm uppercase tracking-widest">
-              Final Step
-            </p>
-
-            <div className="mb-10">
-              <FileUpload
-                label="1. Company Profile Document"
-                name="companyProfileDoc"
-                onChange={handleFileChange}
-                required
-                error={errors.companyProfileDoc}
-              />
-            </div>
-
-            <div className="mb-10">
-              <label className="block text-base md:text-lg font-bold mb-5 text-[#101828]">
-                2. How did you know us? *
-              </label>
-              <div className="grid grid-cols-2 gap-5">
-                {["Social media", "Google search", "Friend", "Marketer"].map(
-                  (src) => (
-                    <Button
-                      key={src}
-                      type="button"
-                      variant={
-                        formData.referralSource === src ? "primary" : "ghost"
-                      }
-                      className={cn(
-                        "py-4 px-6 border-2 font-bold rounded-xl",
-                        formData.referralSource === src 
-                        ? "border-primary bg-primary text-black"
-                        : "bg-[#F2F4F7] text-[#667085] border-transparent hover:bg-[#E4E7EC]"
-                      )}
-                      onClick={() =>
-                        setFormData((p) => ({ ...p, referralSource: src }))
-                      }
-                    >
-                      {src}
-                    </Button>
-                  )
-                )}
-              </div>
-              {errors.referralSource && (
-                <span className="text-red-500 text-xs mt-1 block">
-                  {errors.referralSource}
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-start gap-4 mt-10 p-4 bg-[#F9FAFB] rounded-xl border border-[#EAECF0]">
-              <input
-                type="checkbox"
-                id="terms"
-                name="agreedToTerms"
-                checked={formData.agreedToTerms}
-                onChange={handleChange}
-                className="mt-1 h-5 w-5 rounded accent-primary cursor-pointer"
-              />
-              <label
-                htmlFor="terms"
-                className="text-sm md:text-base text-[#475467] cursor-pointer"
-              >
-                I agree to the{" "}
-                <span className="text-black font-bold hover:underline">
-                  Terms
-                </span>{" "}
-                and{" "}
-                <span className="text-black font-bold hover:underline">
-                  Privacy Policy
-                </span>
-                .
-              </label>
-            </div>
-            {errors.agreedToTerms && (
-              <span className="text-red-500 text-xs mt-1 block">
-                {errors.agreedToTerms}
-              </span>
-            )}
-          </div>
-        );
-    }
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <Input
+            label="2.Enter a valid Email"
+            name="email"
+            type="email"
+            placeholder="Enter email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            error={errors.email}
+          />
+          <Input
+            label="3.what is the password?"
+            name="password"
+            type="password"
+            placeholder="Enter password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            error={errors.password}
+          />
+        </div>
+        <div className="mb-6">
+          <Input
+            label="4.what is the company's owner name?"
+            name="ownerName"
+            placeholder="Full name"
+            value={formData.ownerName}
+            onChange={handleChange}
+            required
+            error={errors.ownerName}
+          />
+        </div>
+        <div className="mb-0">
+          <FileUpload
+            label="5. Upload a profile photo?"
+            name="profilePhoto"
+            onChange={handleFileChange}
+            required
+            error={errors.profilePhoto}
+          />
+        </div>
+      </div>
+    );
   }
 
-  // --- CLIENT FLOW (DEFAULT) ---
-  switch (step) {
-    case 1:
+  // ── STEP 2: Basic Info ───────────────────────────────────────────────────────
+  if (step === 2) {
+    if (isSupplier) {
       return (
         <div className="step-content">
-          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase">
-            Select user
-          </p>
-          <h2 className="text-lg md:text-xl font-semibold mb-6 text-[#333]">
-            1. Select who you are? *
-          </h2>
-
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            {(["Client", "Supplier"] as const).map((type) => (
-              <Button
-                key={type}
-                variant={formData.userType === type ? "primary" : "ghost"}
-                size="md"
-                className={cn(
-                  "flex-1 flex items-center justify-center gap-2.5 border-2",
-                  formData.userType !== type &&
-                    "bg-[#ebeef5] border-transparent text-gray-600 hover:text-gray-800"
-                )}
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, userType: type }))
-                }
-              >
-                {type === "Client" ? (
-                  <Users size={20} />
-                ) : (
-                  <Handshake size={20} />
-                )}
-                {type}
-              </Button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-            <Input
-              label="2. Valid Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              error={errors.email}
-            />
-            <Input
-              label="3. Password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              error={errors.password}
-            />
-          </div>
-          <div className="mb-6">
-            <Input
-              label="4. Owner name"
-              name="ownerName"
-              value={formData.ownerName}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <FileUpload
-              label="5. Profile photo"
-              name="profilePhoto"
-              onChange={handleFileChange}
-            />
-          </div>
-        </div>
-      );
-
-    case 2:
-      return (
-        <div className="step-content">
-          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase">
+          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
             Basic info
           </p>
-          <div className="flex flex-col gap-5 mb-6">
+          <div className="flex flex-col gap-6">
             <Input
-              label="1. What is the company name?"
+              label="1. what is the company name?(Trade marking mark name)"
               name="companyName"
+              placeholder="Company name"
               value={formData.companyName}
               onChange={handleChange}
               required
               error={errors.companyName}
             />
-            <Input
-              label="2. What is the company CR number?"
-              name="crNumber"
-              placeholder="10 digits"
-              value={formData.crNumber}
+            <LocationInput
+              label="2. What is the the company's address?"
+              name="companyAddress"
+              value={formData.companyAddress}
               onChange={handleChange}
               required
+              error={errors.companyAddress}
+              placeholder="Enter address"
             />
-            <Input
-              label="3. How many years of experience?"
-              name="experienceYears"
-              type="number"
-              value={formData.experienceYears}
-              onChange={handleChange}
-              required
-            />
-            <Input
-              label="4. Where is the company located?"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              required
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <Input
+                label="3.Country of the company"
+                name="countryOfCompany"
+                placeholder="Country"
+                value={formData.countryOfCompany}
+                onChange={handleChange}
+                required
+                error={errors.countryOfCompany}
+              />
+              <Input
+                label="4.Country of regression"
+                name="countryOfRegression"
+                placeholder="Country"
+                value={formData.countryOfRegression}
+                onChange={handleChange}
+                required
+                error={errors.countryOfRegression}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <Input
+                label="5.Date of regestration"
+                name="dateOfRegistration"
+                type="date"
+                value={formData.dateOfRegistration}
+                onChange={handleChange}
+                required
+                error={errors.dateOfRegistration}
+              />
+              <Input
+                label="6.Number of regestration"
+                name="numberOfRegistration"
+                placeholder="Registration number"
+                value={formData.numberOfRegistration}
+                onChange={handleChange}
+                required
+                error={errors.numberOfRegistration}
+              />
+            </div>
           </div>
         </div>
       );
+    }
 
-    case 3:
-      return (
-        <div className="step-content">
-          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase">
-            Services questions
-          </p>
+    // Client Basic Info
+    return (
+      <div className="step-content">
+        <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
+          Basic info
+        </p>
+        <div className="flex flex-col gap-6">
+          <Input
+            label="1. what is the company name?(Trade marking mark name)"
+            name="companyName"
+            placeholder="Company name"
+            value={formData.companyName}
+            onChange={handleChange}
+            required
+            error={errors.companyName}
+          />
+          <Input
+            label="2. What is CR.No of the company?(10 digits)"
+            name="crNumber"
+            placeholder="10 digits"
+            value={formData.crNumber}
+            onChange={handleChange}
+            required
+            error={errors.crNumber}
+          />
+          <Input
+            label="3. What is the years of experience of the company?"
+            name="experienceYears"
+            type="number"
+            placeholder="Years"
+            value={formData.experienceYears}
+            onChange={handleChange}
+            required
+            error={errors.experienceYears}
+          />
+          <LocationInput
+            label="4.What is the location of the company?"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+            error={errors.location}
+            placeholder="City, Country"
+          />
+        </div>
+      </div>
+    );
+  }
 
-          <div className="mb-6">
-            <label className="block text-base md:text-lg font-semibold mb-2 text-[#333]">
-              1. Company scope of services *
-            </label>
-            <div className="flex gap-2 bg-[#ebeef5] p-1 rounded-lg w-fit">
-              {(["Services", "Rental", "Materials"] as const).map((scope) => (
+  // ── STEP 3: Services Questions ───────────────────────────────────────────────
+  if (step === 3) {
+    return (
+      <div className="step-content">
+        <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
+          Services questions
+        </p>
+
+        <div className="mb-8">
+          <label className="block text-base md:text-lg font-semibold mb-4 text-[#333]">
+            1. What is the compny&apos;s scope of services?
+            <span className="text-[#ff4d4f]">*</span>
+          </label>
+          {/* Single horizontal row matching the design */}
+          <div className="flex gap-3 overflow-x-auto no-scrollbar">
+            {MOCK_SERVICES.map((item) => {
+              const isActive = formData.serviceScope === item.id;
+              return (
                 <button
-                  key={scope}
-                  onClick={() =>
-                    setFormData((p) => ({ ...p, serviceScope: scope }))
-                  }
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleServiceSelect(item)}
                   className={cn(
-                    "py-2 px-4 rounded-md font-semibold text-sm transition-all",
-                    formData.serviceScope === scope
-                      ? "bg-white shadow-sm text-primary"
-                      : "text-gray-500 hover:text-gray-700"
+                    "flex items-center justify-center gap-3 px-5 py-4 rounded-2xl transition-all shrink-0 font-medium text-sm border-2",
+                    isActive
+                      ? "bg-primary border-primary text-black shadow-md"
+                      : "bg-[#ebeef5] border-transparent text-[#333] hover:bg-[#e2e5ec]"
                   )}
                 >
-                  {scope}
+                  <Image src={item.icon} alt={item.label} width={28} height={28} />
+                  {item.label}
                 </button>
-              ))}
+              );
+            })}
+          </div>
+          {errors.serviceScope && (
+            <span className="text-red-500 text-xs mt-2 block">
+              {errors.serviceScope}
+            </span>
+          )}
+        </div>
+
+        <div className="mb-8">
+          <CheckboxDropdown
+            label="2. What is the Company's Activities Classification?"
+            options={availableActivities}
+            selected={formData.activityClassification}
+            onChange={(vals) =>
+              setFormData((prev) => ({
+                ...prev,
+                activityClassification: vals,
+                subCategories: [],
+                customActivity: vals.includes("other") ? prev.customActivity : "",
+              }))
+            }
+            required
+            error={errors.activityClassification}
+            placeholder="Select the category you need"
+          />
+          {hasOtherActivity && (
+            <div className="mt-4">
+              <Input
+                label="Please specify the Activity"
+                name="customActivity"
+                value={formData.customActivity}
+                onChange={handleChange}
+                required
+                error={errors.customActivity}
+                placeholder="Enter your activity classification"
+              />
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-            <CheckboxDropdown
-              label="2. Activities Classification *"
-              options={CLIENT_ACTIVITIES}
-              selected={formData.activityClassification}
-              onChange={(vals) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  activityClassification: vals,
-                }))
-              }
-              required
-              error={errors.activityClassification}
-              placeholder="Select activities"
-            />
-            <Select
-              label="3. Subcategories"
-              name="subCategories"
-              value={formData.subCategories}
-              onChange={handleChange}
-              options={[{ value: "slickline", label: "Slickline" }]}
-              required
-            />
-          </div>
+          )}
         </div>
-      );
 
-    case 4:
-      return (
-        <div className="step-content">
-          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase">
-            Contact Details
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-            <Input
-              label="1. Company Email"
-              name="companyEmail"
-              type="email"
-              value={formData.companyEmail}
-              onChange={handleChange}
-              required
-              error={errors.companyEmail}
-            />
-            <Input
-              label="2. Company Number"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-              error={errors.phoneNumber}
-            />
-          </div>
-          <div className="mb-6">
-            <Input
-              label="3. Website Link"
-              name="websiteLink"
-              value={formData.websiteLink}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-      );
-
-    case 5:
-      return (
-        <div className="step-content">
-          <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase">
-            Final Step
-          </p>
-
-          <div className="mb-6">
-            <FileUpload
-              label="1. Company Profile Document"
-              name="companyProfileDoc"
-              onChange={handleFileChange}
-              required
-              error={errors.companyProfileDoc}
-            />
-          </div>
-
-          <div className="mb-6 mt-6">
-            <label className="block text-base md:text-lg font-semibold mb-3 text-[#333]">
-              2. How did you know us? *
-            </label>
-            <div className="grid grid-cols-2 gap-4">
-              {["Social media", "Google search", "Friend", "Marketer"].map(
-                (src) => (
-                  <Button
-                    key={src}
-                    type="button"
-                    variant={
-                      formData.referralSource === src ? "primary" : "ghost"
-                    }
-                    className={cn(
-                      "py-3 px-4 border-2",
-                      formData.referralSource !== src &&
-                        "bg-[#ebeef5] text-gray-600 border-transparent"
-                    )}
-                    onClick={() =>
-                      setFormData((p) => ({ ...p, referralSource: src }))
-                    }
-                  >
-                    {src}
-                  </Button>
-                )
+        {formData.activityClassification.length > 0 &&
+          !formData.activityClassification.every((v) => v === "other") && (
+            <div className="mb-0">
+              <CheckboxDropdown
+                label="3. What is the combany's subcategories ?"
+                options={availableSubCategories}
+                selected={formData.subCategories}
+                onChange={(vals) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    subCategories: vals,
+                    customSubCategory: vals.includes("other") ? prev.customSubCategory : "",
+                  }))
+                }
+                required
+                error={errors.subCategories}
+                placeholder="Select the subcategory you need"
+              />
+              {formData.subCategories.includes("other") && (
+                <div className="mt-4">
+                  <Input
+                    label="Please specify the Subcategory"
+                    name="customSubCategory"
+                    value={formData.customSubCategory}
+                    onChange={handleChange}
+                    required
+                    error={errors.customSubCategory}
+                    placeholder="Enter your subcategory"
+                  />
+                </div>
               )}
             </div>
-          </div>
+          )}
+      </div>
+    );
+  }
 
-          <div className="flex items-start gap-3 mt-6">
-            <input
-              type="checkbox"
-              id="terms"
-              name="agreedToTerms"
-              checked={formData.agreedToTerms}
+  // ── STEP 4: Contact Details ──────────────────────────────────────────────────
+  if (step === 4) {
+    const sections = [
+      { id: "ownerSection", label: "Company owner" },
+      { id: "directorsSection", label: "Company directors" },
+      { id: "financialSection", label: "Financial directors" },
+      { id: "commercialSection", label: "Commercial contact" },
+      { id: "afterHoursSection", label: "After office hours" },
+      { id: "qhseSection", label: "QHSE content" },
+    ];
+
+    return (
+      <div className="step-content">
+        <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
+          Contact Details
+        </p>
+
+        <div className="mb-8">
+          <Input
+            label="1. What is the company's email?"
+            name="companyEmail"
+            type="email"
+            placeholder="email@company.com"
+            value={formData.companyEmail}
+            onChange={handleChange}
+            required
+            error={errors.companyEmail}
+          />
+        </div>
+
+        {sections.map((section, idx) => (
+          <ContactSection
+            key={section.id}
+            index={idx + 2}
+            title={section.label}
+            sectionKey={section.id}
+            value={(formData as any)[section.id]}
+            onChange={updateSection}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  // ── STEP 5: Final Step ───────────────────────────────────────────────────────
+  if (step === 5) {
+    const HOW_YOU_KNOW_OPTIONS = [
+      "Social media",
+      "google search",
+      "Clients",
+      "Marketers",
+    ];
+
+    return (
+      <div className="step-content">
+        <p className="text-primary font-semibold mb-3 text-xs md:text-sm uppercase tracking-widest">
+          Final step
+        </p>
+
+        {/* Profile number + Company branch */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <Input
+            label="1. What is the profile number?"
+            name="profileNumber"
+            placeholder="Profile number"
+            value={formData.profileNumber}
+            onChange={handleChange}
+            required
+            error={errors.profileNumber}
+          />
+          <Input
+            label="2. Company's branch"
+            name="companyBranch"
+            placeholder="Branch"
+            value={formData.companyBranch}
+            onChange={handleChange}
+            required
+            error={errors.companyBranch}
+          />
+        </div>
+
+        {/* Company Background */}
+        <div className="mb-8">
+          <p className="text-primary font-bold text-base md:text-lg mb-4">
+            Company Background
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Input
+              label="1. When"
+              name="companyBackgroundWhen"
+              placeholder="When was it established?"
+              value={formData.companyBackgroundWhen}
               onChange={handleChange}
-              className="mt-1 h-4 w-4 accent-primary cursor-pointer"
+              required
+              error={errors.companyBackgroundWhen}
             />
-            <label
-              htmlFor="terms"
-              className="text-sm text-gray-600 cursor-pointer"
-            >
-              I agree to the{" "}
-              <span className="text-primary font-semibold hover:underline">
-                Terms
-              </span>{" "}
-              and{" "}
-              <span className="text-primary font-semibold hover:underline">
-                Privacy Policy
-              </span>
-              .
-            </label>
+            <Input
+              label="2. Where"
+              name="companyBackgroundWhere"
+              placeholder="Where is it based?"
+              value={formData.companyBackgroundWhere}
+              onChange={handleChange}
+              required
+              error={errors.companyBackgroundWhere}
+            />
           </div>
         </div>
-      );
 
-    case 6:
-      return (
-        <div className="step-content flex flex-col items-center justify-center min-h-[400px] text-center">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-6">
-            <ClipboardCheck size={40} className="text-primary" />
+        {/* Premises Area */}
+        <div className="mb-8">
+          <p className="text-primary font-bold text-base md:text-lg mb-4">
+            Premises area
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {PREMISES_OPTIONS.map((option) => {
+              const isSelected = formData.premisesArea.includes(option);
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      premisesArea: isSelected
+                        ? prev.premisesArea.filter((o) => o !== option)
+                        : [...prev.premisesArea, option],
+                    }))
+                  }
+                  className={cn(
+                    "px-5 py-3 rounded-xl text-sm font-medium border-2 transition-all",
+                    isSelected
+                      ? "bg-primary border-primary text-black"
+                      : "bg-[#ebeef5] border-transparent text-gray-600 hover:bg-[#e2e5ec]"
+                  )}
+                >
+                  {option}
+                </button>
+              );
+            })}
           </div>
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 text-dark">
-            Review Request
+        </div>
+
+        {/* How you know us */}
+        <div className="mb-6">
+          <label className="block text-base md:text-lg font-semibold mb-4 text-[#333]">
+            How you know us?<span className="text-[#ff4d4f]">*</span>
+          </label>
+          <div className="flex flex-wrap gap-3 mb-4">
+            {HOW_YOU_KNOW_OPTIONS.map((option) => {
+              const isSelected = formData.howYouKnowUs === option;
+              return (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      howYouKnowUs: isSelected ? "" : option,
+                      // clear code when leaving Marketers
+                      referralCode:
+                        prev.howYouKnowUs === "Marketers" && option !== "Marketers"
+                          ? ""
+                          : prev.referralCode,
+                    }))
+                  }
+                  className={cn(
+                    "px-6 py-3 rounded-xl text-sm font-medium border-2 transition-all",
+                    isSelected
+                      ? "bg-primary border-primary text-black shadow-md"
+                      : "bg-[#ebeef5] border-transparent text-gray-600 hover:bg-[#e2e5ec]"
+                  )}
+                >
+                  {option}
+                </button>
+              );
+            })}
+          </div>
+          {errors.howYouKnowUs && (
+            <span className="text-red-500 text-xs">{errors.howYouKnowUs}</span>
+          )}
+
+          {/* Referral code — appears only when Marketers is selected */}
+          {formData.howYouKnowUs === "Marketers" && (
+            <div className="mt-4">
+              <Input
+                label="Enter referral code"
+                name="referralCode"
+                placeholder="Enter code (optional)"
+                value={formData.referralCode}
+                onChange={handleChange}
+                error={errors.referralCode}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Terms & Conditions */}
+        <div className="flex items-start gap-3">
+          <input
+            type="checkbox"
+            id="agreedToTerms"
+            name="agreedToTerms"
+            checked={formData.agreedToTerms}
+            onChange={handleChange}
+            className="mt-1 w-4 h-4 accent-primary cursor-pointer shrink-0"
+          />
+          <label
+            htmlFor="agreedToTerms"
+            className="text-sm text-[#333] cursor-pointer underline"
+          >
+            Accepet terms, conditions and code of conduction?
+            <span className="text-[#ff4d4f]">*</span>
+          </label>
+        </div>
+        {errors.agreedToTerms && (
+          <span className="text-red-500 text-xs mt-1 block">
+            {errors.agreedToTerms}
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  // ── STEP 6: Review Request ───────────────────────────────────────────────────
+  if (step === 6) {
+    return (
+      <div className="step-content flex flex-col items-center justify-center min-h-[450px] text-center">
+        <p className="text-primary font-semibold mb-6 text-xs md:text-sm uppercase tracking-widest self-start">
+          review request
+        </p>
+        <div className="flex flex-col items-center">
+          <Image
+            src="/enquiries.png"
+            alt="Review request illustration"
+            width={320}
+            height={260}
+            className="mb-6 object-contain"
+          />
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-[#333]">
+            Review request
           </h2>
-          <p className="text-gray-500 max-w-sm mb-8">
-            We will send you an update about your request soon.
+          <p className="text-gray-500 max-w-sm">
+            we will send you an update about your request soon
           </p>
         </div>
-      );
+      </div>
+    );
   }
+
+  return null;
 };

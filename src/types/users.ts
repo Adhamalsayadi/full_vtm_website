@@ -5,29 +5,48 @@ export interface SignUpFormData {
   ownerName: string;
   profilePhoto: File | null;
 
+  // Basic info — Client
   companyName: string;
   crNumber: string;
   experienceYears: string;
   location: string;
 
-serviceScope: string;
-  activityClassification: string[];
-  subCategories: string;
+  // Basic info — Supplier (extra fields)
+  companyAddress: string;
+  countryOfCompany: string;
+  countryOfRegression: string;
+  dateOfRegistration: string;
+  numberOfRegistration: string;
 
-customActivity: string;
+  // Services step
+  serviceScope: string;
+  activityClassification: string[];
+  subCategories: string[];
+  customActivity: string;
   customSubCategory: string;
 
+  // Contact step
   companyEmail: string;
   phoneNumber: string;
   websiteLink: string;
 
-ownerSection: { name: string; tel: string; email: string };
+  ownerSection: { name: string; tel: string; email: string };
   directorsSection: { name: string; tel: string; email: string };
   financialSection: { name: string; tel: string; email: string };
   commercialSection: { name: string; tel: string; email: string };
   afterHoursSection: { name: string; tel: string; email: string };
   qhseSection: { name: string; tel: string; email: string };
 
+  // Final step (both)
+  profileNumber: string;
+  companyBranch: string;
+  companyBackgroundWhen: string;
+  companyBackgroundWhere: string;
+  premisesArea: string[];
+  howYouKnowUs: string;
+  referralCode: string;
+
+  // Old fields kept for API compat
   companyProfileDoc: File | null;
   referralSource: string;
   agreedToTerms: boolean;

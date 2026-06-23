@@ -94,8 +94,9 @@ export default function SupplierProfilePage() {
     companyRegistration: "",
     profileNo: "",
     country: "",
-    serviceScope: "Services",
-    categoryClassification: "Pipe line calssification",
+    serviceScope: ["Services"] as string[],
+    categoryClassification: ["Pipe line calssification"] as string[],
+    otherCategoryClassification: "",
     website: "",
     assessmentName: "",
     assessmentPosition: "",
@@ -262,28 +263,72 @@ export default function SupplierProfilePage() {
                     { id: "Rental", label: "Rental", img: "/for-rent.png" },
                     { id: "Manpower", label: "Man power", img: "/power.png" },
                     { id: "Products", label: "Products", img: "/product.png" },
-                  ].map((scope) => (
+                  ].map((scope) => {
+                    const isSelected = (form.serviceScope as string[]).includes(scope.id);
+                    return (
                     <button key={scope.id} type="button"
-                      onClick={() => setForm((p) => ({ ...p, serviceScope: scope.id }))}
+                      onClick={() => setForm((p) => {
+                        const current = p.serviceScope as string[];
+                        const updated = current.includes(scope.id)
+                          ? current.filter((x) => x !== scope.id)
+                          : [...current, scope.id];
+                        return { ...p, serviceScope: updated };
+                      })}
                       className={`flex items-center gap-2 px-5 py-3 rounded-xl border-2 font-semibold text-[13px] transition-all ${
-                        form.serviceScope === scope.id ? "border-primary bg-primary text-black" : "border-transparent bg-[#F0F2F5] text-[#555] hover:bg-[#E8EAF0]"
+                        isSelected ? "border-primary bg-primary text-black" : "border-transparent bg-[#F0F2F5] text-[#555] hover:bg-[#E8EAF0]"
                       }`}
                     >
                       <img src={scope.img} alt={scope.label} className="w-5 h-5 object-contain" />
                       {scope.label}
                     </button>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <p className={sectionTitle}>4 – company category classification</p>
-                <div className="relative">
-                  <select name="categoryClassification" value={form.categoryClassification} onChange={handleInput} className={`${inp} appearance-none pr-10`}>
-                    <option>Pipe line calssification</option>
-                    <option>Industrial classification</option>
-                    <option>Electrical classification</option>
-                  </select>
-                  <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <div className="flex flex-wrap gap-4 mb-3">
+                  {[
+                    "Pipe line calssification",
+                    "Industrial classification",
+                    "Electrical classification",
+                    "Other",
+                  ].map((opt) => {
+                    const isSelected = form.categoryClassification.includes(opt);
+                    return (
+                      <label
+                        key={opt}
+                        className="flex items-center gap-2 cursor-pointer bg-[#F0F2F5] px-4 py-2.5 rounded-xl hover:bg-[#E8EAF0] transition-all"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => {
+                            setForm((prev) => {
+                              const list = prev.categoryClassification.includes(opt)
+                                ? prev.categoryClassification.filter((x) => x !== opt)
+                                : [...prev.categoryClassification, opt];
+                              return {
+                                ...prev,
+                                categoryClassification: list,
+                              };
+                            });
+                          }}
+                          className="w-4 h-4 accent-primary"
+                        />
+                        <span className="text-[13px] font-medium text-[#333]">{opt}</span>
+                      </label>
+                    );
+                  })}
                 </div>
+                {form.categoryClassification.includes("Other") && (
+                  <input
+                    name="otherCategoryClassification"
+                    value={form.otherCategoryClassification}
+                    onChange={handleInput}
+                    placeholder="Please specify other classification"
+                    className={inp}
+                  />
+                )}
 
                 <p className={sectionTitle}>5 – Company Registration Details</p>
                 <input name="website" value={form.website} onChange={handleInput} placeholder="Website" className={inp} />

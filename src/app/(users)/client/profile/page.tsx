@@ -35,8 +35,9 @@ export default function ClientProfilePage() {
     companyRegistration: "",
 
     // Step 2
-    serviceScope: "Services",
-    categoryClassification: "Pipe line calssification",
+    serviceScope: ["Services"] as string[],
+    categoryClassification: ["Pipe line calssification"] as string[],
+    otherCategoryClassification: "",
     establishedWhen: "",
     establishedWhere: "",
     assessmentName: "",
@@ -230,13 +231,21 @@ export default function ClientProfilePage() {
                       { id: "Rental", label: "Rental", img: "/for-rent.png" },
                       { id: "Manpower", label: "Man power", img: "/power.png" },
                       { id: "Products", label: "Products", img: "/product.png" },
-                    ].map((scope) => (
+                    ].map((scope) => {
+                      const isSelected = (formData.serviceScope as string[]).includes(scope.id);
+                      return (
                       <button
                         key={scope.id}
                         type="button"
-                        onClick={() => setFormData((p) => ({ ...p, serviceScope: scope.id }))}
+                        onClick={() => setFormData((p) => {
+                          const current = p.serviceScope as string[];
+                          const updated = current.includes(scope.id)
+                            ? current.filter((x) => x !== scope.id)
+                            : [...current, scope.id];
+                          return { ...p, serviceScope: updated };
+                        })}
                         className={`flex items-center gap-2 px-4 py-3 rounded-xl border-2 font-semibold text-[13px] transition-all ${
-                          formData.serviceScope === scope.id
+                          isSelected
                             ? "border-primary bg-primary text-black"
                             : "border-transparent bg-[#F0F2F5] text-[#555] hover:bg-[#E8EAF0]"
                         }`}
@@ -244,20 +253,56 @@ export default function ClientProfilePage() {
                         <img src={scope.img} alt={scope.label} className="w-5 h-5 object-contain" />
                         {scope.label}
                       </button>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
 
                 <div>
                   <p className="text-[15px] font-semibold text-[#333] mb-3">company category classification</p>
-                  <div className="relative">
-                    <select name="categoryClassification" value={formData.categoryClassification} onChange={handleInput} className={`${inp} appearance-none pr-10`}>
-                      <option value="Pipe line calssification">Pipe line calssification</option>
-                      <option value="Industrial classification">Industrial classification</option>
-                      <option value="Electrical classification">Electrical classification</option>
-                    </select>
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div className="flex flex-wrap gap-4 mb-3">
+                    {[
+                      "Pipe line calssification",
+                      "Industrial classification",
+                      "Electrical classification",
+                      "Other",
+                    ].map((opt) => {
+                      const isSelected = formData.categoryClassification.includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          className="flex items-center gap-2 cursor-pointer bg-[#F0F2F5] px-4 py-2.5 rounded-xl hover:bg-[#E8EAF0] transition-all"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => {
+                              setFormData((prev) => {
+                                const list = prev.categoryClassification.includes(opt)
+                                  ? prev.categoryClassification.filter((x) => x !== opt)
+                                  : [...prev.categoryClassification, opt];
+                                return {
+                                  ...prev,
+                                  categoryClassification: list,
+                                };
+                              });
+                            }}
+                            className="w-4 h-4 accent-primary"
+                          />
+                          <span className="text-[13px] font-medium text-[#333]">{opt}</span>
+                        </label>
+                      );
+                    })}
                   </div>
+                  {formData.categoryClassification.includes("Other") && (
+                    <input
+                      name="otherCategoryClassification"
+                      value={formData.otherCategoryClassification}
+                      onChange={handleInput}
+                      placeholder="Please specify other classification"
+                      className={inp}
+                    />
+                  )}
                 </div>
 
                 <div>

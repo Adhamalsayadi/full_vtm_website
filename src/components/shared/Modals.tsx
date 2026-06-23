@@ -228,24 +228,43 @@ onSave(data);
               />
            </div>
 
-           <div className="grid grid-cols-2 gap-4">
-               <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Enquiry ETA</label>
-                  <input 
-                    name="enquiryEta"
-                    defaultValue={enquiry.enquiryEta}
-                    className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
-                  />
-               </div>
-               <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Standard</label>
-                  <input 
-                    name="standard"
-                    defaultValue={enquiry.standard}
-                    className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
-                  />
-               </div>
-           </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Enquiry ETA</label>
+                   <input 
+                     name="enquiryEta"
+                     defaultValue={enquiry.enquiryEta}
+                     className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Standard</label>
+                   <input 
+                     name="standard"
+                     defaultValue={enquiry.standard}
+                     className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                   />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Required Qualification</label>
+                   <input 
+                     name="qualification"
+                     defaultValue={enquiry.qualification}
+                     className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                   />
+                </div>
+                <div className="space-y-1.5">
+                   <label className="text-xs font-bold text-[#344054] uppercase tracking-wider">Required Items Unit</label>
+                   <input 
+                     name="unit"
+                     defaultValue={enquiry.unit}
+                     className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 transition-all text-sm"
+                   />
+                </div>
+            </div>
 
            <div className="pt-2 flex gap-3 sticky bottom-0 bg-white">
               <Button type="button" variant="ghost" className="flex-1" onClick={onClose}>Discard</Button>

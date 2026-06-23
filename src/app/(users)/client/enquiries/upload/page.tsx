@@ -37,6 +37,8 @@ export default function UploadEnquiryPage() {
   const [dragActive, setDragActive] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleDrop = (e: React.DragEvent) => {
@@ -53,14 +55,24 @@ export default function UploadEnquiryPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
+    const subCategory = formData.get("subCategory") === "Other"
+      ? (formData.get("customSubCategory") as string)
+      : (formData.get("subCategory") as string);
+
+    const unit = formData.get("unit") === "Other"
+      ? (formData.get("customUnit") as string)
+      : (formData.get("unit") as string);
+
     createEnquiry.mutate(
       {
         title: formData.get("title") as string,
         category: formData.get("category") as string,
-        subCategory: formData.get("subCategory") as string,
+        subCategory,
         requiredDate: formData.get("requiredDate") as string,
         purpose: formData.get("purpose") as string,
         standard: formData.get("standard") as string,
+        qualification: formData.get("qualification") as string,
+        unit,
         quantity,
         createdByUserId: user?.id,
         createdByUserName: user?.name,
@@ -231,17 +243,11 @@ export default function UploadEnquiryPage() {
                       <label className="block text-sm font-semibold text-[#344054] mb-1.5">
                         Required qualification
                       </label>
-                      <select
+                      <input
                         name="qualification"
-                        className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
-                      >
-                        <option value="">Select qualification...</option>
-                        {qualifications.map((q) => (
-                          <option key={q} value={q}>
-                            {q}
-                          </option>
-                        ))}
-                      </select>
+                        placeholder="Enter required qualification"
+                        className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                      />
                     </div>
                   </div>
 
@@ -270,6 +276,8 @@ export default function UploadEnquiryPage() {
                       </label>
                       <select
                         name="subCategory"
+                        value={selectedSubCategory}
+                        onChange={(e) => setSelectedSubCategory(e.target.value)}
                         className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
                       >
                         <option value="">Select subcategory...</option>
@@ -278,7 +286,16 @@ export default function UploadEnquiryPage() {
                             {s}
                           </option>
                         ))}
+                        <option value="Other">Other</option>
                       </select>
+                      {selectedSubCategory === "Other" && (
+                        <input
+                          required
+                          name="customSubCategory"
+                          placeholder="Enter subcategory"
+                          className="w-full px-4 py-2.5 mt-3 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                        />
+                      )}
                     </div>
 
                     <div>
@@ -321,6 +338,34 @@ export default function UploadEnquiryPage() {
                           <Plus size={18} />
                         </button>
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#344054] mb-1.5">
+                        Required items unit <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        required
+                        name="unit"
+                        value={selectedUnit}
+                        onChange={(e) => setSelectedUnit(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm"
+                      >
+                        <option value="">Select unit...</option>
+                        {["Pcs", "Set", "Lot", "Meters", "Kg", "Tons", "Other"].map((u) => (
+                          <option key={u} value={u}>
+                            {u}
+                          </option>
+                        ))}
+                      </select>
+                      {selectedUnit === "Other" && (
+                        <input
+                          required
+                          name="customUnit"
+                          placeholder="Enter unit"
+                          className="w-full px-4 py-2.5 mt-3 bg-[#F9FAFB] border border-[#EAECF0] rounded-xl outline-none focus:ring-2 focus:ring-primary/20 text-sm transition-all"
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

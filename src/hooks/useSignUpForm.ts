@@ -5,16 +5,16 @@ import { registerUser } from "@/lib/api/auth/register/signup";
 const CLIENT_STEPS = [
   "User info",
   "Basic info",
-  "Services",
-  "Contact",
-  "Final",
+  "Services question",
+  "Contact Details",
+  "Final Step",
 ];
 const SUPPLIER_STEPS = [
   "User info",
   "Basic info",
-  "Products",
-  "Contact",
-  "Final",
+  "Services question",
+  "Contact Details",
+  "Final Step",
 ];
 
 interface UseSignUpFormReturn {
@@ -42,17 +42,27 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     ownerName: "",
     profilePhoto: null,
 
+    // Basic info — Client
     companyName: "",
     crNumber: "",
     experienceYears: "",
     location: "",
 
+    // Basic info — Supplier extras
+    companyAddress: "",
+    countryOfCompany: "",
+    countryOfRegression: "",
+    dateOfRegistration: "",
+    numberOfRegistration: "",
+
+    // Services step
     serviceScope: "",
     activityClassification: [],
-    subCategories: "",
+    subCategories: [],
     customActivity: "",
     customSubCategory: "",
 
+    // Contact step
     companyEmail: "",
     phoneNumber: "",
     websiteLink: "",
@@ -64,6 +74,16 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     afterHoursSection: { name: "", tel: "", email: "" },
     qhseSection: { name: "", tel: "", email: "" },
 
+    // Final step
+    profileNumber: "",
+    companyBranch: "",
+    companyBackgroundWhen: "",
+    companyBackgroundWhere: "",
+    premisesArea: [],
+    howYouKnowUs: "",
+    referralCode: "",
+
+    // Legacy / API compat
     companyProfileDoc: null,
     referralSource: "",
     agreedToTerms: false,
@@ -97,32 +117,37 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     if (currentStep === 2) {
       if (!formData.companyName)
         newErrors.companyName = "Company name is required";
-      if (!formData.crNumber) newErrors.crNumber = "CR number is required";
-      if (!formData.experienceYears)
-        newErrors.experienceYears = "Experience is required";
-      if (!formData.location) newErrors.location = "Location is required";
+
+      if (isSupplier) {
+        if (!formData.companyAddress)
+          newErrors.companyAddress = "Company address is required";
+        if (!formData.countryOfCompany)
+          newErrors.countryOfCompany = "Country is required";
+        if (!formData.countryOfRegression)
+          newErrors.countryOfRegression = "Country of regression is required";
+        if (!formData.dateOfRegistration)
+          newErrors.dateOfRegistration = "Date of registration is required";
+        if (!formData.numberOfRegistration)
+          newErrors.numberOfRegistration = "Registration number is required";
+      } else {
+        if (!formData.crNumber) newErrors.crNumber = "CR number is required";
+        if (!formData.experienceYears)
+          newErrors.experienceYears = "Experience is required";
+        if (!formData.location) newErrors.location = "Location is required";
+      }
     }
 
     if (currentStep === 3) {
       if (!formData.serviceScope)
         newErrors.serviceScope = "Please select a service category";
 
-      if (isSupplier) {
-        const hasOther = formData.activityClassification.includes("other");
-        if (hasOther && !formData.customActivity) {
-          newErrors.customActivity = "Please specify the activity";
-        } else if (formData.activityClassification.length === 0) {
-          newErrors.activityClassification = "Classification is required";
-        }
+      if (formData.activityClassification.length === 0) {
+        newErrors.activityClassification = "Classification is required";
+      }
 
-        if (formData.subCategories === "other" && !formData.customSubCategory) {
-          newErrors.customSubCategory = "Please specify the subcategory";
-        } else if (!formData.subCategories) {
-          newErrors.subCategories = "Subcategory is required";
-        }
-      } else {
-        if (formData.activityClassification.length === 0)
-          newErrors.activityClassification = "Classification is required";
+      const hasOtherActivity = formData.activityClassification.includes("other");
+      if (hasOtherActivity && !formData.customActivity) {
+        newErrors.customActivity = "Please specify the activity";
       }
     }
 
@@ -132,10 +157,12 @@ export const useSignUpForm = (): UseSignUpFormReturn => {
     }
 
     if (currentStep === 5) {
-      if (!formData.companyProfileDoc)
-        newErrors.companyProfileDoc = "Profile document is required";
-      if (!formData.referralSource)
-        newErrors.referralSource = "Please select an option";
+      if (!formData.profileNumber)
+        newErrors.profileNumber = "Profile number is required";
+      if (!formData.companyBranch)
+        newErrors.companyBranch = "Company branch is required";
+      if (!formData.howYouKnowUs)
+        newErrors.howYouKnowUs = "Please select how you know us";
       if (!formData.agreedToTerms)
         newErrors.agreedToTerms = "You must agree to terms";
     }

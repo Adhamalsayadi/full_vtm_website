@@ -452,6 +452,8 @@ export interface UpdateEnquiryPayload {
   image?: string;
   vtmStatus?: string;
   adminStatus?: string;
+  qualification?: string;
+  unit?: string;
 }
 
 export async function createEnquiry(payload: Partial<Enquiry>): Promise<Enquiry> {
